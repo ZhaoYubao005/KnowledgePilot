@@ -2,9 +2,9 @@
 
 KnowledgePilot 是一个用于学习和实践大语言模型应用开发的本地项目。项目从最小可运行功能开始，逐步理解模型调用、上下文管理和后续 Agent 系统所需的核心机制。
 
-## 当前版本：V0.3
+## 当前版本：V0.4
 
-V0.3 已实现：
+V0.4 已实现：
 
 - 通过 Ollama HTTP API 调用本地模型
 - 在命令行中连续进行多轮聊天
@@ -17,9 +17,13 @@ V0.3 已实现：
 - 将 Ollama API 地址、模型名称和 System Prompt 从聊天主程序移入配置层
 - 可通过修改 `MODEL_NAME` 切换本地 Ollama 模型
 - 完成 `src` 布局下的 Python 包导入和 PyCharm 运行配置
+- 通过 `load_text(file_path)` 以 UTF-8 编码读取 TXT 文档
+- 通过 `chunk_text(text, chunk_size, overlap)` 按固定长度切分文本
+- 支持相邻 Chunk 保留指定长度的重叠内容
+- 避免在文本末尾生成完全重复的超短 Chunk
 - 输入 `exit` 结束聊天
 
-当前版本的上下文只保存在程序运行期间，关闭程序后不会持久化。
+当前文档模块仅支持基础 TXT 文本，不支持 PDF。对话上下文只保存在程序运行期间，关闭程序后不会持久化。
 
 ## 运行环境
 
@@ -53,6 +57,9 @@ KnowledgePilot/
 │  └─ knowledge_pilot/
 │     ├─ __init__.py
 │     ├─ config.py
+│     ├─ document/
+│     │  ├─ __init__.py
+│     │  └─ text_loader.py
 │     └─ llm/
 │        ├─ __init__.py
 │        └─ ollama_client.py
@@ -70,10 +77,13 @@ KnowledgePilot/
 
 后续版本计划按学习进度逐步加入：
 
-1. RAG 文档检索
-2. Tool Calling
-3. Agent Loop
-4. 持久化 Memory
-5. FastAPI 服务接口
+1. Embedding 文本向量化
+2. Vector Store 向量存储
+3. Retrieval 文档检索
+4. RAG 问答
+5. Tool Calling
+6. Agent Loop
+7. 持久化 Memory
+8. FastAPI 服务接口
 
-RAG、Tool Calling、Agent Loop、持久化 Memory 和 FastAPI 均尚未实现。
+Embedding、Vector Store、Retrieval、RAG、Tool Calling、Agent Loop、持久化 Memory 和 FastAPI 均尚未实现。
