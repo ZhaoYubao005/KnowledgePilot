@@ -1,23 +1,19 @@
-#代码实现
 import requests
-#接口
+
+
 url = 'http://localhost:11434/api/chat'
-#进入对话
 
-#构建历史对话
-history = []
-
-
-#建造循环
+history = [{
+    'role': 'system',
+    'content': '你的应用身份叫“智库”。当用户询问“你是谁、你叫什么名字”时，应以“智库”的身份回答。底层模型只是实现技术，不作为默认身份主动介绍。'
+}]
 
 while True:
-
-    #修改问答方式,让用户直接输入来对话
     user_input = input('你:')
-    #建造循环
+
     if user_input == 'exit':
         break
-    #保存用户对话
+
     history.append({
         'role': 'user',
         'content': user_input
@@ -29,21 +25,12 @@ while True:
         'stream': False
     }
 
-    #计入对话
-    response = requests.post(url,json=payload)
-
-    #提取json格式
+    response = requests.post(url, json=payload)
     data = response.json()
-
-    #提取对话
     assistant_reply = data['message']['content']
-    # 问题加入history
 
     history.append({
         'role': 'assistant',
         'content': assistant_reply
     })
-    #显示对话
     print(assistant_reply)
-
-
