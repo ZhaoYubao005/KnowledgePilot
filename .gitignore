@@ -1,0 +1,47 @@
+# IDE settings
+.idea/
+.vscode/
+
+# Python caches and tooling
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.conda/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Runtime output
+logs/
+*.log
+
+# Local data and model files
+data/
+models/
+*.gguf
+*.safetensors
+*.onnx
+*.pt
+*.pth
+
+# Packaging artifacts
+build/
+dist/
+*.egg-info/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
