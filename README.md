@@ -2,9 +2,9 @@
 
 KnowledgePilot 是一个用于学习和实践大语言模型应用开发的本地项目。项目从最小可运行功能开始，逐步理解模型调用、上下文管理和后续 Agent 系统所需的核心机制。
 
-## 当前版本：V0.2
+## 当前版本：V0.3
 
-V0.2 已实现：
+V0.3 已实现：
 
 - 通过 Ollama HTTP API 调用本地模型
 - 在命令行中连续进行多轮聊天
@@ -13,6 +13,10 @@ V0.2 已实现：
 - 通过 System Prompt 将助手身份设为“智库”
 - 约束回答保持清晰、简洁
 - 面对不确定的信息时明确说明，不编造答案
+- 新增独立配置层 `config.py`
+- 将 Ollama API 地址、模型名称和 System Prompt 从聊天主程序移入配置层
+- 可通过修改 `MODEL_NAME` 切换本地 Ollama 模型
+- 完成 `src` 布局下的 Python 包导入和 PyCharm 运行配置
 - 输入 `exit` 结束聊天
 
 当前版本的上下文只保存在程序运行期间，关闭程序后不会持久化。
@@ -34,9 +38,10 @@ V0.2 已实现：
 python -m pip install -r requirements.txt
 ```
 
-运行程序：
+在 PyCharm 中可使用 `ollama_client` 运行配置直接运行。在 PowerShell 中运行：
 
-```bash
+```powershell
+$env:PYTHONPATH = "src"
 python src/knowledge_pilot/llm/ollama_client.py
 ```
 
@@ -46,7 +51,10 @@ python src/knowledge_pilot/llm/ollama_client.py
 KnowledgePilot/
 ├─ src/
 │  └─ knowledge_pilot/
+│     ├─ __init__.py
+│     ├─ config.py
 │     └─ llm/
+│        ├─ __init__.py
 │        └─ ollama_client.py
 ├─ tests/
 ├─ docs/
@@ -62,11 +70,10 @@ KnowledgePilot/
 
 后续版本计划按学习进度逐步加入：
 
-1. 配置管理和更清晰的模型调用边界
-2. RAG 文档检索
-3. Tool Calling
-4. Agent Loop
-5. Memory
-6. FastAPI 服务接口
+1. RAG 文档检索
+2. Tool Calling
+3. Agent Loop
+4. 持久化 Memory
+5. FastAPI 服务接口
 
-RAG、Tool Calling、Agent、持久化 Memory 和 FastAPI 均尚未实现。
+RAG、Tool Calling、Agent Loop、持久化 Memory 和 FastAPI 均尚未实现。
