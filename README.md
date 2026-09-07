@@ -2,9 +2,9 @@
 
 KnowledgePilot 是一个用于学习和实践大语言模型应用开发的本地项目。项目从最小可运行功能开始，逐步理解模型调用、上下文管理和后续 Agent 系统所需的核心机制。
 
-## 当前版本：V0.4
+## 当前版本：V0.5
 
-V0.4 已实现：
+V0.5 已实现：
 
 - 通过 Ollama HTTP API 调用本地模型
 - 在命令行中连续进行多轮聊天
@@ -21,16 +21,22 @@ V0.4 已实现：
 - 通过 `chunk_text(text, chunk_size, overlap)` 按固定长度切分文本
 - 支持相邻 Chunk 保留指定长度的重叠内容
 - 避免在文本末尾生成完全重复的超短 Chunk
+- 通过本地 Ollama `bge-m3` 模型生成文本 Embedding
+- 支持单段文本与多个 Chunk 的批量向量化
+- 通过余弦相似度比较 Query 与 Chunk 的语义相关性
+- 按相似度降序返回 Top-K 检索结果
+- 使用真实长文档验证 29 个 Chunk 对应 29 个 1024 维向量
 - 输入 `exit` 结束聊天
 
-当前文档模块仅支持基础 TXT 文本，不支持 PDF。对话上下文只保存在程序运行期间，关闭程序后不会持久化。
+当前文档模块仅支持基础 TXT 文本，不支持 PDF。Embedding 与 Retrieval 在运行时实时计算，尚未接入向量数据库或持久化存储。对话上下文只保存在程序运行期间，关闭程序后不会持久化。
 
 ## 运行环境
 
 - Windows 11
 - Python 3.11.16
 - Ollama 0.33.3
-- 本地模型：`gemma4:e2b`
+- 对话模型：`gemma4:e2b`
+- Embedding 模型：`bge-m3`
 - Python 依赖：`requests==2.34.2`
 - 项目解释器：`D:\Anaconda\envs\knowledge-pilot\python.exe`
 
@@ -42,11 +48,19 @@ V0.4 已实现：
 python -m pip install -r requirements.txt
 ```
 
-在 PyCharm 中可使用 `ollama_client` 运行配置直接运行。在 PowerShell 中运行：
+在 PyCharm 中可使用 `ollama_client`、`embedding` 或 `retriever` 运行配置直接运行。在 PowerShell 中运行：
 
 ```powershell
 $env:PYTHONPATH = "src"
 python src/knowledge_pilot/llm/ollama_client.py
+```
+
+运行 Embedding 或 Retrieval 验证：
+
+```powershell
+$env:PYTHONPATH = "src"
+python src/knowledge_pilot/retrieval/embedding.py
+python src/knowledge_pilot/retrieval/retriever.py
 ```
 
 ## 项目结构
@@ -60,9 +74,14 @@ KnowledgePilot/
 │     ├─ document/
 │     │  ├─ __init__.py
 │     │  └─ text_loader.py
-│     └─ llm/
+│     ├─ llm/
+│     │  ├─ __init__.py
+│     │  └─ ollama_client.py
+│     └─ retrieval/
 │        ├─ __init__.py
-│        └─ ollama_client.py
+│        ├─ similarity.py
+│        ├─ embedding.py
+│        └─ retriever.py
 ├─ tests/
 ├─ docs/
 ├─ data/
@@ -77,13 +96,11 @@ KnowledgePilot/
 
 后续版本计划按学习进度逐步加入：
 
-1. Embedding 文本向量化
-2. Vector Store 向量存储
-3. Retrieval 文档检索
-4. RAG 问答
-5. Tool Calling
-6. Agent Loop
-7. 持久化 Memory
-8. FastAPI 服务接口
+1. Vector Store 向量存储
+2. RAG 问答
+3. Tool Calling
+4. Agent Loop
+5. 持久化 Memory
+6. FastAPI 服务接口
 
-Embedding、Vector Store、Retrieval、RAG、Tool Calling、Agent Loop、持久化 Memory 和 FastAPI 均尚未实现。
+Vector Store、RAG、Tool Calling、Agent Loop、持久化 Memory 和 FastAPI 尚未实现。
