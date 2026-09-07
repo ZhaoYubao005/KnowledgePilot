@@ -1,20 +1,16 @@
-from knowledge_pilot.retrieval.retriever import retrieve
+from knowledge_pilot.vector_store.chroma_store import search, collection
 from knowledge_pilot.rag.prompt_builder import build_prompt, build_context
 from knowledge_pilot.llm.ollama_client import chat_with_ollama
 from knowledge_pilot.config import SYSTEM_PROMPT
-from knowledge_pilot.document.text_loader import load_text, chunk_text
-from knowledge_pilot.retrieval.embedding import embed_chunks
 
 
 # 定义函数
-def answer_with_rag(
-    query,
-    chunks,
-    chunk_embeddings,
-    top_k=3,
-    threshold=0.4,
-):
-    top_results = retrieve(query, chunks, chunk_embeddings, top_k)
+def answer_with_rag(query, collection, top_k=3, threshold=0.4):
+    top_results = search(
+        query,
+        collection,
+        top_k,
+    )
     filtered_results = []
     for chunk, score in top_results:
         if score >= threshold:
@@ -38,18 +34,11 @@ def answer_with_rag(
 
 
 if __name__ == "__main__":
-    file_path = "data/v04_long_test.txt"
-
-    text = load_text(file_path)
-    chunks = chunk_text(text, 500, 100)
-    chunk_embeddings = embed_chunks(chunks)
-
-    query = "爱因斯坦出生在哪里？"
+    query = "什么是机器学习？"
 
     answer = answer_with_rag(
         query,
-        chunks,
-        chunk_embeddings,
+        collection,
         top_k=3,
     )
 
