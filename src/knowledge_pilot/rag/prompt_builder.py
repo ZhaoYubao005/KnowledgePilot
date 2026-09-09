@@ -2,7 +2,7 @@
 
 def build_context(top_results):
     context = ""
-    for chunk, score in top_results:
+    for chunk, _score, _metadata in top_results:
         context += chunk + "\n\n"
 
     return context
