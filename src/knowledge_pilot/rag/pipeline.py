@@ -38,7 +38,8 @@ def answer_with_rag(
             "content": prompt,
         },
     ]
-    answer = chat_with_ollama(messages)
+    agent_result = chat_with_ollama(messages)
+    answer = agent_result["answer"]
     sources = build_sources(filtered_results)
     return answer, sources
 

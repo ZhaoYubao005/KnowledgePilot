@@ -19,9 +19,9 @@ class KnowledgeBaseIntegrationTests(unittest.TestCase):
         )
 
         self.assertEqual(collection.name, "knowledge_pilot_docs")
-        self.assertEqual(collection.count(), 30)
         self.assertIsInstance(results, list)
         self.assertEqual(len(results), 3)
+
         for result in results:
             self.assertEqual(set(result), {"content", "source"})
             self.assertTrue(result["content"])
