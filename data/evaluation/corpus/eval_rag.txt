@@ -1,0 +1,11 @@
+RAG 的检索流程与向量表示
+检索增强生成先从 knowledge base 检索资料，再让生成模型依据资料回答。用户问题（Query）与文档文本块需要进入相同的向量空间，才能比较语义接近程度。问题与文本块都通过本地 Ollama 的 bge-m3 生成 embedding。Embedding 调用负责产生向量，不直接生成最终答案。search 接收 query、collection、top_k 和可选 document_id，将 query 转为向量，再由 Chroma 执行 Vector Search。document_id 可将检索限制在某一文档；不设置时检索整个 collection。语义相似只是候选相关性的线索，不保证资料回答了问题。评估应检查候选是否支持问题，并保留顺序和所属文档。离线检索评测可以省去最终生成，但仍依赖 embedding；固定语料与标注不代表没有模型调用。
+
+Chroma 中的文档与来源
+Chroma 保存文本块、向量、记录标识和 metadata，便于追溯检索来源。当前使用余弦距离，search 将 distance 转成 similarity，计算方式是一减距离，返回文本、相似度与 metadata 的三元组。入库时，metadata 保存 document_id、source 和 chunk_index，记录标识由 document_id 与文本块序号组合。document_id 区分文档，source 记录入库文件路径，chunk_index 表示文档内部块位置。项目按字符切分文本，块大小为五百字符，相邻块重叠一百字符。重叠减少边界断裂，也可能让多个候选包含同一事实。块序号不是内容的永久身份：正文或切分参数改变后，同一序号可对应不同文字。离线评测应冻结语料、切分方式与标识映射；来源路径不能替代相关性标注，也不能证明候选覆盖完整答案。
+
+Top-K、Context 与 Generation
+Top-K 控制检索返回多少候选，不表示候选都相关。search 的 top_k 默认值为三，没有额外相似度阈值。answer_with_rag 先调用 search，再保留 similarity 大于或等于零点四的候选。零点四阈值仅属于这条 pipeline。过滤后没有资料时，pipeline 返回资料不足的提示；有资料时，它把文本块构造成 Context，与问题组成提示，调用聊天模型生成答案。search_knowledge_base 是知识库 Tool，调用 search 后只返回 content 与 source，负责检索，不保留分数和完整 metadata。Agent 根据 Observation 继续决策。retrieval 评测应使用保留候选顺序、分数与 metadata 的底层 search，区分检索质量与答案质量。
+
+离线检索指标与多块相关性
+检索评测需要明确相关资料并固定标注粒度。以文本块为粒度时，Hit Rate@K 判断前 K 个结果是否至少命中一个相关块，再统计有相关资料的问题中命中的比例；Recall@K 计算前 K 个结果覆盖的相关块数占该问题全部相关块数的比例。MRR 使用第一条相关结果的排名倒数，未命中时记零，再对问题求平均。第一条相关结果排第二位，其倒数是二分之一。答案可能依赖多个块，此时命中一块可以提高 Hit Rate，却仍可能只有较低的 Recall。重叠块可能承载同一证据，应按预先确定的规则标注。若采用文档粒度，应先按 document_id 合并并明确排名规则，不能把文档命中与块级召回混为一谈。知识库没有答案的问题应单独分析空结果、误检索或拒答，不把零相关块的比例硬算进 Recall；检索指标也不能直接代表生成答案的正确率。

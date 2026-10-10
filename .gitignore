@@ -45,3 +45,25 @@ dist/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Frozen Evaluation V1 inputs; all other data remains ignored.
+!/data/
+/data/*
+!/data/evaluation/
+/data/evaluation/*
+!/data/evaluation/corpus/
+/data/evaluation/corpus/*
+!/data/evaluation/corpus/eval_rag.txt
+!/data/evaluation/corpus/eval_agent.txt
+!/data/evaluation/corpus/eval_tools.txt
+!/data/evaluation/corpus/eval_api.txt
+!/data/evaluation/corpus/eval_memory.txt
+!/data/evaluation/corpus/eval_engineering.txt
+!/data/evaluation/cases_v1.json
+!/data/evaluation/README.md
+!/data/evaluation/scripts/
+/data/evaluation/scripts/*
+!/data/evaluation/scripts/initialize_corpus_v1.py
+!/data/evaluation/manifests/
+/data/evaluation/manifests/*
+!/data/evaluation/manifests/evaluation_v1.json

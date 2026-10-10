@@ -1,0 +1,11 @@
+HTTP API与分层职责
+KnowledgePilot V1.1.0 使用 FastAPI 为聊天和文档能力提供 HTTP API，调用者发送请求并读取结构化响应。接口划分为 Route、Service 和 Core：Route 接收请求、调用服务，并把已捕获异常转换为 HTTP 错误；Service 组织输入与业务调用；Core 保留模型交互、工具执行、检索和向量存储等逻辑。
+应用包含六个路由：GET /health、POST /chat、POST /documents、GET /documents、PUT /documents/{document_id} 和 DELETE /documents/{document_id}。它们分别承担健康检查、聊天、上传、列表、更新和删除。路由函数使用同步 def；文档上传与更新接收文件，把文件名和字节内容交给服务。服务通过既有函数复用核心能力。
+
+无状态聊天与请求内上下文
+V1.1.0 的 POST /chat 是 stateless 聊天入口。每个 HTTP 请求，chat_service 都重新创建 messages 列表，其中一条 system 消息使用配置中的 SYSTEM_PROMPT，一条 user 消息使用当前 query，然后交给 chat_with_ollama。不同 HTTP 请求不复用上一次的 messages，也不自动携带先前的对话内容。
+同一次请求内部，Agent 可以把模型产生的工具调用消息和工具结果消息追加到当前 messages，供后续决策读取。这些消息属于本次执行上下文，支持任务连续处理。返回的 trace 记录本次工具活动，服务没有把它装入下一次请求的逻辑。跨请求记忆需要保存并再次取回历史信息，聊天服务未实现此机制。无状态描述的是聊天历史的传递边界；文档接口管理的持久知识库仍可供后续请求检索。
+
+请求校验与响应契约
+POST /chat 使用 ChatRequest 接收 query 和 max_steps。query 会去掉首尾空白，空字符串和仅含空白的输入无法通过校验；max_steps 默认是五，必须大于或等于一。路由把校验后的字段传给 chat_service，服务直接调用 chat_with_ollama。是否需要知识库工具，由该次 Agent 执行中的模型选择；这一 HTTP 路径没有直接调用 answer_with_rag。ChatResponse 包含 answer、trace 和 stop_reason，表示回答、本次工具记录和停止原因。
+文档接口由另外的模型约束：文档项包含文档标识、来源和分块数量，删除结果包含文档标识与状态。上传和更新接收非空、非空白的 UTF-8 TXT 内容；上传创建新标识，更新沿用指定标识。聊天结果与文档操作结果各自使用对应的响应结构。

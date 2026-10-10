@@ -1,0 +1,8 @@
+Tool 选择与 Registry 机制
+Tool Calling 是 Agent 的行为机制：模型提出工具调用请求，程序负责执行。模型根据意图、工具说明和参数 schema 判断是否调用工具，并给出名称与参数。TOOL_REGISTRY 保存工具名称与 Python 函数的映射，程序找到该函数，再传入参数执行。名称与参数须符合注册工具的接口，否则无法执行。Schema 描述接口，不替代函数实现，也不证明调用成功。Tool Result 作为 Observation 写回对话历史，Agent 随后继续决定调用其他工具或生成答案。一次决策可能没有工具调用，也可能产生多个调用；决策轮数与工具调用次数不能混为一谈。calculator 执行算术，search_knowledge_base 从 knowledge base 检索资料。选择工具应依据任务需要，不应仅凭问题出现某个关键词强制调用。
+
+Calculator 的参数与结果
+calculator 用 a、b 和 operation 执行 add、subtract、multiply、divide 四则运算。合法参数在相同实现下得到相同结果。确定性来自算术函数，而不是模型对数字的猜测。调用成功需要操作受到支持、参数完整且类型正确；除数为零等非法情况不能当作正常结果继续使用。模型可能解析错自然语言中的条件，因此返回一个数值不自动证明整道题已被正确解决。应先确认参数符合用户要求，再判断返回值是否足以支持回答。calculator 不搜索外部事实，也不根据知识库补齐缺失条件。若任务需要先读取材料再计算，可以先检索资料，再把资料明确给出的数据传给 calculator。每一步都应检查真实执行结果，不能把模型声称“已计算”作为证据；计算正确与输入依据正确需要分别判断。除零及不支持的运算会抛出 ValueError，成功时返回数值结果。
+
+知识库 Tool 的检索边界
+search_knowledge_base 接收 query、top_k 和可选 document_id，调用 search 完成向量检索（retrieval）。top_k 控制候选数量，document_id 可限定文档。工具返回 content（候选文本）与 source（metadata 中的来源路径）。结果丢弃 similarity、document_id 和 chunk_index，评测需分数与标识时应使用 search。Tool 内没有额外 threshold，也不调用最终聊天模型。RAG pipeline 则先以默认零点四阈值过滤 Top-K，再将 context 交给生成模型。Tool 返回文本只说明获得候选资料，不意味着资料相关、充分或已回答问题。Agent 可依据 observation 总结资料并说明不足。source 用于追溯证据，不能把模型补充包装成 Tool 返回事实。

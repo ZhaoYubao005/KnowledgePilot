@@ -1,0 +1,5041 @@
+{
+  "dataset_status": "FROZEN",
+  "frozen": true,
+  "case_count": 24,
+  "document_id_status": "FIXED_INGESTED_VERIFIED",
+  "corpus_scope": "固定 corpus_v1：data/evaluation/corpus/ 六篇 UTF-8/LF 文档、19 个 Chunk；已在独立 Evaluation Collection 中验证正文、metadata 和 SHA-256。",
+  "document_map": {
+    "eval_agent": "corpus/eval_agent.txt",
+    "eval_api": "corpus/eval_api.txt",
+    "eval_engineering": "corpus/eval_engineering.txt",
+    "eval_memory": "corpus/eval_memory.txt",
+    "eval_rag": "corpus/eval_rag.txt",
+    "eval_tools": "corpus/eval_tools.txt"
+  },
+  "review_policy": "正式 v1 标注以各 Case 顶层 query、relevant_chunks、hard_negative_candidates、required_facts、coverage_by_chunk 及顶层 scoring_policy 为准。review 与 review.history 保留全部原始审核证据和历史，不覆盖当前字段。SUPPORTED 表示静态证据支持；FROZEN 表示本文件与固定 Corpus 的版本已确定，不表示已执行评测或已提交 Git。",
+  "cases": [
+    {
+      "id": "rag_001",
+      "case_type": "retrieval",
+      "category": "single_chunk",
+      "query": "Top-K 表示什么",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 2
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 1
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 2
+        }
+      ],
+      "expected_answer": "Top-K 控制检索返回的候选数量，不表示这些候选都相关。",
+      "answer_match_type": "manual",
+      "tags": [
+        "top_k"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 2,
+        "notes": "按统一口径补录两个完整重复证据；single_chunk 表示存在单块可完整回答，不表示相关块唯一。",
+        "evidence": [
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 2,
+            "supports": [
+              "Top-K含义"
+            ],
+            "quotes": [
+              "Top-K 控制检索返回多少候选，不表示候选都相关。"
+            ]
+          },
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 1,
+            "supports": [
+              "Top-K含义"
+            ],
+            "quotes": [
+              "Top-K 控制检索返回多少候选，不表示候选都相关。"
+            ]
+          },
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 2,
+            "supports": [
+              "Top-K含义"
+            ],
+            "quotes": [
+              "top_k 控制候选数量"
+            ]
+          }
+        ],
+        "excluded_background": [
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 0,
+            "reason": "只出现 top_k 参数名，没有候选数量定义。"
+          }
+        ],
+        "history": [
+          {
+            "round": 1,
+            "query": "Top-K 表示什么",
+            "expected_answer": "Top-K 控制检索返回的候选数量，不表示这些候选都相关。",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "初始 RAG#2 支持；RAG#1 的 overlap 和 Tools#2 也完整解释候选数量。单块可回答，不代表只有一个相关块。",
+              "additional_relevant_chunks": [
+                {
+                  "document_id": "eval_rag",
+                  "chunk_index": 1
+                },
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 2
+                }
+              ],
+              "partial_evidence_chunks": []
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_rag",
+                "chunk_index": 2
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag_002",
+      "case_type": "retrieval",
+      "category": "single_chunk",
+      "query": "KnowledgePilot 中，answer_with_rag() 的 threshold=0.4 是否也作用于 search_knowledge_base()？如果没有资料通过 Pipeline 阈值，会发生什么？",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 2
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 2
+        }
+      ],
+      "expected_answer": "不会。threshold=0.4 属于 answer_with_rag 的 Pipeline，search_knowledge_base 内没有该额外阈值。Pipeline 按 similarity≥0.4 过滤；如果过滤后没有资料，会返回资料不足的提示。",
+      "answer_match_type": "manual",
+      "tags": [
+        "rag_pipeline",
+        "threshold",
+        "knowledge_base_tool"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 3,
+        "notes": "替换与rag_011重复的max_steps题。全文重核19块：RAG#2可独立完整回答；Tools#2直接支持阈值边界，未说明过滤后无资料的返回。RAG#1只说明底层search无额外阈值，不直接回答Tool适用范围和Pipeline无资料行为。未从Core补入空sources或精确提示字符串。",
+        "evidence": [
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 2,
+            "supports": [
+              "threshold_scope",
+              "no_passing_context"
+            ],
+            "quotes": [
+              "answer_with_rag 先调用 search，再保留 similarity 大于或等于零点四的候选。",
+              "零点四阈值仅属于这条 pipeline。",
+              "过滤后没有资料时，pipeline 返回资料不足的提示"
+            ]
+          },
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 2,
+            "supports": [
+              "threshold_scope"
+            ],
+            "quotes": [
+              "Tool 内没有额外 threshold，也不调用最终聊天模型。",
+              "RAG pipeline 则先以默认零点四阈值过滤 Top-K，再将 context 交给生成模型。"
+            ]
+          }
+        ],
+        "single_chunk_check": {
+          "verification_scope": "ALL_19_CHUNKS",
+          "required_facts": {
+            "threshold_scope": "threshold=0.4只属于answer_with_rag Pipeline，不作用于search_knowledge_base Tool。",
+            "no_passing_context": "没有资料通过Pipeline阈值时，返回资料不足的提示。"
+          },
+          "complete_single_chunks": [
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 2
+            }
+          ],
+          "partial_answer_chunks": [
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 2
+            }
+          ],
+          "category_supported": true
+        },
+        "excluded_background": [
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 1,
+            "reason": "仅提供底层search无额外阈值的背景；不能直接提供Tool适用范围或Pipeline无资料后的行为。"
+          }
+        ],
+        "history": [
+          {
+            "round": 1,
+            "query": "max_steps 限制什么",
+            "expected_answer": "max_steps 限制一次 Agent 执行中的最大 Decision 轮数，不是工具调用次数；同一轮可以执行多个 Tool Call。",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "初始 Agent#2 支持；Agent#1 的 overlap 完整包含限制对象与同轮多工具的说明。",
+              "additional_relevant_chunks": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 1
+                }
+              ],
+              "partial_evidence_chunks": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 0
+                },
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 0
+                },
+                {
+                  "document_id": "eval_api",
+                  "chunk_index": 2
+                }
+              ]
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 2
+              }
+            ]
+          },
+          {
+            "round": 2,
+            "query": "max_steps 限制什么",
+            "expected_answer": "max_steps 限制一次 Agent 执行中的最大 Decision 轮数，不是工具调用次数；同一轮可以执行多个 Tool Call。",
+            "answer_match_type": "manual",
+            "review": {
+              "status": "SUPPORTED",
+              "round": 2,
+              "notes": "Agent#1 overlap 完整给出 max_steps→最大 Decision 轮数的绑定及同轮多工具只占一轮，已补录。",
+              "evidence": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 2,
+                  "supports": [
+                    "限制对象"
+                  ],
+                  "quotes": [
+                    "max_steps 限制 Agent 的最大 Decision 轮数，默认值是五。",
+                    "同轮即使执行多个工具，也只占一个轮数。"
+                  ]
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 1,
+                  "supports": [
+                    "限制对象"
+                  ],
+                  "quotes": [
+                    "max_steps 限制 Agent 的最大 Decision 轮数，默认值是五。",
+                    "同轮即使执行多个工具，也只占一个轮数。"
+                  ]
+                }
+              ],
+              "excluded_background": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 0,
+                  "reason": "区分 Decision/Tool 次数，但没有明确 max_steps 限制哪种次数。"
+                },
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 0,
+                  "reason": "只有两种计数不同的背景，没有参数限制对象绑定。"
+                },
+                {
+                  "document_id": "eval_api",
+                  "chunk_index": 2,
+                  "reason": "只有默认值、校验与参数传递，没有限制对象。"
+                }
+              ]
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 2
+              },
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag_003",
+      "case_type": "retrieval",
+      "category": "single_chunk",
+      "query": "Tool Registry 的作用",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 0
+        }
+      ],
+      "expected_answer": "TOOL_REGISTRY 保存工具名称与 Python 函数的映射，程序按名称找到函数并传入参数执行；工具 Schema 描述接口。",
+      "answer_match_type": "manual",
+      "tags": [
+        "tool_registry"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "notes": "Tools#0 明确给出工具名称到 Python 函数的映射及执行职责；未发现其他完整 Registry 映射证据。",
+        "additional_relevant_chunks": [],
+        "partial_evidence_chunks": []
+      }
+    },
+    {
+      "id": "rag_004",
+      "case_type": "retrieval",
+      "category": "single_chunk",
+      "query": "/chat 为什么 stateless",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_api",
+          "chunk_index": 1
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 3
+        },
+        {
+          "document_id": "eval_memory",
+          "chunk_index": 0
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 0
+        }
+      ],
+      "expected_answer": "每个 HTTP 请求重新创建 messages，包含 system 和当前 user 消息；不同请求不复用上一请求的 messages，因此不自动携带先前的对话上下文。",
+      "answer_match_type": "manual",
+      "tags": [
+        "stateless",
+        "messages"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 2,
+        "notes": "补录 Agent#3、Memory#0 完整证据，并按必要子事实口径补录 API#0 每请求新建 messages 的直接证据。API#0 无法独立给出完整历史不复用解释。",
+        "evidence": [
+          {
+            "document_id": "eval_api",
+            "chunk_index": 1,
+            "supports": [
+              "请求重建",
+              "历史不复用"
+            ],
+            "quotes": [
+              "每个 HTTP 请求，chat_service 都重新创建 messages 列表",
+              "不同 HTTP 请求不复用上一次的 messages"
+            ]
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 3,
+            "supports": [
+              "请求重建",
+              "单次上下文"
+            ],
+            "quotes": [
+              "当前 /chat 为每个请求建立新的 system 与 user 消息",
+              "这种上下文服务于当前请求"
+            ]
+          },
+          {
+            "document_id": "eval_memory",
+            "chunk_index": 0,
+            "supports": [
+              "请求重建",
+              "历史不恢复"
+            ],
+            "quotes": [
+              "当前 KnowledgePilot V1.1.0 的 /chat 为每个请求重新建立 system 与 user 消息。",
+              "也没有在下一次请求中自动恢复这些内容。"
+            ]
+          },
+          {
+            "document_id": "eval_api",
+            "chunk_index": 0,
+            "supports": [
+              "请求重建"
+            ],
+            "quotes": [
+              "每个 HTTP 请求，chat_service 都重新创建 messages 列表"
+            ]
+          }
+        ],
+        "partial_evidence_chunks": [
+          {
+            "document_id": "eval_api",
+            "chunk_index": 0
+          }
+        ],
+        "history": [
+          {
+            "round": 1,
+            "query": "/chat 为什么 stateless",
+            "expected_answer": "每个 HTTP 请求重新创建 messages，包含 system 和当前 user 消息；不同请求不复用上一请求的 messages，因此不自动携带先前的对话上下文。",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "初始 API#1 支持；Agent#3、Memory#0 也给出每请求重建上下文与无长期保存。API#0 只覆盖请求重建的部分说明。",
+              "additional_relevant_chunks": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 3
+                },
+                {
+                  "document_id": "eval_memory",
+                  "chunk_index": 0
+                }
+              ],
+              "partial_evidence_chunks": [
+                {
+                  "document_id": "eval_api",
+                  "chunk_index": 0
+                }
+              ]
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_api",
+                "chunk_index": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag_005",
+      "case_type": "retrieval",
+      "category": "single_chunk",
+      "query": "长期 Memory 与 messages 的区别",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_memory",
+          "chunk_index": 0
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 3
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 1
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 1
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 0
+        }
+      ],
+      "expected_answer": "本次 Agent 运行中的 messages 承载短期上下文；长期 Memory 保存并在后续请求或会话中重新使用信息。当前 KnowledgePilot 尚未实现这种长期 Memory。",
+      "answer_match_type": "manual",
+      "tags": [
+        "memory",
+        "messages"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 2,
+        "notes": "补录 Agent#3、API#1；Agent#1 对本次 messages 有直接定义，API#0 给出每请求重建事实，作为短期上下文子证据也补录。后两块不能独立定义长期 Memory。",
+        "evidence": [
+          {
+            "document_id": "eval_memory",
+            "chunk_index": 0,
+            "supports": [
+              "短期上下文",
+              "跨请求跨会话记忆"
+            ],
+            "quotes": [
+              "短期上下文通常由当前请求的 messages 承载",
+              "长期 Memory 关注跨请求或跨会话的信息保留"
+            ]
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 3,
+            "supports": [
+              "单次上下文",
+              "长期记忆边界"
+            ],
+            "quotes": [
+              "这种上下文服务于当前请求，跨请求保留用户偏好或历史事实属于长期 Memory 的范围。"
+            ]
+          },
+          {
+            "document_id": "eval_api",
+            "chunk_index": 1,
+            "supports": [
+              "单次上下文",
+              "跨请求记忆"
+            ],
+            "quotes": [
+              "这些消息属于本次执行上下文",
+              "跨请求记忆需要保存并再次取回历史信息"
+            ]
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 1,
+            "supports": [
+              "单次上下文"
+            ],
+            "quotes": [
+              "messages 承载一次运行的工作上下文"
+            ]
+          },
+          {
+            "document_id": "eval_api",
+            "chunk_index": 0,
+            "supports": [
+              "每请求新建上下文"
+            ],
+            "quotes": [
+              "每个 HTTP 请求，chat_service 都重新创建 messages 列表"
+            ]
+          }
+        ],
+        "partial_evidence_chunks": [
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 1
+          },
+          {
+            "document_id": "eval_api",
+            "chunk_index": 0
+          }
+        ],
+        "history": [
+          {
+            "round": 1,
+            "query": "长期 Memory 与 messages 的区别",
+            "expected_answer": "本次 Agent 运行中的 messages 承载短期上下文；长期 Memory 保存并在后续请求或会话中重新使用信息。当前 KnowledgePilot 尚未实现这种长期 Memory。",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "初始 Memory#0 支持；Agent#3、API#1 也区分本次 messages 与跨请求记忆。API#1 不完整描述跨会话范围。",
+              "additional_relevant_chunks": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 3
+                },
+                {
+                  "document_id": "eval_api",
+                  "chunk_index": 1
+                }
+              ],
+              "partial_evidence_chunks": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 1
+                },
+                {
+                  "document_id": "eval_api",
+                  "chunk_index": 0
+                }
+              ]
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_memory",
+                "chunk_index": 0
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "rag_006",
+      "case_type": "retrieval",
+      "category": "single_chunk",
+      "query": "Test 与 Evaluation 的区别",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 0
+        }
+      ],
+      "expected_answer": "Test 验证程序是否按照设计工作；Evaluation 衡量 RAG 和 Agent 的实际表现。测试通过不能保证真实检索和工具选择质量。",
+      "answer_match_type": "manual",
+      "tags": [
+        "test",
+        "evaluation"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "notes": "Engineering#0 明确区分程序行为验证与 RAG/Agent 实际表现；未发现其他完整定义证据。",
+        "additional_relevant_chunks": [],
+        "partial_evidence_chunks": []
+      }
+    },
+    {
+      "id": "rag_007",
+      "case_type": "retrieval",
+      "category": "multi_chunk",
+      "query": "KnowledgePilot 的 Agent Loop 按什么顺序经过 Decision、Action 和 Observation，各阶段分别负责什么？trace 的单条工具记录有哪些字段、各字段表示什么，step 从几开始，同一 Decision 轮内多个 Tool Call 的 step 是否相同？",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 0
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 1
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 2
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 3
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 0
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 1
+        },
+        {
+          "document_id": "eval_memory",
+          "chunk_index": 0
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 2
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 2
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 2
+        }
+      ],
+      "expected_answer": "Agent Loop 按 Decision、Action、Observation 再进入下一次 Decision。Decision 由模型根据 messages 选择直接回答或提出 Tool Call；Action 由程序执行选定工具；Observation 把执行结果放回上下文，供模型下一轮判断。单条 trace 包含 step、tool、arguments、result：step 是从一开始的决策轮号，tool 是工具名称，arguments 是模型给出的原始参数，result 是执行结果或错误 Observation。同轮多个调用形成多条记录，共享相同 step。",
+      "answer_match_type": "manual",
+      "tags": [
+        "agent_loop",
+        "trace",
+        "multi_chunk"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 3,
+        "notes": "保留10个Relevant。删除独立trace_field_names，字段名已包含在四项字段含义中。Observation用途事实仅要求模型使用结果处理任务，不把总结资料冒充下一Decision时序证明；时序由loop_order单独记录。Memory#0的概括性写回记partial，不计完整observation_write。 Tools#0的执行后生成答案仅记decision_direct_answer的部分证据；直接最终回答由Agent#0明示支持。",
+        "evidence": [
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 0,
+            "supports": [
+              "loop_order",
+              "decision_input",
+              "decision_direct_answer",
+              "decision_tool_choice",
+              "action_execution",
+              "observation_write",
+              "observation_use"
+            ],
+            "quotes": [
+              "Agent Loop 的过程是 Decision、Action、Observation，再进入下一次 Decision。",
+              "Decision 是模型根据 messages 判断如何继续：可以直接给出最终回答，也可以提出 Tool Call。",
+              "Action 是程序执行模型选定的工具",
+              "Observation 是程序把执行结果放回上下文，供模型下一轮判断使用。"
+            ]
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 1,
+            "supports": [
+              "decision_input",
+              "decision_tool_choice",
+              "observation_write",
+              "observation_use"
+            ],
+            "quotes": [
+              "程序保存模型提出工具调用的 assistant 消息",
+              "下一轮模型便能够看到自己的调用和对应的 Observation，依据取得的信息继续处理任务。",
+              "messages 承载一次运行的工作上下文",
+              "为每个结果追加 role 为 tool 的消息"
+            ]
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 2,
+            "supports": [
+              "observation_use",
+              "trace_step_meaning",
+              "trace_tool_meaning"
+            ],
+            "quotes": [
+              "工具执行后通常还需要下一轮模型整理结果并给出回答",
+              "step 是从一开始的决策轮号，tool 是工具名称"
+            ]
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 3,
+            "supports": [
+              "trace_step_meaning",
+              "trace_tool_meaning",
+              "trace_arguments_meaning",
+              "trace_result_meaning",
+              "trace_shared_step"
+            ],
+            "quotes": [
+              "step 是从一开始的决策轮号，tool 是工具名称",
+              "arguments 是模型给出的原始参数，result 是执行结果或错误 Observation。",
+              "同轮多个调用形成多项 trace，并共享相同 step。"
+            ]
+          },
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 0,
+            "supports": [
+              "decision_tool_choice",
+              "action_execution",
+              "observation_write",
+              "observation_use"
+            ],
+            "quotes": [
+              "模型提出工具调用请求，程序负责执行。",
+              "模型根据意图、工具说明和参数 schema 判断是否调用工具",
+              "Tool Result 作为 Observation 写回对话历史，Agent 随后继续决定调用其他工具或生成答案。"
+            ],
+            "partial_support": [
+              {
+                "fact_id": "decision_direct_answer",
+                "note": "本块说明工具执行后Agent继续决定生成答案；未直接明示Decision可直接给最终回答，不计该事实完整覆盖。"
+              }
+            ]
+          },
+          {
+            "document_id": "eval_api",
+            "chunk_index": 1,
+            "supports": [
+              "decision_input",
+              "decision_tool_choice",
+              "observation_write",
+              "observation_use"
+            ],
+            "quotes": [
+              "模型产生的工具调用消息和工具结果消息追加到当前 messages，供后续决策读取。"
+            ]
+          },
+          {
+            "document_id": "eval_memory",
+            "chunk_index": 0,
+            "supports": [
+              "decision_input",
+              "observation_use"
+            ],
+            "quotes": [
+              "短期上下文通常由当前请求的 messages 承载，包括系统提示、用户问题、工具调用和工具结果。",
+              "模型据此理解当前任务并继续判断"
+            ],
+            "partial_support": [
+              {
+                "fact_id": "observation_write",
+                "note": "另有追加Observation形成上下文的概括；本轮不把概括计为完整的执行结果写回机制。"
+              }
+            ]
+          },
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 2,
+            "supports": [
+              "observation_use"
+            ],
+            "quotes": [
+              "Agent 根据 Observation 继续决策。"
+            ]
+          },
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 2,
+            "supports": [
+              "observation_use"
+            ],
+            "quotes": [
+              "Agent 可依据 observation 总结资料并说明不足。"
+            ]
+          },
+          {
+            "document_id": "eval_api",
+            "chunk_index": 2,
+            "supports": [
+              "decision_tool_choice"
+            ],
+            "quotes": [
+              "是否需要知识库工具，由该次 Agent 执行中的模型选择"
+            ]
+          }
+        ],
+        "multi_chunk_check": {
+          "verification_scope": "ALL_19_CHUNKS",
+          "required_facts": {
+            "loop_order": "Agent Loop 按 Decision→Action→Observation→下一次 Decision 的顺序运行。",
+            "decision_input": "模型依据 messages 判断如何继续。",
+            "decision_direct_answer": "模型可以选择直接给出最终回答。",
+            "decision_tool_choice": "模型可以选择或提出 Tool Call。",
+            "action_execution": "程序执行模型选定的工具。",
+            "observation_write": "工具执行结果作为 Observation 写回上下文。",
+            "observation_use": "模型可将 Observation 内容作为继续处理任务的依据。",
+            "trace_step_meaning": "step 是从 1 开始的 Decision 轮号。",
+            "trace_tool_meaning": "tool 保存工具名称。",
+            "trace_arguments_meaning": "arguments 保存模型给出的原始参数。",
+            "trace_result_meaning": "result 保存执行结果或错误 Observation。",
+            "trace_shared_step": "同一 Decision 轮多个 Tool Call 的记录共享相同 step。"
+          },
+          "coverage_by_chunk": [
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 0,
+              "covered_facts": [
+                "loop_order",
+                "decision_input",
+                "decision_direct_answer",
+                "decision_tool_choice",
+                "action_execution",
+                "observation_write",
+                "observation_use"
+              ]
+            },
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 1,
+              "covered_facts": [
+                "decision_input",
+                "decision_tool_choice",
+                "observation_write",
+                "observation_use"
+              ]
+            },
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 2,
+              "covered_facts": [
+                "observation_use",
+                "trace_step_meaning",
+                "trace_tool_meaning"
+              ]
+            },
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 3,
+              "covered_facts": [
+                "trace_step_meaning",
+                "trace_tool_meaning",
+                "trace_arguments_meaning",
+                "trace_result_meaning",
+                "trace_shared_step"
+              ]
+            },
+            {
+              "document_id": "eval_api",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_api",
+              "chunk_index": 1,
+              "covered_facts": [
+                "decision_input",
+                "decision_tool_choice",
+                "observation_write",
+                "observation_use"
+              ]
+            },
+            {
+              "document_id": "eval_api",
+              "chunk_index": 2,
+              "covered_facts": [
+                "decision_tool_choice"
+              ]
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 1,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 2,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 3,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_memory",
+              "chunk_index": 0,
+              "covered_facts": [
+                "decision_input",
+                "observation_use"
+              ],
+              "partial_support": [
+                {
+                  "fact_id": "observation_write",
+                  "note": "另有追加Observation形成上下文的概括；本轮不把概括计为完整的执行结果写回机制。"
+                }
+              ]
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 1,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 2,
+              "covered_facts": [
+                "observation_use"
+              ]
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 3,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 0,
+              "covered_facts": [
+                "decision_tool_choice",
+                "action_execution",
+                "observation_write",
+                "observation_use"
+              ],
+              "partial_support": [
+                {
+                  "fact_id": "decision_direct_answer",
+                  "note": "本块说明工具执行后Agent继续决定生成答案；未直接明示Decision可直接给最终回答，不计该事实完整覆盖。"
+                }
+              ]
+            },
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 1,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 2,
+              "covered_facts": [
+                "observation_use"
+              ]
+            }
+          ],
+          "complete_single_chunks": [],
+          "minimum_chunks_for_complete_answer": 2,
+          "example_complete_chunk_sets": [
+            [
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 0
+              },
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 3
+              }
+            ]
+          ],
+          "necessity_reason": "Agent#3提供arguments/result含义及同轮共享step，但没有完整Loop顺序与阶段职责；Agent#0与Agent#3是一个足够组合。全部19块无完整单块，示例不是唯一允许组合。",
+          "example_complete_chunk_sets_are_exhaustive": false,
+          "coverage_rule": "covered_facts完整支持计入；partial_support不计完整覆盖。不同Chunk支持同一fact_id只计一次，不要求返回固定示例组合。"
+        },
+        "partial_evidence_chunks": [
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 0
+          },
+          {
+            "document_id": "eval_memory",
+            "chunk_index": 0
+          }
+        ],
+        "history": [
+          {
+            "round": 1,
+            "query": "max_steps 与 trace 分别是什么",
+            "expected_answer": "max_steps 限制最大 Decision 轮数；trace 记录工具执行事实，每个 Tool Call 一项，包含 step、tool、arguments、result。trace 长度表示工具尝试次数，不等于全部 Decision 轮数。",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "初始两块共同支持。Agent#2 已同时给出 max_steps 与 trace 基本定义，宽泛题目未必强制两块；完整字段释义与长度口径在 Agent#3。Agent#1 可替代 max_steps 子证据。",
+              "additional_relevant_chunks": [],
+              "partial_evidence_chunks": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 1
+                },
+                {
+                  "document_id": "eval_api",
+                  "chunk_index": 1
+                },
+                {
+                  "document_id": "eval_api",
+                  "chunk_index": 2
+                },
+                {
+                  "document_id": "eval_memory",
+                  "chunk_index": 0
+                }
+              ]
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 2
+              },
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 3
+              }
+            ]
+          },
+          {
+            "round": 2,
+            "query": "KnowledgePilot 的 Agent Loop 按什么顺序经过 Decision、Action 和 Observation，各阶段分别负责什么？trace 的单条工具记录有哪些字段、各字段表示什么，step 从几开始，同一 Decision 轮内多个 Tool Call 的 step 是否相同？",
+            "expected_answer": "Agent Loop 按 Decision、Action、Observation 再进入下一次 Decision。Decision 由模型根据 messages 选择直接回答或提出 Tool Call；Action 由程序执行选定工具；Observation 把执行结果放回上下文，供模型下一轮判断。单条 trace 包含 step、tool、arguments、result：step 是从一开始的决策轮号，tool 是工具名称，arguments 是模型给出的原始参数，result 是执行结果或错误 Observation。同轮多个调用形成多条记录，共享相同 step。",
+            "answer_match_type": "manual",
+            "review": {
+              "status": "SUPPORTED",
+              "round": 2,
+              "notes": "将宽泛max_steps/trace题改为三阶段职责与trace详细结构。所有直接子证据均纳入；只有Agent#3完整提供arguments/result含义和共享step，且它不提供完整Loop顺序/职责，故无单块可全答。",
+              "evidence": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 0,
+                  "supports": [
+                    "loop_order",
+                    "decision_input",
+                    "decision_direct_answer",
+                    "decision_tool_choice",
+                    "action_execution",
+                    "observation_write",
+                    "observation_use"
+                  ],
+                  "quotes": [
+                    "Agent Loop 的过程是 Decision、Action、Observation，再进入下一次 Decision。",
+                    "Decision 是模型根据 messages 判断如何继续：可以直接给出最终回答，也可以提出 Tool Call。",
+                    "Action 是程序执行模型选定的工具",
+                    "Observation 是程序把执行结果放回上下文，供模型下一轮判断使用。"
+                  ]
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 1,
+                  "supports": [
+                    "decision_input",
+                    "decision_tool_choice",
+                    "observation_write",
+                    "observation_use"
+                  ],
+                  "quotes": [
+                    "程序保存模型提出工具调用的 assistant 消息",
+                    "为每个结果追加 role 为 tool 的消息",
+                    "下一轮模型便能够看到自己的调用和对应的 Observation，依据取得的信息继续处理任务。"
+                  ]
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 2,
+                  "supports": [
+                    "observation_use",
+                    "trace_field_names",
+                    "trace_step_meaning",
+                    "trace_tool_meaning"
+                  ],
+                  "quotes": [
+                    "工具执行后通常还需要下一轮模型整理结果并给出回答",
+                    "包含 step、tool、arguments、result",
+                    "step 是从一开始的决策轮号，tool 是工具名称"
+                  ]
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 3,
+                  "supports": [
+                    "trace_field_names",
+                    "trace_step_meaning",
+                    "trace_tool_meaning",
+                    "trace_arguments_meaning",
+                    "trace_result_meaning",
+                    "trace_shared_step"
+                  ],
+                  "quotes": [
+                    "包含 step、tool、arguments、result",
+                    "step 是从一开始的决策轮号，tool 是工具名称",
+                    "arguments 是模型给出的原始参数，result 是执行结果或错误 Observation。",
+                    "同轮多个调用形成多项 trace，并共享相同 step。"
+                  ]
+                },
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 0,
+                  "supports": [
+                    "decision_tool_choice",
+                    "decision_direct_answer",
+                    "action_execution",
+                    "observation_write",
+                    "observation_use"
+                  ],
+                  "quotes": [
+                    "模型提出工具调用请求，程序负责执行。",
+                    "Tool Result 作为 Observation 写回对话历史，Agent 随后继续决定调用其他工具或生成答案。"
+                  ]
+                },
+                {
+                  "document_id": "eval_api",
+                  "chunk_index": 1,
+                  "supports": [
+                    "decision_input",
+                    "decision_tool_choice",
+                    "observation_write",
+                    "observation_use"
+                  ],
+                  "quotes": [
+                    "模型产生的工具调用消息和工具结果消息追加到当前 messages，供后续决策读取。"
+                  ]
+                },
+                {
+                  "document_id": "eval_memory",
+                  "chunk_index": 0,
+                  "supports": [
+                    "decision_input",
+                    "observation_write",
+                    "observation_use"
+                  ],
+                  "quotes": [
+                    "短期上下文通常由当前请求的 messages 承载",
+                    "模型据此理解当前任务并继续判断",
+                    "Agent 在运行中追加工具调用和 Observation"
+                  ]
+                },
+                {
+                  "document_id": "eval_rag",
+                  "chunk_index": 2,
+                  "supports": [
+                    "observation_use"
+                  ],
+                  "quotes": [
+                    "Agent 根据 Observation 继续决策。"
+                  ]
+                },
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 2,
+                  "supports": [
+                    "observation_use"
+                  ],
+                  "quotes": [
+                    "Agent 可依据 observation 总结资料并说明不足。"
+                  ]
+                },
+                {
+                  "document_id": "eval_api",
+                  "chunk_index": 2,
+                  "supports": [
+                    "decision_tool_choice"
+                  ],
+                  "quotes": [
+                    "是否需要知识库工具，由该次 Agent 执行中的模型选择"
+                  ]
+                }
+              ],
+              "multi_chunk_check": {
+                "verification_scope": "ALL_19_CHUNKS",
+                "required_facts": {
+                  "loop_order": "Decision→Action→Observation→下一次Decision",
+                  "decision_input": "模型依据messages判断",
+                  "decision_direct_answer": "模型可以直接回答",
+                  "decision_tool_choice": "模型可以选择或提出工具调用",
+                  "action_execution": "程序执行模型选定的工具",
+                  "observation_write": "执行结果写回上下文",
+                  "observation_use": "Observation供模型继续判断",
+                  "trace_field_names": "step/tool/arguments/result四字段",
+                  "trace_step_meaning": "step为从1开始的Decision轮号",
+                  "trace_tool_meaning": "tool为工具名",
+                  "trace_arguments_meaning": "arguments为原始参数",
+                  "trace_result_meaning": "result为执行结果或错误Observation",
+                  "trace_shared_step": "同Decision轮多个调用共享step"
+                },
+                "coverage_by_chunk": [
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 0,
+                    "covered_facts": [
+                      "loop_order",
+                      "decision_input",
+                      "decision_direct_answer",
+                      "decision_tool_choice",
+                      "action_execution",
+                      "observation_write",
+                      "observation_use"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 1,
+                    "covered_facts": [
+                      "decision_input",
+                      "decision_tool_choice",
+                      "observation_write",
+                      "observation_use"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 2,
+                    "covered_facts": [
+                      "observation_use",
+                      "trace_field_names",
+                      "trace_step_meaning",
+                      "trace_tool_meaning"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 3,
+                    "covered_facts": [
+                      "trace_field_names",
+                      "trace_step_meaning",
+                      "trace_tool_meaning",
+                      "trace_arguments_meaning",
+                      "trace_result_meaning",
+                      "trace_shared_step"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_api",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_api",
+                    "chunk_index": 1,
+                    "covered_facts": [
+                      "decision_input",
+                      "decision_tool_choice",
+                      "observation_write",
+                      "observation_use"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_api",
+                    "chunk_index": 2,
+                    "covered_facts": [
+                      "decision_tool_choice"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 1,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 3,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_memory",
+                    "chunk_index": 0,
+                    "covered_facts": [
+                      "decision_input",
+                      "observation_write",
+                      "observation_use"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 1,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 2,
+                    "covered_facts": [
+                      "observation_use"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 3,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_tools",
+                    "chunk_index": 0,
+                    "covered_facts": [
+                      "decision_tool_choice",
+                      "decision_direct_answer",
+                      "action_execution",
+                      "observation_write",
+                      "observation_use"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_tools",
+                    "chunk_index": 1,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_tools",
+                    "chunk_index": 2,
+                    "covered_facts": [
+                      "observation_use"
+                    ]
+                  }
+                ],
+                "complete_single_chunks": [],
+                "minimum_chunks_for_complete_answer": 2,
+                "example_complete_chunk_sets": [
+                  [
+                    {
+                      "document_id": "eval_agent",
+                      "chunk_index": 0
+                    },
+                    {
+                      "document_id": "eval_agent",
+                      "chunk_index": 3
+                    }
+                  ]
+                ],
+                "necessity_reason": "Agent#3为完整trace.arguments/result释义及同轮共享step所必需；该块缺Loop三阶段顺序与完整职责，至少还需Agent#0。"
+              }
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 0
+              },
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 1
+              },
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 2
+              },
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 3
+              },
+              {
+                "document_id": "eval_tools",
+                "chunk_index": 0
+              },
+              {
+                "document_id": "eval_api",
+                "chunk_index": 1
+              },
+              {
+                "document_id": "eval_memory",
+                "chunk_index": 0
+              },
+              {
+                "document_id": "eval_rag",
+                "chunk_index": 2
+              },
+              {
+                "document_id": "eval_tools",
+                "chunk_index": 2
+              },
+              {
+                "document_id": "eval_api",
+                "chunk_index": 2
+              }
+            ]
+          }
+        ]
+      },
+      "required_facts": {
+        "loop_order": "Agent Loop 按 Decision→Action→Observation→下一次 Decision 的顺序运行。",
+        "decision_input": "模型依据 messages 判断如何继续。",
+        "decision_direct_answer": "模型可以选择直接给出最终回答。",
+        "decision_tool_choice": "模型可以选择或提出 Tool Call。",
+        "action_execution": "程序执行模型选定的工具。",
+        "observation_write": "工具执行结果作为 Observation 写回上下文。",
+        "observation_use": "模型可将 Observation 内容作为继续处理任务的依据。",
+        "trace_step_meaning": "step 是从 1 开始的 Decision 轮号。",
+        "trace_tool_meaning": "tool 保存工具名称。",
+        "trace_arguments_meaning": "arguments 保存模型给出的原始参数。",
+        "trace_result_meaning": "result 保存执行结果或错误 Observation。",
+        "trace_shared_step": "同一 Decision 轮多个 Tool Call 的记录共享相同 step。"
+      },
+      "coverage_by_chunk": [
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 0,
+          "covered_facts": [
+            "loop_order",
+            "decision_input",
+            "decision_direct_answer",
+            "decision_tool_choice",
+            "action_execution",
+            "observation_write",
+            "observation_use"
+          ]
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 1,
+          "covered_facts": [
+            "decision_input",
+            "decision_tool_choice",
+            "observation_write",
+            "observation_use"
+          ]
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 2,
+          "covered_facts": [
+            "observation_use",
+            "trace_step_meaning",
+            "trace_tool_meaning"
+          ]
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 3,
+          "covered_facts": [
+            "trace_step_meaning",
+            "trace_tool_meaning",
+            "trace_arguments_meaning",
+            "trace_result_meaning",
+            "trace_shared_step"
+          ]
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 1,
+          "covered_facts": [
+            "decision_input",
+            "decision_tool_choice",
+            "observation_write",
+            "observation_use"
+          ]
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 2,
+          "covered_facts": [
+            "decision_tool_choice"
+          ]
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 1,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 2,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 3,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_memory",
+          "chunk_index": 0,
+          "covered_facts": [
+            "decision_input",
+            "observation_use"
+          ],
+          "partial_support": [
+            {
+              "fact_id": "observation_write",
+              "note": "另有追加Observation形成上下文的概括；本轮不把概括计为完整的执行结果写回机制。"
+            }
+          ]
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 1,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 2,
+          "covered_facts": [
+            "observation_use"
+          ]
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 3,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 0,
+          "covered_facts": [
+            "decision_tool_choice",
+            "action_execution",
+            "observation_write",
+            "observation_use"
+          ],
+          "partial_support": [
+            {
+              "fact_id": "decision_direct_answer",
+              "note": "本块说明工具执行后Agent继续决定生成答案；未直接明示Decision可直接给最终回答，不计该事实完整覆盖。"
+            }
+          ]
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 1,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 2,
+          "covered_facts": [
+            "observation_use"
+          ]
+        }
+      ],
+      "required_fact_contexts": {}
+    },
+    {
+      "id": "rag_008",
+      "case_type": "retrieval",
+      "category": "multi_chunk",
+      "query": "KnowledgePilot 的 TOOL_REGISTRY 如何把模型给出的工具名称映射到实际执行函数？工具执行出现可捕获异常时，Agent Loop 如何形成错误 Observation 并让模型继续决策？这与知识库 Tool 正常返回空列表有什么区别？",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 0
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 1
+        }
+      ],
+      "expected_answer": "TOOL_REGISTRY 保存工具名称到 Python 函数的映射，程序按名称找到函数并传入参数执行。可捕获的工具执行异常会被整理成以 Tool execution failed 开头的结果，作为 Observation 放回 messages，模型可以根据错误继续判断。正常返回空列表表示检索没有取得片段；执行失败表示调用过程发生问题，两者不能混为一谈。",
+      "answer_match_type": "manual",
+      "tags": [
+        "tool_registry",
+        "error_observation",
+        "multi_chunk"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 3,
+        "notes": "保留2个Relevant及原3项事实。Registry名称到函数映射由Tools#0提供；错误Observation机制与空列表/执行失败区别由Agent#1提供。普通Observation背景不视为指定异常处理的完整证据。",
+        "evidence": [
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 0,
+            "supports": [
+              "registry_mapping"
+            ],
+            "quotes": [
+              "TOOL_REGISTRY 保存工具名称与 Python 函数的映射，程序找到该函数，再传入参数执行。"
+            ]
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 1,
+            "supports": [
+              "error_observation",
+              "empty_vs_failure"
+            ],
+            "quotes": [
+              "工具执行出现可捕获的异常时，程序会把错误整理为 Tool execution failed 开头的结果，作为 Observation 放回 messages，模型可以根据错误继续判断。",
+              "工具返回空列表表示检索没有取得片段；执行失败则表示调用过程发生了问题。两种情况需区分。"
+            ]
+          }
+        ],
+        "multi_chunk_check": {
+          "verification_scope": "ALL_19_CHUNKS",
+          "required_facts": {
+            "registry_mapping": "工具名称到Python函数映射与传参执行",
+            "error_observation": "可捕获异常转为Tool execution failed前缀结果写回messages继续决策",
+            "empty_vs_failure": "正常空列表表示未取得片段，执行失败表示调用过程出错"
+          },
+          "coverage_by_chunk": [
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 1,
+              "covered_facts": [
+                "error_observation",
+                "empty_vs_failure"
+              ]
+            },
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 2,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 3,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_api",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_api",
+              "chunk_index": 1,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_api",
+              "chunk_index": 2,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 1,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 2,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 3,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_memory",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 1,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 2,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 3,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 0,
+              "covered_facts": [
+                "registry_mapping"
+              ]
+            },
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 1,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 2,
+              "covered_facts": []
+            }
+          ],
+          "complete_single_chunks": [],
+          "minimum_chunks_for_complete_answer": 2,
+          "example_complete_chunk_sets": [
+            [
+              {
+                "document_id": "eval_tools",
+                "chunk_index": 0
+              },
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 1
+              }
+            ]
+          ],
+          "necessity_reason": "名称→函数机制与错误Observation/空列表区别位于不同块；全部19块没有单块完整覆盖。Tools#0与Agent#1只是充分组合示例。",
+          "example_complete_chunk_sets_are_exhaustive": false,
+          "coverage_rule": "covered_facts完整支持计入；partial_support不计完整覆盖。不同Chunk支持同一fact_id只计一次，不要求返回固定示例组合。"
+        },
+        "partial_evidence_chunks": [],
+        "history": [
+          {
+            "round": 1,
+            "query": "Tool Calling 与 Agent Loop 的职责区别",
+            "expected_answer": "Tool Calling 是模型选择工具、提供名称和参数、程序执行并返回结果的行为机制；Agent Loop 组织 Decision、Action、Observation 与后续 Decision，持续推进任务并形成回答。",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "初始两块支持，但 Agent#0 单块已描述 Tool Call/执行及 Decision-Action-Observation 循环，Tools#0 也描述返回后继续决策；是否确属必须跨块题待裁决。",
+              "additional_relevant_chunks": [],
+              "partial_evidence_chunks": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 1
+                }
+              ]
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_tools",
+                "chunk_index": 0
+              },
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 0
+              }
+            ]
+          },
+          {
+            "round": 2,
+            "query": "KnowledgePilot 的 TOOL_REGISTRY 如何把模型给出的工具名称映射到实际执行函数？工具执行出现可捕获异常时，Agent Loop 如何形成错误 Observation 并让模型继续决策？这与知识库 Tool 正常返回空列表有什么区别？",
+            "expected_answer": "TOOL_REGISTRY 保存工具名称到 Python 函数的映射，程序按名称找到函数并传入参数执行。可捕获的工具执行异常会被整理成以 Tool execution failed 开头的结果，作为 Observation 放回 messages，模型可以根据错误继续判断。正常返回空列表表示检索没有取得片段；执行失败表示调用过程发生问题，两者不能混为一谈。",
+            "answer_match_type": "manual",
+            "review": {
+              "status": "SUPPORTED",
+              "round": 2,
+              "notes": "参考方向的Registry与普通Observation继续决策都在Tools#0，仍可能单块作答，因此加入明确错误Observation及空列表/失败区别。Tools#0与Agent#1分别提供不可替代事实。普通Observation背景不证明异常捕获或空列表区别。",
+              "evidence": [
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 0,
+                  "supports": [
+                    "registry_mapping"
+                  ],
+                  "quotes": [
+                    "TOOL_REGISTRY 保存工具名称与 Python 函数的映射，程序找到该函数，再传入参数执行。"
+                  ]
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 1,
+                  "supports": [
+                    "error_observation",
+                    "empty_vs_failure"
+                  ],
+                  "quotes": [
+                    "工具执行出现可捕获的异常时，程序会把错误整理为 Tool execution failed 开头的结果，作为 Observation 放回 messages，模型可以根据错误继续判断。",
+                    "工具返回空列表表示检索没有取得片段；执行失败则表示调用过程发生了问题。两种情况需区分。"
+                  ]
+                }
+              ],
+              "multi_chunk_check": {
+                "verification_scope": "ALL_19_CHUNKS",
+                "required_facts": {
+                  "registry_mapping": "工具名称到Python函数映射与传参执行",
+                  "error_observation": "可捕获异常转为Tool execution failed前缀结果写回messages继续决策",
+                  "empty_vs_failure": "正常空列表表示未取得片段，执行失败表示调用过程出错"
+                },
+                "coverage_by_chunk": [
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 1,
+                    "covered_facts": [
+                      "error_observation",
+                      "empty_vs_failure"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 3,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_api",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_api",
+                    "chunk_index": 1,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_api",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 1,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 3,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_memory",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 1,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 3,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_tools",
+                    "chunk_index": 0,
+                    "covered_facts": [
+                      "registry_mapping"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_tools",
+                    "chunk_index": 1,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_tools",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  }
+                ],
+                "complete_single_chunks": [],
+                "minimum_chunks_for_complete_answer": 2,
+                "example_complete_chunk_sets": [
+                  [
+                    {
+                      "document_id": "eval_tools",
+                      "chunk_index": 0
+                    },
+                    {
+                      "document_id": "eval_agent",
+                      "chunk_index": 1
+                    }
+                  ]
+                ],
+                "necessity_reason": "Registry名称→函数机制仅Tools#0明确提供；指定错误处理及空列表/失败区分仅Agent#1提供，两组事实在不同块。"
+              }
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_tools",
+                "chunk_index": 0
+              },
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 1
+              }
+            ]
+          }
+        ]
+      },
+      "required_facts": {
+        "registry_mapping": "工具名称到Python函数映射与传参执行",
+        "error_observation": "可捕获异常转为Tool execution failed前缀结果写回messages继续决策",
+        "empty_vs_failure": "正常空列表表示未取得片段，执行失败表示调用过程出错"
+      },
+      "coverage_by_chunk": [
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 1,
+          "covered_facts": [
+            "error_observation",
+            "empty_vs_failure"
+          ]
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 2,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 3,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 1,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 2,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 1,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 2,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 3,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_memory",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 1,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 2,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 3,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 0,
+          "covered_facts": [
+            "registry_mapping"
+          ]
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 1,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 2,
+          "covered_facts": []
+        }
+      ],
+      "required_fact_contexts": {}
+    },
+    {
+      "id": "rag_009",
+      "case_type": "retrieval",
+      "category": "multi_chunk",
+      "query": "底层 search() 的每条结果由哪三个部分组成？metadata 中 document_id、source、chunk_index 各表示什么？search_knowledge_base() 对外返回哪些字段，哪些检索分数和标识不再保留？",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 1
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 2
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 2
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 0
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 1
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 1
+        }
+      ],
+      "expected_answer": "search 每条结果是文本、similarity 和 metadata 的三元组。metadata 中 document_id 区分文档，source 记录入库文件路径，chunk_index 表示文档内部块位置。search_knowledge_base 对外每项只返回 content（候选文本）与 source（metadata 中的来源路径），不保留 similarity、document_id 和 chunk_index。",
+      "answer_match_type": "manual",
+      "tags": [
+        "search",
+        "retrieval_result",
+        "multi_chunk"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 3,
+        "notes": "保留6个Relevant；合并近义tool_content_source/tool_field_names，精确输出字段集只计一次。Agent#0/#1继续保留必要语义子证据但不冒充精确字段名完整覆盖；两个丢弃标识分别为不同事实。",
+        "evidence": [
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 1,
+            "supports": [
+              "search_tuple",
+              "document_id_meaning",
+              "source_meaning",
+              "chunk_index_meaning"
+            ],
+            "quotes": [
+              "返回文本、相似度与 metadata 的三元组。",
+              "document_id 区分文档，source 记录入库文件路径，chunk_index 表示文档内部块位置。"
+            ]
+          },
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 2,
+            "supports": [
+              "tool_output_fields",
+              "discard_similarity"
+            ],
+            "quotes": [
+              "调用 search 后只返回 content 与 source",
+              "不保留分数和完整 metadata"
+            ],
+            "partial_support": [
+              {
+                "fact_id": "discard_document_id",
+                "note": "不保留完整metadata未逐项明示document_id，不单独计完整标识丢弃事实。"
+              },
+              {
+                "fact_id": "discard_chunk_index",
+                "note": "不保留完整metadata未逐项明示chunk_index，不单独计完整标识丢弃事实。"
+              }
+            ]
+          },
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 2,
+            "supports": [
+              "source_meaning",
+              "tool_output_fields",
+              "discard_similarity",
+              "discard_document_id",
+              "discard_chunk_index"
+            ],
+            "quotes": [
+              "工具返回 content（候选文本）与 source（metadata 中的来源路径）。",
+              "结果丢弃 similarity、document_id 和 chunk_index"
+            ]
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 0,
+            "supports": [],
+            "quotes": [
+              "search_knowledge_base 返回包含内容与来源的片段列表。"
+            ],
+            "partial_support": [
+              {
+                "fact_id": "tool_output_fields",
+                "note": "直接提供内容与来源这一语义子证据，但没有给出精确字段名，不单独计为完整覆盖。"
+              }
+            ]
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 1,
+            "supports": [],
+            "quotes": [
+              "search_knowledge_base 返回包含内容与来源的片段列表。"
+            ],
+            "partial_support": [
+              {
+                "fact_id": "tool_output_fields",
+                "note": "与Agent#0重叠重复；缺少精确字段名，不单独计为完整覆盖。"
+              }
+            ]
+          },
+          {
+            "document_id": "eval_engineering",
+            "chunk_index": 1,
+            "supports": [
+              "document_id_meaning",
+              "chunk_index_meaning"
+            ],
+            "quotes": [
+              "document_id 标识文档，chunk_index 标识文档内部片段"
+            ]
+          }
+        ],
+        "partial_evidence_chunks": [
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 2
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 0
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 1
+          }
+        ],
+        "multi_chunk_check": {
+          "verification_scope": "ALL_19_CHUNKS",
+          "required_facts": {
+            "search_tuple": "底层 search() 每条结果为文本、similarity、metadata 的三元组。",
+            "document_id_meaning": "metadata.document_id 标识文档。",
+            "source_meaning": "metadata.source 是入库文件来源路径。",
+            "chunk_index_meaning": "metadata.chunk_index 是文档内部块位置。",
+            "tool_output_fields": "search_knowledge_base() 对外每条结果的字段名为 content 和 source。",
+            "discard_similarity": "知识库 Tool 不保留 similarity 检索分数。",
+            "discard_document_id": "知识库 Tool 不保留 document_id。",
+            "discard_chunk_index": "知识库 Tool 不保留 chunk_index。"
+          },
+          "coverage_by_chunk": [
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 0,
+              "covered_facts": [],
+              "partial_support": [
+                {
+                  "fact_id": "tool_output_fields",
+                  "note": "直接提供内容与来源这一语义子证据，但没有给出精确字段名，不单独计为完整覆盖。"
+                }
+              ]
+            },
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 1,
+              "covered_facts": [],
+              "partial_support": [
+                {
+                  "fact_id": "tool_output_fields",
+                  "note": "与Agent#0重叠重复；缺少精确字段名，不单独计为完整覆盖。"
+                }
+              ]
+            },
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 2,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 3,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_api",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_api",
+              "chunk_index": 1,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_api",
+              "chunk_index": 2,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 1,
+              "covered_facts": [
+                "document_id_meaning",
+                "chunk_index_meaning"
+              ]
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 2,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 3,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_memory",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 1,
+              "covered_facts": [
+                "search_tuple",
+                "document_id_meaning",
+                "source_meaning",
+                "chunk_index_meaning"
+              ]
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 2,
+              "covered_facts": [
+                "tool_output_fields",
+                "discard_similarity"
+              ],
+              "partial_support": [
+                {
+                  "fact_id": "discard_document_id",
+                  "note": "不保留完整metadata未逐项明示document_id，不单独计完整标识丢弃事实。"
+                },
+                {
+                  "fact_id": "discard_chunk_index",
+                  "note": "不保留完整metadata未逐项明示chunk_index，不单独计完整标识丢弃事实。"
+                }
+              ]
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 3,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 1,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 2,
+              "covered_facts": [
+                "source_meaning",
+                "tool_output_fields",
+                "discard_similarity",
+                "discard_document_id",
+                "discard_chunk_index"
+              ]
+            }
+          ],
+          "complete_single_chunks": [],
+          "minimum_chunks_for_complete_answer": 2,
+          "example_complete_chunk_sets": [
+            [
+              {
+                "document_id": "eval_rag",
+                "chunk_index": 1
+              },
+              {
+                "document_id": "eval_tools",
+                "chunk_index": 2
+              }
+            ]
+          ],
+          "necessity_reason": "完整search三元组与metadata含义、Tool精确输出字段及丢弃项分处不同块；RAG#1与Tools#2是足够组合示例，全部19块没有完整单块。",
+          "example_complete_chunk_sets_are_exhaustive": false,
+          "coverage_rule": "covered_facts完整支持计入；partial_support不计完整覆盖。不同Chunk支持同一fact_id只计一次，不要求返回固定示例组合。"
+        },
+        "history": [
+          {
+            "round": 1,
+            "query": "底层 search() 与 search_knowledge_base() 的返回结果区别",
+            "expected_answer": "search 返回文本、similarity 和 metadata 的三元组，metadata 含 document_id、source、chunk_index；search_knowledge_base 只返回 content 与 source，丢弃 similarity、document_id 和 chunk_index。",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "初始两块提供三元组与工具字段差异。RAG#2 已概括保留分数/metadata 与仅 content/source；Tools#2 单块覆盖主要差异。是否要求精确返回格式待裁决。",
+              "additional_relevant_chunks": [
+                {
+                  "document_id": "eval_rag",
+                  "chunk_index": 2
+                }
+              ],
+              "partial_evidence_chunks": []
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_rag",
+                "chunk_index": 1
+              },
+              {
+                "document_id": "eval_tools",
+                "chunk_index": 2
+              }
+            ]
+          },
+          {
+            "round": 2,
+            "query": "底层 search() 的每条结果由哪三个部分组成？metadata 中 document_id、source、chunk_index 各表示什么？search_knowledge_base() 对外返回哪些字段，哪些检索分数和标识不再保留？",
+            "expected_answer": "search 每条结果是文本、similarity 和 metadata 的三元组。metadata 中 document_id 区分文档，source 记录入库文件路径，chunk_index 表示文档内部块位置。search_knowledge_base 对外每项只返回 content（候选文本）与 source（metadata 中的来源路径），不保留 similarity、document_id 和 chunk_index。",
+            "answer_match_type": "manual",
+            "review": {
+              "status": "SUPPORTED",
+              "round": 2,
+              "notes": "明确要求完整三元组及三字段含义，避免只答概括性差异。RAG#1缺Tool输出，其余块缺完整三元组。Agent#0/#1重复返回内容与来源、Engineering#1重复两个标识含义，均作为直接子证据补录。",
+              "evidence": [
+                {
+                  "document_id": "eval_rag",
+                  "chunk_index": 1,
+                  "supports": [
+                    "search_tuple",
+                    "document_id_meaning",
+                    "source_meaning",
+                    "chunk_index_meaning"
+                  ],
+                  "quotes": [
+                    "返回文本、相似度与 metadata 的三元组。",
+                    "document_id 区分文档，source 记录入库文件路径，chunk_index 表示文档内部块位置。"
+                  ]
+                },
+                {
+                  "document_id": "eval_rag",
+                  "chunk_index": 2,
+                  "supports": [
+                    "tool_content_source",
+                    "discard_similarity",
+                    "tool_field_names"
+                  ],
+                  "quotes": [
+                    "调用 search 后只返回 content 与 source",
+                    "不保留分数和完整 metadata"
+                  ]
+                },
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 2,
+                  "supports": [
+                    "tool_content_source",
+                    "source_meaning",
+                    "discard_similarity",
+                    "discard_document_chunk",
+                    "tool_field_names"
+                  ],
+                  "quotes": [
+                    "工具返回 content（候选文本）与 source（metadata 中的来源路径）。",
+                    "结果丢弃 similarity、document_id 和 chunk_index"
+                  ]
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 0,
+                  "supports": [
+                    "tool_content_source"
+                  ],
+                  "quotes": [
+                    "search_knowledge_base 返回包含内容与来源的片段列表。"
+                  ]
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 1,
+                  "supports": [
+                    "tool_content_source"
+                  ],
+                  "quotes": [
+                    "search_knowledge_base 返回包含内容与来源的片段列表。"
+                  ]
+                },
+                {
+                  "document_id": "eval_engineering",
+                  "chunk_index": 1,
+                  "supports": [
+                    "document_id_meaning",
+                    "chunk_index_meaning"
+                  ],
+                  "quotes": [
+                    "document_id 标识文档，chunk_index 标识文档内部片段"
+                  ]
+                }
+              ],
+              "partial_evidence_chunks": [
+                {
+                  "document_id": "eval_rag",
+                  "chunk_index": 2
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 0
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 1
+                },
+                {
+                  "document_id": "eval_engineering",
+                  "chunk_index": 1
+                }
+              ],
+              "multi_chunk_check": {
+                "verification_scope": "ALL_19_CHUNKS",
+                "required_facts": {
+                  "search_tuple": "search返回文本/similarity/metadata三元组",
+                  "document_id_meaning": "document_id标识文档",
+                  "source_meaning": "source为metadata中的入库来源路径",
+                  "chunk_index_meaning": "chunk_index为文档内部块位置",
+                  "tool_content_source": "Tool返回候选内容与来源",
+                  "discard_similarity": "Tool不保留检索分数",
+                  "discard_document_chunk": "Tool不保留document_id与chunk_index",
+                  "tool_field_names": "Tool对外字段名为content/source"
+                },
+                "coverage_by_chunk": [
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 0,
+                    "covered_facts": [
+                      "tool_content_source"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 1,
+                    "covered_facts": [
+                      "tool_content_source"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 3,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_api",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_api",
+                    "chunk_index": 1,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_api",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 1,
+                    "covered_facts": [
+                      "document_id_meaning",
+                      "chunk_index_meaning"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 3,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_memory",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 1,
+                    "covered_facts": [
+                      "search_tuple",
+                      "document_id_meaning",
+                      "source_meaning",
+                      "chunk_index_meaning"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 2,
+                    "covered_facts": [
+                      "tool_content_source",
+                      "discard_similarity",
+                      "tool_field_names"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 3,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_tools",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_tools",
+                    "chunk_index": 1,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_tools",
+                    "chunk_index": 2,
+                    "covered_facts": [
+                      "tool_content_source",
+                      "source_meaning",
+                      "discard_similarity",
+                      "discard_document_chunk",
+                      "tool_field_names"
+                    ]
+                  }
+                ],
+                "complete_single_chunks": [],
+                "minimum_chunks_for_complete_answer": 2,
+                "example_complete_chunk_sets": [
+                  [
+                    {
+                      "document_id": "eval_rag",
+                      "chunk_index": 1
+                    },
+                    {
+                      "document_id": "eval_tools",
+                      "chunk_index": 2
+                    }
+                  ]
+                ],
+                "necessity_reason": "只有RAG#1完整给出search三元组及全部metadata含义，但没有Tool返回结果；至少需组合Tools#2，任何单块均不覆盖全部事实。"
+              }
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_rag",
+                "chunk_index": 1
+              },
+              {
+                "document_id": "eval_rag",
+                "chunk_index": 2
+              },
+              {
+                "document_id": "eval_tools",
+                "chunk_index": 2
+              },
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 0
+              },
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 1
+              },
+              {
+                "document_id": "eval_engineering",
+                "chunk_index": 1
+              }
+            ]
+          }
+        ]
+      },
+      "required_facts": {
+        "search_tuple": "底层 search() 每条结果为文本、similarity、metadata 的三元组。",
+        "document_id_meaning": "metadata.document_id 标识文档。",
+        "source_meaning": "metadata.source 是入库文件来源路径。",
+        "chunk_index_meaning": "metadata.chunk_index 是文档内部块位置。",
+        "tool_output_fields": "search_knowledge_base() 对外每条结果的字段名为 content 和 source。",
+        "discard_similarity": "知识库 Tool 不保留 similarity 检索分数。",
+        "discard_document_id": "知识库 Tool 不保留 document_id。",
+        "discard_chunk_index": "知识库 Tool 不保留 chunk_index。"
+      },
+      "coverage_by_chunk": [
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 0,
+          "covered_facts": [],
+          "partial_support": [
+            {
+              "fact_id": "tool_output_fields",
+              "note": "直接提供内容与来源这一语义子证据，但没有给出精确字段名，不单独计为完整覆盖。"
+            }
+          ]
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 1,
+          "covered_facts": [],
+          "partial_support": [
+            {
+              "fact_id": "tool_output_fields",
+              "note": "与Agent#0重叠重复；缺少精确字段名，不单独计为完整覆盖。"
+            }
+          ]
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 2,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 3,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 1,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 2,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 1,
+          "covered_facts": [
+            "document_id_meaning",
+            "chunk_index_meaning"
+          ]
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 2,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 3,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_memory",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 1,
+          "covered_facts": [
+            "search_tuple",
+            "document_id_meaning",
+            "source_meaning",
+            "chunk_index_meaning"
+          ]
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 2,
+          "covered_facts": [
+            "tool_output_fields",
+            "discard_similarity"
+          ],
+          "partial_support": [
+            {
+              "fact_id": "discard_document_id",
+              "note": "不保留完整metadata未逐项明示document_id，不单独计完整标识丢弃事实。"
+            },
+            {
+              "fact_id": "discard_chunk_index",
+              "note": "不保留完整metadata未逐项明示chunk_index，不单独计完整标识丢弃事实。"
+            }
+          ]
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 3,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 1,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 2,
+          "covered_facts": [
+            "source_meaning",
+            "tool_output_fields",
+            "discard_similarity",
+            "discard_document_id",
+            "discard_chunk_index"
+          ]
+        }
+      ],
+      "required_fact_contexts": {}
+    },
+    {
+      "id": "rag_010",
+      "case_type": "retrieval",
+      "category": "multi_chunk",
+      "query": "Baseline 是什么，版本比较时为什么要固定 Evaluation Dataset、Corpus 和实验配置？当新版本整体指标提高却出现旧能力退化时，怎样用 Badcase 与 Ablation 分析 Regression，并保持哪些对照条件一致？",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 1
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 2
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 0
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 3
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 1
+        }
+      ],
+      "expected_answer": "Baseline 是固定 Evaluation Dataset、明确配置下取得的基准成绩，为版本比较提供参照。固定 Dataset 使版本面对相同任务；固定 Corpus、分块及标识映射避免资料变化混入比较；明确检索范围、Top-K、阈值使用和服务模型等实验条件，便于归因。Regression 是新版本使原本正常能力退化，整体指标提高仍可能掩盖具体样本退化。Badcase 记录失败样本，区分资料缺失、漏召回、排名、工具选择、参数或服务异常。Ablation 在其他条件固定时移除或禁用组件分析贡献；例如比较阈值启用与关闭，保持 Corpus、问题集合和向量模型一致。版本对照应保持任务、资料和计分口径一致。",
+      "answer_match_type": "manual",
+      "tags": [
+        "baseline",
+        "regression",
+        "badcase",
+        "ablation",
+        "multi_chunk"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 3,
+        "notes": "保留5个Relevant。将固定Corpus/分块/标识拆为不同必需事实；任务、Corpus和条件在版本比较及消融中共用事实ID，避免重复计分。补明整体指标提高仍会掩盖具体退化。Engineering#3只覆盖资料一致性，不能冒充分块或标识证据。",
+        "evidence": [
+          {
+            "document_id": "eval_engineering",
+            "chunk_index": 0,
+            "supports": [
+              "baseline_definition"
+            ],
+            "quotes": [
+              "Baseline 是当前系统在固定 Evaluation Dataset 上、采用明确配置得到的基准成绩。"
+            ],
+            "partial_support": [
+              {
+                "fact_id": "same_tasks",
+                "note": "句尾截在面对相，没有完整给出相同任务，不能计为覆盖。"
+              }
+            ]
+          },
+          {
+            "document_id": "eval_engineering",
+            "chunk_index": 1,
+            "supports": [
+              "baseline_definition",
+              "same_tasks",
+              "corpus_consistency",
+              "chunking_effect",
+              "identifier_mapping",
+              "baseline_configuration",
+              "regression_definition",
+              "aggregate_masks_regression",
+              "same_scoring"
+            ],
+            "quotes": [
+              "Baseline 是当前系统在固定 Evaluation Dataset 上、采用明确配置得到的基准成绩。",
+              "Evaluation Dataset 固定有助于让不同版本面对相同任务",
+              "Corpus 固定有助于让不同检索方案搜索相同资料。",
+              "只固定问题而不断改变 knowledge base，难以判断变化来自算法还是语料。",
+              "document_id 标识文档，chunk_index 标识文档内部片段，二者应绑定相同语料版本。",
+              "改动这些参数也会改变片段边界。",
+              "Baseline 应记录检索范围、Top-K、是否应用阈值及使用的服务模型。",
+              "Regression 指新版本使原本正常的能力退化。",
+              "一次改动可能提高整体命中率，却让少量原本能检索到的关键片段消失",
+              "新旧版本的对照应先保持任务、资料和计分口径一致"
+            ]
+          },
+          {
+            "document_id": "eval_engineering",
+            "chunk_index": 2,
+            "supports": [
+              "same_tasks",
+              "regression_definition",
+              "aggregate_masks_regression",
+              "badcase_diagnosis",
+              "ablation_method",
+              "same_vector_model"
+            ],
+            "quotes": [
+              "Regression 指新版本使原本正常的能力退化。",
+              "一次改动可能提高整体命中率，却让少量原本能检索到的关键片段消失",
+              "Badcase 是具体失败样本及原因分析，可以区分资料缺失、检索漏召回、相关片段排名靠后、工具选择不当、参数错误或服务异常。",
+              "Ablation 在其他条件固定时移除或禁用某个组件，分析其贡献。",
+              "比较启用和关闭阈值过滤，保持 Corpus、问题集合和向量模型一致。"
+            ],
+            "partial_support": [
+              {
+                "fact_id": "corpus_consistency",
+                "note": "明确要求Corpus保持一致，但本块没有完整解释资料变化混入版本比较的原因。"
+              }
+            ]
+          },
+          {
+            "document_id": "eval_engineering",
+            "chunk_index": 3,
+            "supports": [
+              "corpus_consistency"
+            ],
+            "quotes": [
+              "评测过程中应避免更新固定 Corpus，以免资料变化混入版本对比。",
+              "不能把基础设施故障自动解释为检索或 Agent 能力下降。"
+            ],
+            "partial_support": [
+              {
+                "fact_id": "badcase_diagnosis",
+                "note": "说明服务与基础设施异常这一部分原因，未完整列出本题的失败分类。"
+              }
+            ]
+          },
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 1,
+            "supports": [
+              "chunking_effect",
+              "identifier_mapping"
+            ],
+            "quotes": [
+              "正文或切分参数改变后，同一序号可对应不同文字。",
+              "离线评测应冻结语料、切分方式与标识映射"
+            ],
+            "partial_support": [
+              {
+                "fact_id": "corpus_consistency",
+                "note": "要求冻结语料，但本块未完整说明版本比较中的资料变化归因问题。"
+              }
+            ]
+          }
+        ],
+        "partial_evidence_chunks": [
+          {
+            "document_id": "eval_engineering",
+            "chunk_index": 0
+          },
+          {
+            "document_id": "eval_engineering",
+            "chunk_index": 2
+          },
+          {
+            "document_id": "eval_engineering",
+            "chunk_index": 3
+          },
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 1
+          }
+        ],
+        "multi_chunk_check": {
+          "verification_scope": "ALL_19_CHUNKS",
+          "required_facts": {
+            "baseline_definition": "Baseline 是固定 Evaluation Dataset 和明确配置下的基准成绩。",
+            "same_tasks": "版本或消融对照应使用相同任务或问题集合。",
+            "corpus_consistency": "固定 Corpus 使比较使用相同资料，避免资料变化混入版本比较。",
+            "chunking_effect": "改变切分参数会改变片段边界或同一块序号对应的内容。",
+            "identifier_mapping": "document_id 与 chunk_index 的标识映射应绑定固定的同一语料版本。",
+            "baseline_configuration": "Baseline 应记录检索范围、Top-K、是否使用阈值及服务模型。",
+            "regression_definition": "Regression 是新版本使原本正常的能力退化。",
+            "aggregate_masks_regression": "整体指标提高仍可能掩盖具体样本或关键片段的退化。",
+            "badcase_diagnosis": "Badcase 分析具体失败样本，区分资料缺失、漏召回、排名靠后、工具选择、参数或服务异常等原因。",
+            "ablation_method": "Ablation 在其他条件固定时移除或禁用组件，以分析该组件贡献。",
+            "same_vector_model": "消融对照应保持向量模型一致。",
+            "same_scoring": "版本对照应保持计分口径一致。"
+          },
+          "coverage_by_chunk": [
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 1,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 2,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_agent",
+              "chunk_index": 3,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_api",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_api",
+              "chunk_index": 1,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_api",
+              "chunk_index": 2,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 0,
+              "covered_facts": [
+                "baseline_definition"
+              ],
+              "partial_support": [
+                {
+                  "fact_id": "same_tasks",
+                  "note": "句尾截在面对相，没有完整给出相同任务，不能计为覆盖。"
+                }
+              ]
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 1,
+              "covered_facts": [
+                "baseline_definition",
+                "same_tasks",
+                "corpus_consistency",
+                "chunking_effect",
+                "identifier_mapping",
+                "baseline_configuration",
+                "regression_definition",
+                "aggregate_masks_regression",
+                "same_scoring"
+              ]
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 2,
+              "covered_facts": [
+                "same_tasks",
+                "regression_definition",
+                "aggregate_masks_regression",
+                "badcase_diagnosis",
+                "ablation_method",
+                "same_vector_model"
+              ],
+              "partial_support": [
+                {
+                  "fact_id": "corpus_consistency",
+                  "note": "明确要求Corpus保持一致，但本块没有完整解释资料变化混入版本比较的原因。"
+                }
+              ]
+            },
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 3,
+              "covered_facts": [
+                "corpus_consistency"
+              ],
+              "partial_support": [
+                {
+                  "fact_id": "badcase_diagnosis",
+                  "note": "说明服务与基础设施异常这一部分原因，未完整列出本题的失败分类。"
+                }
+              ]
+            },
+            {
+              "document_id": "eval_memory",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 1,
+              "covered_facts": [
+                "chunking_effect",
+                "identifier_mapping"
+              ],
+              "partial_support": [
+                {
+                  "fact_id": "corpus_consistency",
+                  "note": "要求冻结语料，但本块未完整说明版本比较中的资料变化归因问题。"
+                }
+              ]
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 2,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_rag",
+              "chunk_index": 3,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 0,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 1,
+              "covered_facts": []
+            },
+            {
+              "document_id": "eval_tools",
+              "chunk_index": 2,
+              "covered_facts": []
+            }
+          ],
+          "complete_single_chunks": [],
+          "minimum_chunks_for_complete_answer": 2,
+          "example_complete_chunk_sets": [
+            [
+              {
+                "document_id": "eval_engineering",
+                "chunk_index": 1
+              },
+              {
+                "document_id": "eval_engineering",
+                "chunk_index": 2
+              }
+            ]
+          ],
+          "necessity_reason": "Engineering#1提供Baseline与固定比较条件，但缺完整Badcase/Ablation方法；Engineering#2提供分析方法但缺Baseline定义。两块是足够组合示例，全部19块没有完整单块。",
+          "example_complete_chunk_sets_are_exhaustive": false,
+          "coverage_rule": "covered_facts完整支持计入；partial_support不计完整覆盖。不同Chunk支持同一fact_id只计一次，不要求返回固定示例组合。"
+        },
+        "history": [
+          {
+            "round": 1,
+            "query": "为什么建立 Baseline 并检查 Regression",
+            "expected_answer": "Baseline 是固定 Dataset 和明确配置下的基准成绩，为版本对比提供参照；检查 Regression 用于发现原本正常能力的退化，整体指标提升仍可能掩盖部分样本退化。",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "初始两块支持；Engineering#1 overlap 已完整给出 Regression 定义及整体提升仍有片段退化，单块足以回答当前主题。Engineering#0 仅含 Baseline 定义。",
+              "additional_relevant_chunks": [],
+              "partial_evidence_chunks": [
+                {
+                  "document_id": "eval_engineering",
+                  "chunk_index": 0
+                },
+                {
+                  "document_id": "eval_engineering",
+                  "chunk_index": 3
+                }
+              ]
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_engineering",
+                "chunk_index": 1
+              },
+              {
+                "document_id": "eval_engineering",
+                "chunk_index": 2
+              }
+            ]
+          },
+          {
+            "round": 2,
+            "query": "Baseline 是什么，版本比较时为什么要固定 Evaluation Dataset、Corpus 和实验配置？当新版本整体指标提高却出现旧能力退化时，怎样用 Badcase 与 Ablation 分析 Regression，并保持哪些对照条件一致？",
+            "expected_answer": "Baseline 是固定 Evaluation Dataset、明确配置下取得的基准成绩，为版本比较提供参照。固定 Dataset 使版本面对相同任务；固定 Corpus、分块及标识映射避免资料变化混入比较；明确检索范围、Top-K、阈值使用和服务模型等实验条件，便于归因。Regression 是新版本使原本正常能力退化，整体指标提高仍可能掩盖具体样本退化。Badcase 记录失败样本，区分资料缺失、漏召回、排名、工具选择、参数或服务异常。Ablation 在其他条件固定时移除或禁用组件分析贡献；例如比较阈值启用与关闭，保持 Corpus、问题集合和向量模型一致。版本对照应保持任务、资料和计分口径一致。",
+            "answer_match_type": "manual",
+            "review": {
+              "status": "SUPPORTED",
+              "round": 2,
+              "notes": "明确加入Baseline定义、Badcase分类和Ablation方法，Engineering#1的Regression overlap无法独立全答。Engineering#0重复Baseline定义、Engineering#3和RAG#1直接支持固定Corpus理由，均补录。Ablation只改变目标组件，其余条件固定。",
+              "evidence": [
+                {
+                  "document_id": "eval_engineering",
+                  "chunk_index": 1,
+                  "supports": [
+                    "baseline_definition",
+                    "fixed_dataset",
+                    "fixed_corpus",
+                    "baseline_configuration",
+                    "regression_definition",
+                    "comparison_conditions"
+                  ],
+                  "quotes": [
+                    "Baseline 是当前系统在固定 Evaluation Dataset 上、采用明确配置得到的基准成绩。",
+                    "Evaluation Dataset 固定有助于让不同版本面对相同任务；Corpus 固定有助于让不同检索方案搜索相同资料。",
+                    "Baseline 应记录检索范围、Top-K、是否应用阈值及使用的服务模型。",
+                    "Regression 指新版本使原本正常的能力退化。",
+                    "新旧版本的对照应先保持任务、资料和计分口径一致"
+                  ]
+                },
+                {
+                  "document_id": "eval_engineering",
+                  "chunk_index": 2,
+                  "supports": [
+                    "regression_definition",
+                    "badcase",
+                    "ablation",
+                    "ablation_conditions"
+                  ],
+                  "quotes": [
+                    "Regression 指新版本使原本正常的能力退化。",
+                    "Badcase 是具体失败样本及原因分析，可以区分资料缺失、检索漏召回、相关片段排名靠后、工具选择不当、参数错误或服务异常。",
+                    "Ablation 在其他条件固定时移除或禁用某个组件，分析其贡献。",
+                    "比较启用和关闭阈值过滤，保持 Corpus、问题集合和向量模型一致。"
+                  ]
+                },
+                {
+                  "document_id": "eval_engineering",
+                  "chunk_index": 0,
+                  "supports": [
+                    "baseline_definition"
+                  ],
+                  "quotes": [
+                    "Baseline 是当前系统在固定 Evaluation Dataset 上、采用明确配置得到的基准成绩。"
+                  ]
+                },
+                {
+                  "document_id": "eval_engineering",
+                  "chunk_index": 3,
+                  "supports": [
+                    "fixed_corpus"
+                  ],
+                  "quotes": [
+                    "评测过程中应避免更新固定 Corpus，以免资料变化混入版本对比。"
+                  ]
+                },
+                {
+                  "document_id": "eval_rag",
+                  "chunk_index": 1,
+                  "supports": [
+                    "fixed_corpus"
+                  ],
+                  "quotes": [
+                    "正文或切分参数改变后，同一序号可对应不同文字。",
+                    "离线评测应冻结语料、切分方式与标识映射"
+                  ]
+                }
+              ],
+              "partial_evidence_chunks": [
+                {
+                  "document_id": "eval_engineering",
+                  "chunk_index": 0
+                },
+                {
+                  "document_id": "eval_engineering",
+                  "chunk_index": 3
+                },
+                {
+                  "document_id": "eval_rag",
+                  "chunk_index": 1
+                }
+              ],
+              "multi_chunk_check": {
+                "verification_scope": "ALL_19_CHUNKS",
+                "required_facts": {
+                  "baseline_definition": "固定Dataset、明确配置下的基准成绩",
+                  "fixed_dataset": "Dataset固定使不同版本面对相同任务",
+                  "fixed_corpus": "Corpus/分块/标识固定避免资料变化混入比较",
+                  "baseline_configuration": "明确检索范围、检索参数、阈值使用与服务模型",
+                  "regression_definition": "新版本造成原正常能力退化",
+                  "comparison_conditions": "版本对照保持任务、资料、计分口径一致",
+                  "badcase": "记录失败样本并区分失败原因",
+                  "ablation": "固定其他条件移除或禁用组件分析贡献",
+                  "ablation_conditions": "阈值消融对照保持Corpus、问题集合、向量模型一致"
+                },
+                "coverage_by_chunk": [
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 1,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_agent",
+                    "chunk_index": 3,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_api",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_api",
+                    "chunk_index": 1,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_api",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 0,
+                    "covered_facts": [
+                      "baseline_definition"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 1,
+                    "covered_facts": [
+                      "baseline_definition",
+                      "fixed_dataset",
+                      "fixed_corpus",
+                      "baseline_configuration",
+                      "regression_definition",
+                      "comparison_conditions"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 2,
+                    "covered_facts": [
+                      "regression_definition",
+                      "badcase",
+                      "ablation",
+                      "ablation_conditions"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_engineering",
+                    "chunk_index": 3,
+                    "covered_facts": [
+                      "fixed_corpus"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_memory",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 1,
+                    "covered_facts": [
+                      "fixed_corpus"
+                    ]
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_rag",
+                    "chunk_index": 3,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_tools",
+                    "chunk_index": 0,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_tools",
+                    "chunk_index": 1,
+                    "covered_facts": []
+                  },
+                  {
+                    "document_id": "eval_tools",
+                    "chunk_index": 2,
+                    "covered_facts": []
+                  }
+                ],
+                "complete_single_chunks": [],
+                "minimum_chunks_for_complete_answer": 2,
+                "example_complete_chunk_sets": [
+                  [
+                    {
+                      "document_id": "eval_engineering",
+                      "chunk_index": 1
+                    },
+                    {
+                      "document_id": "eval_engineering",
+                      "chunk_index": 2
+                    }
+                  ]
+                ],
+                "necessity_reason": "Badcase/Ablation方法只有Engineering#2完整给出，但该块没有Baseline定义；Engineering#1提供基准及固定材料作用，至少需要组合两块。"
+              }
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_engineering",
+                "chunk_index": 1
+              },
+              {
+                "document_id": "eval_engineering",
+                "chunk_index": 2
+              },
+              {
+                "document_id": "eval_engineering",
+                "chunk_index": 0
+              },
+              {
+                "document_id": "eval_engineering",
+                "chunk_index": 3
+              },
+              {
+                "document_id": "eval_rag",
+                "chunk_index": 1
+              }
+            ]
+          }
+        ]
+      },
+      "required_facts": {
+        "baseline_definition": "Baseline 是固定 Evaluation Dataset 和明确配置下的基准成绩。",
+        "same_tasks": "版本或消融对照应使用相同任务或问题集合。",
+        "corpus_consistency": "固定 Corpus 使比较使用相同资料，避免资料变化混入版本比较。",
+        "chunking_effect": "改变切分参数会改变片段边界或同一块序号对应的内容。",
+        "identifier_mapping": "document_id 与 chunk_index 的标识映射应绑定固定的同一语料版本。",
+        "baseline_configuration": "Baseline 应记录检索范围、Top-K、是否使用阈值及服务模型。",
+        "regression_definition": "Regression 是新版本使原本正常的能力退化。",
+        "aggregate_masks_regression": "整体指标提高仍可能掩盖具体样本或关键片段的退化。",
+        "badcase_diagnosis": "Badcase 分析具体失败样本，区分资料缺失、漏召回、排名靠后、工具选择、参数或服务异常等原因。",
+        "ablation_method": "Ablation 在其他条件固定时移除或禁用组件，以分析该组件贡献。",
+        "same_vector_model": "消融对照应保持向量模型一致。",
+        "same_scoring": "版本对照应保持计分口径一致。"
+      },
+      "coverage_by_chunk": [
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 1,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 2,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 3,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 1,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_api",
+          "chunk_index": 2,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 0,
+          "covered_facts": [
+            "baseline_definition"
+          ],
+          "partial_support": [
+            {
+              "fact_id": "same_tasks",
+              "note": "句尾截在面对相，没有完整给出相同任务，不能计为覆盖。"
+            }
+          ]
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 1,
+          "covered_facts": [
+            "baseline_definition",
+            "same_tasks",
+            "corpus_consistency",
+            "chunking_effect",
+            "identifier_mapping",
+            "baseline_configuration",
+            "regression_definition",
+            "aggregate_masks_regression",
+            "same_scoring"
+          ]
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 2,
+          "covered_facts": [
+            "same_tasks",
+            "regression_definition",
+            "aggregate_masks_regression",
+            "badcase_diagnosis",
+            "ablation_method",
+            "same_vector_model"
+          ],
+          "partial_support": [
+            {
+              "fact_id": "corpus_consistency",
+              "note": "明确要求Corpus保持一致，但本块没有完整解释资料变化混入版本比较的原因。"
+            }
+          ]
+        },
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 3,
+          "covered_facts": [
+            "corpus_consistency"
+          ],
+          "partial_support": [
+            {
+              "fact_id": "badcase_diagnosis",
+              "note": "说明服务与基础设施异常这一部分原因，未完整列出本题的失败分类。"
+            }
+          ]
+        },
+        {
+          "document_id": "eval_memory",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 1,
+          "covered_facts": [
+            "chunking_effect",
+            "identifier_mapping"
+          ],
+          "partial_support": [
+            {
+              "fact_id": "corpus_consistency",
+              "note": "要求冻结语料，但本块未完整说明版本比较中的资料变化归因问题。"
+            }
+          ]
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 2,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 3,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 0,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 1,
+          "covered_facts": []
+        },
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 2,
+          "covered_facts": []
+        }
+      ],
+      "required_fact_contexts": {
+        "same_vector_model": {
+          "scope": "threshold_filtering_toggle",
+          "controlled_variable": "threshold_filtering_enabled",
+          "held_constant": [
+            "embedding_model"
+          ],
+          "interpretation": "仅指比较阈值过滤启用/关闭的消融示例；不要求在以向量模型本身为改变变量的其他实验中仍保持该模型不变。",
+          "evidence_chunks": [
+            {
+              "document_id": "eval_engineering",
+              "chunk_index": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "rag_011",
+      "case_type": "retrieval",
+      "category": "hard_negative",
+      "query": "max_steps 是 Decision 轮数还是 Tool 次数",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 2
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 1
+        }
+      ],
+      "expected_answer": "max_steps 限制 Decision 轮数；一轮请求模型只消耗一个轮数，同轮多个 Tool Call 不分别消耗 Decision 轮数。",
+      "answer_match_type": "manual",
+      "tags": [
+        "max_steps",
+        "decision",
+        "tool_calls"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 2,
+        "notes": "补录 overlap 直接证据 Agent#1。Agent#0/Tools#0 未明确 max_steps 的计数对象，不因主题相近补录。API#2 仍是真负例。",
+        "evidence": [
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 2,
+            "supports": [
+              "Decision而非Tool次数"
+            ],
+            "quotes": [
+              "max_steps 限制 Agent 的最大 Decision 轮数",
+              "同轮即使执行多个工具，也只占一个轮数。"
+            ]
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 1,
+            "supports": [
+              "Decision而非Tool次数"
+            ],
+            "quotes": [
+              "max_steps 限制 Agent 的最大 Decision 轮数",
+              "同轮即使执行多个工具，也只占一个轮数。"
+            ]
+          }
+        ],
+        "excluded_background": [
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 0,
+            "reason": "没有 max_steps→Decision 的限制对象绑定。"
+          },
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 0,
+            "reason": "没有 max_steps→Decision 的限制对象绑定。"
+          }
+        ],
+        "history": [
+          {
+            "round": 1,
+            "query": "max_steps 是 Decision 轮数还是 Tool 次数",
+            "expected_answer": "max_steps 限制 Decision 轮数；一轮请求模型只消耗一个轮数，同轮多个 Tool Call 不分别消耗 Decision 轮数。",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "Agent#2 支持；Agent#1 overlap 也完整回答 Decision 与 Tool 次数差异，初始相关集可能遗漏。API#2 候选没有该区分。",
+              "additional_relevant_chunks": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 1
+                }
+              ],
+              "partial_evidence_chunks": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 0
+                },
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 0
+                }
+              ]
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 2
+              }
+            ],
+            "hard_negative_candidates": [
+              {
+                "document_id": "eval_api",
+                "chunk_index": 2,
+                "review_status": "VALID_NEGATIVE",
+                "reason": "描述 HTTP max_steps 默认值与校验，不说明 Decision 轮数和 Tool 次数的区别。"
+              }
+            ]
+          }
+        ]
+      },
+      "hard_negative_candidates": [
+        {
+          "document_id": "eval_api",
+          "chunk_index": 2,
+          "review_status": "VALID_NEGATIVE",
+          "reason": "描述 HTTP max_steps 默认值与校验，不说明 Decision 轮数和 Tool 次数的区别。"
+        }
+      ]
+    },
+    {
+      "id": "rag_012",
+      "case_type": "retrieval",
+      "category": "hard_negative",
+      "query": "Tool Result 写回 Agent messages 时，role、tool_name、content 分别代表什么？",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 1
+        }
+      ],
+      "expected_answer": "role 为 tool，表示工具结果消息；tool_name 标明执行的工具；content 保存工具结果的字符串表示，供下一轮模型读取为 Observation。",
+      "answer_match_type": "manual",
+      "tags": [
+        "tool_result",
+        "observation",
+        "messages"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 2,
+        "notes": "按授权缩题到写回消息的具体三字段。仅 Agent#1 直接提供赋值或含义；API#1 的一般追加过程不回答任一所问字段，恢复为真负例。",
+        "evidence": [
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 1,
+            "supports": [
+              "role",
+              "tool_name",
+              "content"
+            ],
+            "quotes": [
+              "追加 role 为 tool 的消息，其中 tool_name 标明工具，content 保存结果的字符串表示。"
+            ]
+          }
+        ],
+        "excluded_background": [
+          {
+            "document_id": "eval_api",
+            "chunk_index": 1,
+            "reason": "没有 tool 角色、tool_name 含义或 content 字符串保存方式。"
+          }
+        ],
+        "history": [
+          {
+            "round": 1,
+            "query": "Tool Result 如何作为 Observation 写入 messages",
+            "expected_answer": "先保存提出工具调用的 assistant 消息，再为每个结果追加 role 为 tool 的消息；tool_name 标明工具，content 保存结果的字符串表示，供下一轮模型作为 Observation 读取。",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "Agent#1 支持 role/tool_name/content 实现细节。API#1 候选实际提供工具结果追加 messages、供后续决策读取的事实，不能直接作为 Negative；题目未要求具体消息字段。",
+              "additional_relevant_chunks": [
+                {
+                  "document_id": "eval_api",
+                  "chunk_index": 1
+                }
+              ],
+              "partial_evidence_chunks": [
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 0
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 0
+                },
+                {
+                  "document_id": "eval_memory",
+                  "chunk_index": 0
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 3
+                }
+              ]
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 1
+              }
+            ],
+            "hard_negative_candidates": [
+              {
+                "document_id": "eval_api",
+                "chunk_index": 1,
+                "review_status": "NEEDS_REVIEW",
+                "reason": "实际说明工具结果追加到 messages 并供后续决策读取，支持题目的核心过程，不能按文档主题强行标负。"
+              }
+            ]
+          }
+        ]
+      },
+      "hard_negative_candidates": [
+        {
+          "document_id": "eval_api",
+          "chunk_index": 1,
+          "review_status": "VALID_NEGATIVE",
+          "reason": "虽然描述工具结果追加 messages，但没有回答写回消息的 role/tool_name/content 任一具体字段；不提供本题必要子事实。"
+        }
+      ]
+    },
+    {
+      "id": "rag_013",
+      "case_type": "retrieval",
+      "category": "hard_negative",
+      "query": "trace 单条工具记录有哪些字段",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 3
+        },
+        {
+          "document_id": "eval_agent",
+          "chunk_index": 2
+        }
+      ],
+      "expected_answer": "包含 step、tool、arguments、result；分别表示 Decision 轮号、工具名称、原始参数、执行结果或错误 Observation。",
+      "answer_match_type": "manual",
+      "tags": [
+        "trace_fields"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 2,
+        "notes": "Agent#2 overlap 完整列出四字段并解释 step/tool，虽 arguments/result 释义截断，仍为直接证据；已补录。API#2 仅顶层字段，不是单条 trace。",
+        "evidence": [
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 3,
+            "supports": [
+              "四字段及含义"
+            ],
+            "quotes": [
+              "包含 step、tool、arguments、result",
+              "arguments 是模型给出的原始参数，result 是执行结果或错误 Observation。"
+            ]
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 2,
+            "supports": [
+              "四字段列表",
+              "step和tool含义"
+            ],
+            "quotes": [
+              "包含 step、tool、arguments、result",
+              "step 是从一开始的决策轮号，tool 是工具名称"
+            ]
+          }
+        ],
+        "partial_evidence_chunks": [
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 2
+          }
+        ],
+        "history": [
+          {
+            "round": 1,
+            "query": "trace 单条工具记录有哪些字段",
+            "expected_answer": "包含 step、tool、arguments、result；分别表示 Decision 轮号、工具名称、原始参数、执行结果或错误 Observation。",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "Agent#3 支持；Agent#2 overlap 已完整列出四字段，虽释义截断，仍足够回答字段列表。API#2 只给顶层 ChatResponse 字段。",
+              "additional_relevant_chunks": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 2
+                }
+              ],
+              "partial_evidence_chunks": []
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_agent",
+                "chunk_index": 3
+              }
+            ],
+            "hard_negative_candidates": [
+              {
+                "document_id": "eval_api",
+                "chunk_index": 2,
+                "review_status": "VALID_NEGATIVE",
+                "reason": "answer/trace/stop_reason 是顶层字段，不是单条 trace 的 step/tool/arguments/result。"
+              }
+            ]
+          }
+        ]
+      },
+      "hard_negative_candidates": [
+        {
+          "document_id": "eval_api",
+          "chunk_index": 2,
+          "review_status": "VALID_NEGATIVE",
+          "reason": "answer/trace/stop_reason 是顶层字段，不是单条 trace 的 step/tool/arguments/result。"
+        }
+      ]
+    },
+    {
+      "id": "rag_014",
+      "case_type": "retrieval",
+      "category": "hard_negative",
+      "query": "distance 如何转换为 similarity",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 1
+        }
+      ],
+      "expected_answer": "当前使用余弦距离，search 通过 similarity = 1 - distance 将 distance 转换为 similarity。",
+      "answer_match_type": "manual",
+      "tags": [
+        "distance",
+        "similarity"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "notes": "RAG#1 明确一减距离。RAG#0 在公式前截断，只提供转换背景；Tools#2 没有转换公式。",
+        "additional_relevant_chunks": [],
+        "partial_evidence_chunks": [
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 0
+          }
+        ]
+      },
+      "hard_negative_candidates": [
+        {
+          "document_id": "eval_tools",
+          "chunk_index": 2,
+          "review_status": "VALID_NEGATIVE",
+          "reason": "说明工具结果丢弃 similarity，但没有 distance 到 similarity 的转换公式。"
+        }
+      ]
+    },
+    {
+      "id": "rag_015",
+      "case_type": "retrieval",
+      "category": "hard_negative",
+      "query": "update_document 更新失败为什么可能丢失旧 Chunk",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 3
+        }
+      ],
+      "expected_answer": "当前 update 非原子：先删除旧 Chroma Chunk，再生成并写入新 Chunk；后续入库失败时旧向量记录可能已经丢失，原始文件恢复保护不等于向量数据库事务回滚。",
+      "answer_match_type": "manual",
+      "tags": [
+        "update_document",
+        "non_atomic"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "notes": "Engineering#3 明确先删旧记录、再入库及失败后旧记录可能丢失。RAG#1 只说明 metadata/块身份，不说明更新失败流程。",
+        "additional_relevant_chunks": [],
+        "partial_evidence_chunks": []
+      },
+      "hard_negative_candidates": [
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 1,
+          "review_status": "VALID_NEGATIVE",
+          "reason": "描述 Chroma metadata 和 chunk 身份变化，没有先删后写或失败丢失旧块的原因。"
+        }
+      ]
+    },
+    {
+      "id": "rag_016",
+      "case_type": "retrieval",
+      "category": "hard_negative",
+      "query": "Hit Rate、Recall、MRR 分别衡量什么",
+      "relevant_chunks": [
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 3
+        },
+        {
+          "document_id": "eval_rag",
+          "chunk_index": 2
+        }
+      ],
+      "expected_answer": "Hit Rate@K 衡量前 K 个结果是否至少命中一个相关块并统计命中问题比例；Recall@K 是前 K 个结果覆盖的相关块数占全部相关块数的比例；MRR 是第一条相关结果排名倒数的平均值，未命中记零。",
+      "answer_match_type": "manual",
+      "tags": [
+        "hit_rate",
+        "recall",
+        "mrr"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 2,
+        "notes": "RAG#2 overlap 完整定义 Hit Rate，是必要子问题的直接证据，已补录。该块仅到 Recall@K，无法独立回答 Recall 与 MRR；RAG#3 可以完整回答。",
+        "evidence": [
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 3,
+            "supports": [
+              "Hit Rate",
+              "Recall",
+              "MRR"
+            ],
+            "quotes": [
+              "Hit Rate@K 判断前 K 个结果是否至少命中一个相关块",
+              "Recall@K 计算前 K 个结果覆盖的相关块数占该问题全部相关块数的比例。",
+              "MRR 使用第一条相关结果的排名倒数，未命中时记零，再对问题求平均。"
+            ]
+          },
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 2,
+            "supports": [
+              "Hit Rate"
+            ],
+            "quotes": [
+              "Hit Rate@K 判断前 K 个结果是否至少命中一个相关块，再统计有相关资料的问题中命中的比例"
+            ]
+          }
+        ],
+        "partial_evidence_chunks": [
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 2
+          }
+        ],
+        "history": [
+          {
+            "round": 1,
+            "query": "Hit Rate、Recall、MRR 分别衡量什么",
+            "expected_answer": "Hit Rate@K 衡量前 K 个结果是否至少命中一个相关块并统计命中问题比例；Recall@K 是前 K 个结果覆盖的相关块数占全部相关块数的比例；MRR 是第一条相关结果排名倒数的平均值，未命中记零。",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "RAG#3 完整支持三个指标；RAG#2 overlap 只完整给出 Hit Rate，Recall 定义截断且没有 MRR。部分证据是否计入相关集需统一；Engineering#2 没有指标定义。",
+              "additional_relevant_chunks": [],
+              "partial_evidence_chunks": [
+                {
+                  "document_id": "eval_rag",
+                  "chunk_index": 2
+                }
+              ]
+            },
+            "relevant_chunks": [
+              {
+                "document_id": "eval_rag",
+                "chunk_index": 3
+              }
+            ],
+            "hard_negative_candidates": [
+              {
+                "document_id": "eval_engineering",
+                "chunk_index": 2,
+                "review_status": "VALID_NEGATIVE",
+                "reason": "介绍 Regression/Badcase/Ablation，没有 Hit Rate/Recall/MRR 定义。"
+              }
+            ]
+          }
+        ]
+      },
+      "hard_negative_candidates": [
+        {
+          "document_id": "eval_engineering",
+          "chunk_index": 2,
+          "review_status": "VALID_NEGATIVE",
+          "reason": "介绍 Regression/Badcase/Ablation，没有 Hit Rate/Recall/MRR 定义。"
+        }
+      ]
+    },
+    {
+      "id": "agent_001",
+      "case_type": "agent",
+      "category": "single_tool",
+      "query": "计算 125 × 8\n最终仅输出计算结果的数字。",
+      "expected_answer": "1000",
+      "answer_match_type": "exact",
+      "required_tools": [
+        "calculator"
+      ],
+      "forbidden_tools": [
+        "search_knowledge_base"
+      ],
+      "max_steps": 5,
+      "tags": [
+        "arithmetic"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "notes": "125×8=1000；calculator 的 multiply 支持该任务。输入来自 Query，无需检索。 第3轮只追加最终数字输出要求；沿用原事实、答案和必需/禁止工具。评分采用完整有限数值的Decimal等值比较，不抽取解释中的数字。",
+        "evidence_chunks": [
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 0
+          },
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 1
+          }
+        ],
+        "round": 3,
+        "history": [
+          {
+            "round": 2,
+            "query": "计算 125 × 8",
+            "expected_answer": "1000",
+            "answer_match_type": "exact",
+            "review": {
+              "status": "SUPPORTED",
+              "notes": "125×8=1000；calculator 的 multiply 支持该任务。输入来自 Query，无需检索。",
+              "evidence_chunks": [
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 0
+                },
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 1
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "agent_002",
+      "case_type": "agent",
+      "category": "single_tool",
+      "query": "根据知识库解释 /chat 为什么是 stateless",
+      "expected_answer": "每次请求重新创建 messages，不共享之前的请求上下文",
+      "answer_match_type": "manual",
+      "required_tools": [
+        "search_knowledge_base"
+      ],
+      "forbidden_tools": [
+        "calculator"
+      ],
+      "max_steps": 5,
+      "tags": [
+        "stateless"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "notes": "API#1、Agent#3、Memory#0 支持预期事实；stateless 指聊天历史边界，不否认知识库持久化。",
+        "evidence_chunks": [
+          {
+            "document_id": "eval_api",
+            "chunk_index": 1
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 3
+          },
+          {
+            "document_id": "eval_memory",
+            "chunk_index": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "agent_003",
+      "case_type": "agent",
+      "category": "single_tool",
+      "query": "使用 calculator 计算 144 ÷ 12\n最终仅输出计算结果的数字。",
+      "expected_answer": "12",
+      "answer_match_type": "exact",
+      "required_tools": [
+        "calculator"
+      ],
+      "forbidden_tools": [
+        "search_knowledge_base"
+      ],
+      "max_steps": 5,
+      "tags": [
+        "arithmetic"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "notes": "144÷12=12；calculator 的 divide 支持该任务。12 与 12.0 的数值归一化规则尚未定义。 第3轮只追加最终数字输出要求；沿用原事实、答案和必需/禁止工具。评分采用完整有限数值的Decimal等值比较，不抽取解释中的数字。",
+        "evidence_chunks": [
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 0
+          },
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 1
+          }
+        ],
+        "round": 3,
+        "history": [
+          {
+            "round": 2,
+            "query": "使用 calculator 计算 144 ÷ 12",
+            "expected_answer": "12",
+            "answer_match_type": "exact",
+            "review": {
+              "status": "SUPPORTED",
+              "notes": "144÷12=12；calculator 的 divide 支持该任务。12 与 12.0 的数值归一化规则尚未定义。",
+              "evidence_chunks": [
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 0
+                },
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 1
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "agent_004",
+      "case_type": "agent",
+      "category": "multi_tool",
+      "query": "从知识库查询 Agent Result 的顶层字段数量，再乘以 8\n最终仅输出计算结果的数字。",
+      "expected_answer": "24",
+      "answer_match_type": "exact",
+      "required_tools": [
+        "search_knowledge_base",
+        "calculator"
+      ],
+      "forbidden_tools": [],
+      "max_steps": 5,
+      "tags": [
+        "agent_result",
+        "arithmetic"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "notes": "Agent Result 顶层为 answer、trace、stop_reason 三项，3×8=24；trace 单项的四字段属于另一层。required_tools 只要求命中两工具，不固定完整调用序列。 第3轮只追加最终数字输出要求；沿用原事实、答案和必需/禁止工具。评分采用完整有限数值的Decimal等值比较，不抽取解释中的数字。",
+        "evidence_chunks": [
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 2
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 3
+          },
+          {
+            "document_id": "eval_api",
+            "chunk_index": 2
+          }
+        ],
+        "round": 3,
+        "history": [
+          {
+            "round": 2,
+            "query": "从知识库查询 Agent Result 的顶层字段数量，再乘以 8",
+            "expected_answer": "24",
+            "answer_match_type": "exact",
+            "review": {
+              "status": "SUPPORTED",
+              "notes": "Agent Result 顶层为 answer、trace、stop_reason 三项，3×8=24；trace 单项的四字段属于另一层。required_tools 只要求命中两工具，不固定完整调用序列。",
+              "evidence_chunks": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 2
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 3
+                },
+                {
+                  "document_id": "eval_api",
+                  "chunk_index": 2
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "agent_005",
+      "case_type": "agent",
+      "category": "multi_tool",
+      "query": "从知识库查询 max_steps 的默认值，再乘以 6\n最终仅输出计算结果的数字。",
+      "expected_answer": "30",
+      "answer_match_type": "exact",
+      "required_tools": [
+        "search_knowledge_base",
+        "calculator"
+      ],
+      "forbidden_tools": [],
+      "max_steps": 5,
+      "tags": [
+        "max_steps",
+        "arithmetic"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "notes": "默认五在 Agent#1 overlap、Agent#2 与 API#2 明确出现，5×6=30。两工具均必需，不固定完整调用序列。 第3轮只追加最终数字输出要求；沿用原事实、答案和必需/禁止工具。评分采用完整有限数值的Decimal等值比较，不抽取解释中的数字。",
+        "evidence_chunks": [
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 1
+          },
+          {
+            "document_id": "eval_agent",
+            "chunk_index": 2
+          },
+          {
+            "document_id": "eval_api",
+            "chunk_index": 2
+          }
+        ],
+        "round": 3,
+        "history": [
+          {
+            "round": 2,
+            "query": "从知识库查询 max_steps 的默认值，再乘以 6",
+            "expected_answer": "30",
+            "answer_match_type": "exact",
+            "review": {
+              "status": "SUPPORTED",
+              "notes": "默认五在 Agent#1 overlap、Agent#2 与 API#2 明确出现，5×6=30。两工具均必需，不固定完整调用序列。",
+              "evidence_chunks": [
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 1
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 2
+                },
+                {
+                  "document_id": "eval_api",
+                  "chunk_index": 2
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "agent_006",
+      "case_type": "agent",
+      "category": "multi_tool",
+      "query": "根据知识库，search_knowledge_base 返回的每条结果包含几个字段？再使用 calculator 将字段数量乘以 7。\n最终仅输出计算结果的数字。",
+      "expected_answer": "14",
+      "answer_match_type": "exact",
+      "required_tools": [
+        "search_knowledge_base",
+        "calculator"
+      ],
+      "forbidden_tools": [],
+      "max_steps": 5,
+      "tags": [
+        "knowledge_base_result",
+        "arithmetic"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "round": 3,
+        "notes": "不再推断 Registry 总数。RAG#2 明确只返回 content/source，Tools#2 明确两字段及丢弃项，故每条结果2字段，2×7=14。保留两必需工具与非固定完整序列。 第3轮只追加最终数字输出要求；沿用原事实、答案和必需/禁止工具。评分采用完整有限数值的Decimal等值比较，不抽取解释中的数字。",
+        "evidence": [
+          {
+            "document_id": "eval_rag",
+            "chunk_index": 2,
+            "supports": [
+              "结果仅两字段"
+            ],
+            "quotes": [
+              "调用 search 后只返回 content 与 source"
+            ]
+          },
+          {
+            "document_id": "eval_tools",
+            "chunk_index": 2,
+            "supports": [
+              "两字段名称及丢弃项"
+            ],
+            "quotes": [
+              "工具返回 content（候选文本）与 source（metadata 中的来源路径）。",
+              "结果丢弃 similarity、document_id 和 chunk_index"
+            ]
+          }
+        ],
+        "calculation": {
+          "input_count": 2,
+          "operation": "multiply",
+          "multiplier": 7,
+          "result": "14"
+        },
+        "history": [
+          {
+            "round": 1,
+            "query": "从知识库查询 Tool Registry 注册的工具种类数，再乘以 7",
+            "expected_answer": "14",
+            "review": {
+              "status": "NEEDS_REVIEW",
+              "notes": "保留给定预期 14。Corpus 介绍两个工具，但未明示 Registry 注册总数为二或穷举全部注册项；源码注册数不能替代知识库证据，不能仅凭提及两项推出总数。",
+              "evidence_chunks": [
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 0
+                },
+                {
+                  "document_id": "eval_agent",
+                  "chunk_index": 0
+                }
+              ]
+            }
+          },
+          {
+            "round": 2,
+            "query": "根据知识库，search_knowledge_base 返回的每条结果包含几个字段？再使用 calculator 将字段数量乘以 7。",
+            "expected_answer": "14",
+            "answer_match_type": "exact",
+            "review": {
+              "status": "SUPPORTED",
+              "round": 2,
+              "notes": "不再推断 Registry 总数。RAG#2 明确只返回 content/source，Tools#2 明确两字段及丢弃项，故每条结果2字段，2×7=14。保留两必需工具与非固定完整序列。",
+              "evidence": [
+                {
+                  "document_id": "eval_rag",
+                  "chunk_index": 2,
+                  "supports": [
+                    "结果仅两字段"
+                  ],
+                  "quotes": [
+                    "调用 search 后只返回 content 与 source"
+                  ]
+                },
+                {
+                  "document_id": "eval_tools",
+                  "chunk_index": 2,
+                  "supports": [
+                    "两字段名称及丢弃项"
+                  ],
+                  "quotes": [
+                    "工具返回 content（候选文本）与 source（metadata 中的来源路径）。",
+                    "结果丢弃 similarity、document_id 和 chunk_index"
+                  ]
+                }
+              ],
+              "calculation": {
+                "input_count": 2,
+                "operation": "multiply",
+                "multiplier": 7,
+                "result": "14"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "agent_007",
+      "case_type": "agent",
+      "category": "no_answer",
+      "query": "根据知识库，KnowledgePilot 计划在哪一天迁移到 PostgreSQL？",
+      "expected_answer": "知识库未提供迁移到 PostgreSQL 的计划日期，无法依据现有资料给出具体日期；不编造日期。",
+      "answer_match_type": "manual",
+      "required_tools": [
+        "search_knowledge_base"
+      ],
+      "forbidden_tools": [
+        "calculator"
+      ],
+      "max_steps": 5,
+      "tags": [
+        "missing_migration_date"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "notes": "已全文语义检查六篇 Corpus，无 PostgreSQL 迁移计划日期或可推导日期的依据；只断言资料未提供日期。max_steps=5 是草稿沿用值，附件未逐条指定。",
+        "evidence_chunks": [],
+        "verification_scope": "ALL_SIX_CORPUS_FULL_TEXT"
+      }
+    },
+    {
+      "id": "agent_008",
+      "case_type": "agent",
+      "category": "no_answer",
+      "query": "根据知识库，V1.2 离线评测使用的 GPU 具体型号是什么？",
+      "expected_answer": "知识库未提供 V1.2 离线评测使用的具体 GPU 型号，无法依据现有资料给出型号；不猜测硬件型号。",
+      "answer_match_type": "manual",
+      "required_tools": [
+        "search_knowledge_base"
+      ],
+      "forbidden_tools": [
+        "calculator"
+      ],
+      "max_steps": 5,
+      "tags": [
+        "missing_gpu_model"
+      ],
+      "review": {
+        "status": "SUPPORTED",
+        "notes": "已全文语义检查六篇 Corpus，无评测 GPU 型号依据；Ollama/bge-m3/机器负载不能推出型号。max_steps=5 是草稿沿用值，附件未逐条指定。",
+        "evidence_chunks": [],
+        "verification_scope": "ALL_SIX_CORPUS_FULL_TEXT"
+      }
+    }
+  ],
+  "review_round": 3,
+  "relevance_policy": {
+    "relevant": "Chunk 包含回答 Query 所需的直接、实质性事实；完整答案或必要子问题证据均相关。",
+    "hard_negative": "语义相似，但没有提供 Query 所要求的直接事实。",
+    "single_chunk": "存在单个 Chunk 可以完整回答，不表示只有一个 Relevant Chunk。",
+    "multi_chunk": "完整回答确实需要组合多个 Chunk 中的事实。",
+    "duplicates_and_overlap": "重复事实与 overlap 中的直接证据全部纳入，不人为只保留一块。"
+  },
+  "review_policy_history": [
+    {
+      "round": 1,
+      "policy": "relevant_chunks 保留用户初步 Ground Truth；review.additional_relevant_chunks 与 partial_evidence_chunks 仅为审核建议，未合入标注。SUPPORTED 只说明正文或算术支持，不代表已运行评测或完成冻结。NEEDS_REVIEW 必须人工裁决。"
+    },
+    {
+      "round": 2,
+      "policy": "第2轮按统一相关性口径修订 relevant_chunks；review.evidence 为当前证据，partial_evidence_chunks 可标示已纳入的必要子证据，excluded_background 不纳入。review.history 保留旧题及第1轮审核，不作为当前 Ground Truth。SUPPORTED 表示正文事实或算术支持，不代表已运行评测或冻结。"
+    },
+    {
+      "round": 3,
+      "policy": "第3轮仅替换rag_002、补充四条Multi-Chunk的必需事实及逐块覆盖、追加五条数值Agent的最终数字输出要求，并在scoring_policy声明评分口径。Relevant保留重复与overlap证据；partial_support不等于完整事实覆盖。review.history保留此前题目、Ground Truth和审核信息，不作为当前标注。SUPPORTED只表示静态Corpus/算术支持，不表示已运行评测、验证困难排名或冻结。"
+    }
+  ],
+  "scoring_policy": {
+    "version": "v1",
+    "status": "FROZEN_NOT_EXECUTED",
+    "retrieval": {
+      "recall_at_k": {
+        "scope": "retrieval",
+        "definition": "Top-K中命中的不同Relevant Chunk数量 / 该Case全部Relevant Chunk数量。",
+        "chunk_identity": [
+          "document_id",
+          "chunk_index"
+        ],
+        "relevant_chunks_unchanged_for_multi_chunk": true,
+        "no_score_driven_label_deletion": true,
+        "operation": "unique_relevant_chunk_hits_divided_by_relevant_chunk_count"
+      },
+      "fact_coverage_at_k": {
+        "scope": "multi_chunk",
+        "definition": "Top-K已完整覆盖的不同必需事实数 / 全部必需事实数。",
+        "fact_definitions_path": "required_facts",
+        "chunk_coverage_path": "coverage_by_chunk",
+        "union_by": "fact_id",
+        "repeated_support_counts_once": true,
+        "partial_support_counts_as_covered": false,
+        "fact_contexts_path": "required_fact_contexts",
+        "operation": "union_covered_fact_ids_divided_by_required_fact_count"
+      },
+      "evidence_sufficient_at_k": {
+        "scope": "multi_chunk",
+        "definition": "Top-K的covered_facts去重并集包含全部required_facts时为1，否则为0。",
+        "equivalent_combinations_accepted": true,
+        "example_complete_chunk_sets_are_exhaustive": false,
+        "operation": "all_required_fact_ids_covered"
+      },
+      "fact_annotation": {
+        "description": "每个fact_id对应一个明确必需事实；covered_facts只列当前Chunk完整支持的事实，partial_support保留不足以覆盖整项的直接子证据。重复或近义表述共用同一个事实ID，不重复计数。",
+        "all_corpus_chunks_audited": 19,
+        "canonical_annotation_location": "case_top_level",
+        "context_is_part_of_fact_definition": true,
+        "absent_context": "NO_ADDITIONAL_RESTRICTION",
+        "example_combinations_are_exhaustive": false
+      },
+      "mrr": {
+        "scope": "positive_retrieval",
+        "operation": "reciprocal_first_relevant_rank",
+        "rank_index_base": 1,
+        "miss_value": 0,
+        "evaluation_depth": "recorded_run_top_k",
+        "definition": "在该次记录的 Top-K 内首次命中任意 Relevant Chunk 时取排名倒数；Top-K 未命中记0。"
+      },
+      "positive_aggregation": {
+        "included_case_types": [
+          "retrieval"
+        ],
+        "excluded_categories": [
+          "no_answer"
+        ],
+        "require_nonempty_relevant_chunks": true,
+        "applies_to": [
+          "recall_at_k",
+          "mrr"
+        ],
+        "excluded_case_action": "EXCLUDE_NOT_ZERO",
+        "no_answer_scoring": "SEPARATE_AGENT_TASK_SUCCESS_AND_MANUAL_REFUSAL_REVIEW"
+      }
+    },
+    "numeric_answers": {
+      "scope": "数值型Agent Case（answer_match_type=exact）",
+      "answer_field": "answer",
+      "full_answer_numeric": true,
+      "normalization": "去除首尾空白",
+      "comparison": "Decimal数值相等，不按字符串外观比较，也不使用浮点近似容差。",
+      "finite_only": true,
+      "allow_sign": true,
+      "allow_decimal_point": true,
+      "allow_exponent": true,
+      "allow_explanation": false,
+      "allow_units": false,
+      "allow_code_fence": false,
+      "allow_thousands_separator": false,
+      "allow_underscore": false,
+      "extract_numeric_substring": false,
+      "accepted_format": "整个答案必须为ASCII十进制数值形式，可带正负号、小数点、科学计数指数；不得含内部空白或其他文字。",
+      "equivalent_examples": [
+        [
+          "12",
+          "12.0"
+        ],
+        [
+          "1000",
+          "1e3"
+        ]
+      ],
+      "rejected_examples": [
+        "NaN",
+        "sNaN",
+        "Infinity",
+        "-Infinity",
+        "答案是12",
+        "12个",
+        "1_000",
+        "1,000"
+      ],
+      "output_instruction": "最终仅输出计算结果的数字。",
+      "invalid_format": "答案不匹配；保留原始答案供复查。",
+      "natural_language_cases": "沿用各Case的manual/contains设计，本轮不改其answer_match_type。",
+      "normalization_operations": [
+        "strip"
+      ],
+      "parse_as": "Decimal",
+      "comparison_operator": "numeric_equality",
+      "fullmatch_pattern": "[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?",
+      "regex_match_mode": "fullmatch",
+      "finite_check_required": true
+    },
+    "agent_tools": {
+      "tool_attempt": {
+        "definition": "每条合法trace记录中出现工具名，即记录一次尝试；包括执行失败的尝试。",
+        "name_field": "trace[*].tool",
+        "registered_name_not_required_for_attempt": true,
+        "operation": "trace_tool_name_presence_per_record"
+      },
+      "tool_execution_success": {
+        "definition": "该次工具调用实际成功执行、没有错误结果，并符合工具参数和返回契约。",
+        "error_result_prefix": "Tool execution failed:",
+        "contracts": {
+          "calculator": {
+            "arguments": {
+              "a": "有限数值，排除bool",
+              "b": "有限数值，排除bool",
+              "operation": [
+                "add",
+                "subtract",
+                "multiply",
+                "divide"
+              ]
+            },
+            "result": "有限数值，排除bool；数值字符串不等于工具原生数值返回。"
+          },
+          "search_knowledge_base": {
+            "arguments": {
+              "query": "字符串",
+              "top_k": "可选整数",
+              "document_id": "可选字符串或null"
+            },
+            "result": {
+              "type": "list",
+              "empty_list_is_success": true,
+              "item_required_fields": [
+                "content",
+                "source"
+              ],
+              "content": "string",
+              "source": [
+                "string",
+                "null"
+              ],
+              "item_fields_exactly": [
+                "content",
+                "source"
+              ]
+            }
+          }
+        },
+        "result_correctness_separate_from_execution": true,
+        "operation": "successful_execution_and_matching_tool_contract"
+      },
+      "required_tool_coverage": {
+        "definition": "必需工具中已尝试的去重名称数 / 全部必需工具的去重名称数。",
+        "source": "required_tools 与 trace[*].tool",
+        "failed_attempts_included": true,
+        "successful_execution_not_required_for_attempt_metric": true,
+        "operation": "distinct_required_names_attempted_divided_by_distinct_required_names"
+      },
+      "all_required_tools_hit": {
+        "definition": "所有required_tools名称均出现在trace尝试中时为1，否则为0。",
+        "failed_attempts_included": true,
+        "operation": "all_required_tool_names_attempted"
+      },
+      "task_success": {
+        "definition": "答案符合该Case答案规则，并满足预先声明的必要行为约束。",
+        "common_constraints": [
+          "全部必需工具均被尝试",
+          "禁止工具没有任何尝试",
+          "该任务必需的工具至少各有一次成功执行，且其输入与结果符合任务要求"
+        ],
+        "execution_requirement_separate_from_attempt_metrics": true,
+        "failed_attempt_before_success_allowed": true,
+        "all_attempts_must_succeed": false,
+        "fixed_complete_call_sequence_required": false,
+        "completed_implies_task_success": false,
+        "profiles_by_case": {
+          "agent_001": "至少一次成功calculator执行本题计算，结果支持最终数字。",
+          "agent_002": "至少一次成功search_knowledge_base检索；返回的固定Corpus资料支持stateless解释。",
+          "agent_003": "至少一次成功calculator执行本题计算，结果支持最终数字。",
+          "agent_004": "成功知识库检索支持顶层字段数量，成功calculator完成题目要求的乘法。",
+          "agent_005": "成功知识库检索支持默认max_steps，成功calculator完成题目要求的乘法。",
+          "agent_006": "成功知识库检索支持结果字段数量，成功calculator完成题目要求的乘法。",
+          "agent_007": "成功调用知识库工具，结合固定Corpus确认资料未提供迁移日期；最终明确资料不足，不编造日期。非空候选也可能没有答案。",
+          "agent_008": "成功调用知识库工具，结合固定Corpus确认资料未提供GPU型号；最终明确资料不足，不猜测型号。非空候选也可能没有答案。"
+        },
+        "operation": "answer_correct_and_all_task_behavior_constraints_satisfied",
+        "required_constraint_ids": [
+          "all_required_tools_attempted",
+          "no_forbidden_tool_attempts",
+          "task_relevant_successful_execution_per_required_tool"
+        ],
+        "answer_rule_source": "case.answer_match_type",
+        "stop_reason_completed_is_sufficient": false
+      },
+      "observation_errors": {
+        "missing_or_invalid_trace": "RUN_ERROR，不能伪造成空trace或零尝试；不可观测工具指标记null。",
+        "empty_trace_is_valid": true,
+        "run_errors_reported_separately": true,
+        "run_error_task_success": false,
+        "tool_error_is_not_no_answer_evidence": true
+      }
+    },
+    "hard_negative_candidates": {
+      "interpretation": "仅核验没有Query所需直接事实的语义负例资格。",
+      "retrieval_ranking_difficulty_verified": false,
+      "rank_hardness_status": "NOT_EVALUATED",
+      "candidate_label_does_not_prove_difficult_ranking": true
+    },
+    "implementation_status": "NOT_IMPLEMENTED"
+  },
+  "schema_version": "v1",
+  "dataset_version": "v1",
+  "corpus_version": "corpus_v1",
+  "scoring_policy_version": "v1",
+  "frozen_at": "2026-10-10T07:35:18.441388+00:00",
+  "version_manifest": "manifests/evaluation_v1.json",
+  "annotation_contract": {
+    "required_facts_path": "cases[*].required_facts",
+    "coverage_by_chunk_path": "cases[*].coverage_by_chunk",
+    "required_fact_contexts_path": "cases[*].required_fact_contexts",
+    "scoring_policy_path": "scoring_policy",
+    "fact_id_is_object_key": true,
+    "coverage_chunk_identity": [
+      "document_id",
+      "chunk_index"
+    ],
+    "covered_facts_are_fact_ids": true,
+    "partial_support_counts_as_covered": false,
+    "review_multi_chunk_check_role": "AUDIT_COPY_NOT_CANONICAL",
+    "review_history_role": "HISTORICAL_NOT_ACTIVE",
+    "fact_meaning_includes_matching_context": true
+  },
+  "scoring_policy_history": [
+    {
+      "version": "1.0-draft",
+      "role": "HISTORICAL_NOT_ACTIVE",
+      "policy": {
+        "version": "1.0-draft",
+        "status": "DEFINED_NOT_EXECUTED",
+        "retrieval": {
+          "recall_at_k": {
+            "scope": "retrieval",
+            "definition": "Top-K中命中的不同Relevant Chunk数量 / 该Case全部Relevant Chunk数量。",
+            "chunk_identity": [
+              "document_id",
+              "chunk_index"
+            ],
+            "relevant_chunks_unchanged_for_multi_chunk": true,
+            "no_score_driven_label_deletion": true
+          },
+          "fact_coverage_at_k": {
+            "scope": "multi_chunk",
+            "definition": "Top-K已完整覆盖的不同必需事实数 / 全部必需事实数。",
+            "fact_definitions_path": "review.multi_chunk_check.required_facts",
+            "chunk_coverage_path": "review.multi_chunk_check.coverage_by_chunk",
+            "union_by": "fact_id",
+            "repeated_support_counts_once": true,
+            "partial_support_counts_as_covered": false
+          },
+          "evidence_sufficient_at_k": {
+            "scope": "multi_chunk",
+            "definition": "Top-K的covered_facts去重并集包含全部required_facts时为1，否则为0。",
+            "equivalent_combinations_accepted": true,
+            "example_complete_chunk_sets_are_exhaustive": false
+          },
+          "fact_annotation": {
+            "description": "每个fact_id对应一个明确必需事实；covered_facts只列当前Chunk完整支持的事实，partial_support保留不足以覆盖整项的直接子证据。重复或近义表述共用同一个事实ID，不重复计数。",
+            "all_corpus_chunks_audited": 19
+          }
+        },
+        "numeric_answers": {
+          "scope": "数值型Agent Case（answer_match_type=exact）",
+          "answer_field": "answer",
+          "full_answer_numeric": true,
+          "normalization": "去除首尾空白",
+          "comparison": "Decimal数值相等，不按字符串外观比较，也不使用浮点近似容差。",
+          "finite_only": true,
+          "allow_sign": true,
+          "allow_decimal_point": true,
+          "allow_exponent": true,
+          "allow_explanation": false,
+          "allow_units": false,
+          "allow_code_fence": false,
+          "allow_thousands_separator": false,
+          "allow_underscore": false,
+          "extract_numeric_substring": false,
+          "accepted_format": "整个答案必须为ASCII十进制数值形式，可带正负号、小数点、科学计数指数；不得含内部空白或其他文字。",
+          "equivalent_examples": [
+            [
+              "12",
+              "12.0"
+            ],
+            [
+              "1000",
+              "1e3"
+            ]
+          ],
+          "rejected_examples": [
+            "NaN",
+            "sNaN",
+            "Infinity",
+            "-Infinity",
+            "答案是12",
+            "12个",
+            "1_000",
+            "1,000"
+          ],
+          "output_instruction": "最终仅输出计算结果的数字。",
+          "invalid_format": "答案不匹配；保留原始答案供复查。",
+          "natural_language_cases": "沿用各Case的manual/contains设计，本轮不改其answer_match_type。"
+        },
+        "agent_tools": {
+          "tool_attempt": {
+            "definition": "每条合法trace记录中出现工具名，即记录一次尝试；包括执行失败的尝试。",
+            "name_field": "trace[*].tool",
+            "registered_name_not_required_for_attempt": true
+          },
+          "tool_execution_success": {
+            "definition": "该次工具调用实际成功执行、没有错误结果，并符合工具参数和返回契约。",
+            "error_result_prefix": "Tool execution failed:",
+            "contracts": {
+              "calculator": {
+                "arguments": {
+                  "a": "有限数值，排除bool",
+                  "b": "有限数值，排除bool",
+                  "operation": [
+                    "add",
+                    "subtract",
+                    "multiply",
+                    "divide"
+                  ]
+                },
+                "result": "有限数值，排除bool；数值字符串不等于工具原生数值返回。"
+              },
+              "search_knowledge_base": {
+                "arguments": {
+                  "query": "字符串",
+                  "top_k": "可选整数",
+                  "document_id": "可选字符串或null"
+                },
+                "result": {
+                  "type": "list",
+                  "empty_list_is_success": true,
+                  "item_required_fields": [
+                    "content",
+                    "source"
+                  ],
+                  "content": "string",
+                  "source": [
+                    "string",
+                    "null"
+                  ],
+                  "item_fields_exactly": [
+                    "content",
+                    "source"
+                  ]
+                }
+              }
+            },
+            "result_correctness_separate_from_execution": true
+          },
+          "required_tool_coverage": {
+            "definition": "必需工具中已尝试的去重名称数 / 全部必需工具的去重名称数。",
+            "source": "required_tools 与 trace[*].tool",
+            "failed_attempts_included": true,
+            "successful_execution_not_required_for_attempt_metric": true
+          },
+          "all_required_tools_hit": {
+            "definition": "所有required_tools名称均出现在trace尝试中时为1，否则为0。",
+            "failed_attempts_included": true
+          },
+          "task_success": {
+            "definition": "答案符合该Case答案规则，并满足预先声明的必要行为约束。",
+            "common_constraints": [
+              "全部必需工具均被尝试",
+              "禁止工具没有任何尝试",
+              "该任务必需的工具至少各有一次成功执行，且其输入与结果符合任务要求"
+            ],
+            "execution_requirement_separate_from_attempt_metrics": true,
+            "failed_attempt_before_success_allowed": true,
+            "all_attempts_must_succeed": false,
+            "fixed_complete_call_sequence_required": false,
+            "completed_implies_task_success": false,
+            "profiles_by_case": {
+              "agent_001": "至少一次成功calculator执行本题计算，结果支持最终数字。",
+              "agent_002": "至少一次成功search_knowledge_base检索；返回的固定Corpus资料支持stateless解释。",
+              "agent_003": "至少一次成功calculator执行本题计算，结果支持最终数字。",
+              "agent_004": "成功知识库检索支持顶层字段数量，成功calculator完成题目要求的乘法。",
+              "agent_005": "成功知识库检索支持默认max_steps，成功calculator完成题目要求的乘法。",
+              "agent_006": "成功知识库检索支持结果字段数量，成功calculator完成题目要求的乘法。",
+              "agent_007": "成功调用知识库工具，结合固定Corpus确认资料未提供迁移日期；最终明确资料不足，不编造日期。非空候选也可能没有答案。",
+              "agent_008": "成功调用知识库工具，结合固定Corpus确认资料未提供GPU型号；最终明确资料不足，不猜测型号。非空候选也可能没有答案。"
+            }
+          },
+          "observation_errors": {
+            "missing_or_invalid_trace": "RUN_ERROR，不能伪造成空trace或零尝试；不可观测工具指标记null。",
+            "empty_trace_is_valid": true,
+            "run_errors_reported_separately": true,
+            "run_error_task_success": false,
+            "tool_error_is_not_no_answer_evidence": true
+          }
+        },
+        "hard_negative_candidates": {
+          "interpretation": "仅核验没有Query所需直接事实的语义负例资格。",
+          "retrieval_ranking_difficulty_verified": false,
+          "rank_hardness_status": "NOT_EVALUATED",
+          "candidate_label_does_not_prove_difficult_ranking": true
+        }
+      }
+    }
+  ],
+  "freeze_validation": {
+    "static_review": {
+      "SUPPORTED": 24,
+      "NEEDS_REVIEW": 0
+    },
+    "case_counts": {
+      "retrieval": 16,
+      "agent": 8
+    },
+    "category_counts": {
+      "single_chunk": 6,
+      "multi_chunk": 4,
+      "hard_negative": 6,
+      "single_tool": 3,
+      "multi_tool": 3,
+      "no_answer": 2
+    },
+    "corpus_documents": 6,
+    "corpus_chunks": 19,
+    "chroma_verify_only": "PASSED",
+    "chroma_verified_at": "2026-10-10T15:28:30.981763+08:00",
+    "ingest_performed_during_freeze": false,
+    "ground_truth_based_on_retrieval_results": false,
+    "baseline_evaluation_executed": false
+  },
+  "path_bases": {
+    "document_map": "dataset_directory",
+    "version_manifest": "dataset_directory"
+  }
+}
