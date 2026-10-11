@@ -10,3 +10,13 @@ data/evaluation/cases_v1.json text eol=lf
 data/evaluation/scripts/initialize_corpus_v1.py text eol=lf
 data/evaluation/manifests/evaluation_v1.json text eol=lf
 data/evaluation/README.md text eol=lf
+
+# Preserve exact historical evidence and recorded rescore source fingerprints.
+data/evaluation/reports/agent_batch_raw_v1.json -text
+data/evaluation/reports/agent_manual_reviews_v1.json -text
+data/evaluation/reports/agent_baseline_v1.json -text
+data/evaluation/reports/agent_baseline_validation_v1.json -text
+data/evaluation/reports/rag_baseline_v1_k3_20261010T143304_819842Z.json -text whitespace=cr-at-eol
+src/knowledge_pilot/evaluation/agent_evaluator.py -text whitespace=cr-at-eol
+src/knowledge_pilot/evaluation/agent_report.py -text
+scripts/finalize_agent_report.py -text

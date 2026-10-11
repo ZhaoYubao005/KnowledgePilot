@@ -1,0 +1,256 @@
+{
+  "dataset_version": "v1",
+  "agent_case_count": 8,
+  "registered_tools": [
+    "calculator",
+    "search_knowledge_base"
+  ],
+  "cases": [
+    {
+      "case_id": "agent_001",
+      "answer_correct": true,
+      "task_success": false,
+      "stop_reason": "completed",
+      "tool_call_count": 0,
+      "decision_steps": 1,
+      "required_tool_hit_rate": 0.0,
+      "forbidden_violation": false,
+      "invalid_tool_rate": 0.0,
+      "answer": "1000",
+      "trace": []
+    },
+    {
+      "case_id": "agent_002",
+      "answer_correct": null,
+      "task_success": null,
+      "stop_reason": "completed",
+      "tool_call_count": 1,
+      "decision_steps": 2,
+      "required_tool_hit_rate": 1.0,
+      "forbidden_violation": false,
+      "invalid_tool_rate": 0.0,
+      "answer": "根据知识库提供的信息，`/chat` 之所以是**无状态 (stateless)** 的主要原因在于其处理聊天历史的方式：\n\n1.  **每次请求独立创建上下文：** 每一个 `/chat` 的 HTTP 请求，`chat_service` 都会**重新创建** `messages` 列表。\n2.  **不复用历史信息：** 不同 HTTP 请求之间，系统**不会复用**上一次对话的 `messages` 列表，也不自动携带先前的对话内容。\n3.  **边界定义：** “无状态”描述的是聊天历史的传递边界。这意味着，聊天服务本身并不自动维护跨请求的对话记忆。\n4.  **长期记忆缺失：** 知识库中指出，聊天服务**未实现**跨请求保存和再次取回历史信息（即长期记忆）的机制。\n\n总结来说，`/chat` 是无状态的，因为它将每个请求视为一个独立的事件，不依赖于前一个请求的会话状态来完成当前任务。如果需要实现跨请求的记忆，需要由外部机制（如保存和再次取回历史信息）来管理。",
+      "trace": [
+        {
+          "step": 1,
+          "tool": "search_knowledge_base",
+          "arguments": {
+            "query": "/chat 为什么是 stateless"
+          },
+          "result": [
+            {
+              "content": "无状态聊天与请求内上下文\nV1.1.0 的 POST /chat 是 stateless 聊天入口。每个 HTTP 请求，chat_service 都重新创建 messages 列表，其中一条 system 消息使用配置中的 SYSTEM_PROMPT，一条 user 消息使用当前 query，然 后交给 chat_with_ollama。不同 HTTP 请求不复用上一次的 messages，也不自动携带先前的对话内容。\n同一次请求内部，Agent 可以把模型产生的工具调用消息和工具结果消息追加到当前 messages，供后续决策读取。这些消息属于本次执行上下文，支持任务 连续处理。返回的 trace 记录本次工具活动，服务没有把它装入下一次请求的逻辑。跨请求记忆需要保存并再次取回历史信息，聊 天服务未实现此机制。无状态描述的是聊天历史的传递边界；文档接口管理的持久知识库仍可供后续请求检索。\n\n请求校验与响应契约\nPOST /chat 使用 ChatRequest 接收 query 和 max_steps。query 会去掉首尾空白，空字符串和仅含空白的输入无法通过校 验；max_steps ",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_api.txt"
+            },
+            {
+              "content": "trace 记录 Agent 的工具执行事实。每个 Tool Call 对应一项，包含 step、tool、arguments、result：step 是从一开始的决策轮号，tool 是工具名称，arguments 是模型给出的原始参数，result 是执行结果或错误 Observation 。同轮多个调用形成多项 trace，并共享相同 step。最终直接回答的轮次没有工具记录，因此直接回答可以具有空 trace，trace  长度代表工具尝试次数。answer、trace、stop_reason 共同构成 Agent Result。当前 /chat 为每个请求建立新的 system 与 user 消息，再调用 Agent；运行期间 messages 追加工具消息。这种上下文服务于当前请求，跨请求保留用户偏好或历史事实属于长期 Memory 的范围。当前 V1.1.0 的 stateless /chat 没有实现这类长期保存。\n",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_agent.txt"
+            },
+            {
+              "content": "请求校验与响应契约\nPOST /chat 使用 ChatRequest 接收 query 和 max_steps。query 会去掉首尾 空白，空字符串和仅含空白的输入无法通过校验；max_steps 默认是五，必须大于或等于一。路由把校验后的字段传给 chat_service，服务直接调用 chat_with_ollama。是否需要知识库工具，由该次 Agent 执行中的模型选择；这一 HTTP 路径没有直接调用 answer_with_rag。ChatResponse 包含 answer、trace 和 stop_reason，表示回答、本次工具记录和停止原因。\n文档接口由另外的模 型约束：文档项包含文档标识、来源和分块数量，删除结果包含文档标识与状态。上传和更新接收非空、非空白的 UTF-8 TXT 内容 ；上传创建新标识，更新沿用指定标识。聊天结果与文档操作结果各自使用对应的响应结构。\n",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_api.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "agent_003",
+      "answer_correct": true,
+      "task_success": false,
+      "stop_reason": "completed",
+      "tool_call_count": 0,
+      "decision_steps": 1,
+      "required_tool_hit_rate": 0.0,
+      "forbidden_violation": false,
+      "invalid_tool_rate": 0.0,
+      "answer": "12",
+      "trace": []
+    },
+    {
+      "case_id": "agent_004",
+      "answer_correct": false,
+      "task_success": false,
+      "stop_reason": "completed",
+      "tool_call_count": 1,
+      "decision_steps": 2,
+      "required_tool_hit_rate": 0.5,
+      "forbidden_violation": false,
+      "invalid_tool_rate": 0.0,
+      "answer": "信息不足，无法执行计算。知识库中没有提供“Agent Result”的顶层字段数量的具体数字。",
+      "trace": [
+        {
+          "step": 1,
+          "tool": "search_knowledge_base",
+          "arguments": {
+            "query": "Agent Result 的顶层字段数量"
+          },
+          "result": [
+            {
+              "content": "Agent 用循环连接用户任务、模型判断和工具执行，使请求经多轮处理形成回答。Agent Loop 的过程 是 Decision、Action、Observation，再进入下一次 Decision。Decision 是模型根据 messages 判断如何继续：可以直接给出最终回答，也可以提出 Tool Call。Action 是程序执行模型选定的工具，Observation 是程序把执行结果放回上下文，供模型下一轮判 断使用。当前 KnowledgePilot 的 chat_with_ollama 接收 messages 和 max_steps，每轮向 Ollama 发送消息以及 calculator、search_knowledge_base 工具的 Schema。一个 Decision 轮可以产生多个 Tool Call，程序依次处理本轮的全部调用，工具调用次数与决策轮数需分别理解。\n\nTool Result 是一次工具执行产生的结果。calculator 通常返回计算数值，search_knowledge_base  返回包含内容与来源的片段列表。程序保存模型提出工具调用的 assi",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_agent.txt"
+            },
+            {
+              "content": "Tool Result 是一次工具执行产生的结果。calculator 通常返回计算数值，search_knowledge_base  返回包含内容与来源的片段列表。程序保存模型提出工具调用的 assistant 消息，再为每个结果追加 role 为 tool 的消息，其中 tool_name 标明工具，content 保存结果的字符串表示。下一轮模型便能够看到自己的调用和对应的 Observation，依据取得的信息继续处理任务。messages 承载一次运行的工作上下文，Tool Result 提供来自实际执行的依据。工具执行出现可捕获的异常时，程 序会把错误整理为 Tool execution failed 开头的结果，作为 Observation 放回 messages，模型可以根据错误继续判断。工具返 回空列表表示检索没有取得片段；执行失败则表示调用过程发生了问题。两种情况需区分。\n\nmax_steps 限制 Agent 的最大 Decision 轮数，默认值是五。进入一次循环并请求模型，就消耗一个决策轮；同轮即使执行多个工具，也只占一个轮数。工具执行后通 常还需要下一轮模型整理结果",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_agent.txt"
+            },
+            {
+              "content": "trace 记录 Agent 的工具执行事实。每个 Tool Call 对应一项，包含 step、tool、arguments、result：step 是从一开始的决策轮号，tool 是工具名称，arguments 是模型给出的原始参数，result 是执行结果或错误 Observation 。同轮多个调用形成多项 trace，并共享相同 step。最终直接回答的轮次没有工具记录，因此直接回答可以具有空 trace，trace  长度代表工具尝试次数。answer、trace、stop_reason 共同构成 Agent Result。当前 /chat 为每个请求建立新的 system 与 user 消息，再调用 Agent；运行期间 messages 追加工具消息。这种上下文服务于当前请求，跨请求保留用户偏好或历史事实属于长期 Memory 的范围。当前 V1.1.0 的 stateless /chat 没有实现这类长期保存。\n",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_agent.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "agent_005",
+      "answer_correct": true,
+      "task_success": false,
+      "stop_reason": "completed",
+      "tool_call_count": 1,
+      "decision_steps": 2,
+      "required_tool_hit_rate": 0.5,
+      "forbidden_violation": false,
+      "invalid_tool_rate": 0.0,
+      "answer": "30",
+      "trace": [
+        {
+          "step": 1,
+          "tool": "search_knowledge_base",
+          "arguments": {
+            "query": "max_steps 的默认值"
+          },
+          "result": [
+            {
+              "content": "max_steps 限制 Agent 的最大 Decision 轮数，默认值是五。进入一次循环并请求模型，就消耗一个 决策轮；同轮即使执行多个工具，也只占一个轮数。工具执行后通常还需要下一轮模型整理结果并给出回答，因此工具调用与最终回答可能分属两个 Decision。模型本轮没有提出更多 Tool Call 时，函数返回 answer、trace 和 stop_reason，stop_reason 为 completed。completed 表示循环按停止条件结束，回答是否正确、是否充分仍需要依据问题和工具结果判断。若允许的轮数都用完， 模型仍在请求工具，函数返回最大步骤限制提示，并将 stop_reason 设为 max_steps。这个上限为一次请求提供明确的停止边界， 也让调用方能够区分正常停止与轮数耗尽。即使无需调用工具，一次直接回答也需要一次模型 Decision，仍占用一个轮数。\n\ntrace 记录 Agent 的工具执行事实。每个 Tool Call 对应一项，包含 step、tool、arguments、result：step 是从一开始的决策轮号，tool 是工具名称，ar",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_agent.txt"
+            },
+            {
+              "content": "Tool Result 是一次工具执行产生的结果。calculator 通常返回计算数值，search_knowledge_base  返回包含内容与来源的片段列表。程序保存模型提出工具调用的 assistant 消息，再为每个结果追加 role 为 tool 的消息，其中 tool_name 标明工具，content 保存结果的字符串表示。下一轮模型便能够看到自己的调用和对应的 Observation，依据取得的信息继续处理任务。messages 承载一次运行的工作上下文，Tool Result 提供来自实际执行的依据。工具执行出现可捕获的异常时，程 序会把错误整理为 Tool execution failed 开头的结果，作为 Observation 放回 messages，模型可以根据错误继续判断。工具返 回空列表表示检索没有取得片段；执行失败则表示调用过程发生了问题。两种情况需区分。\n\nmax_steps 限制 Agent 的最大 Decision 轮数，默认值是五。进入一次循环并请求模型，就消耗一个决策轮；同轮即使执行多个工具，也只占一个轮数。工具执行后通 常还需要下一轮模型整理结果",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_agent.txt"
+            },
+            {
+              "content": "请求校验与响应契约\nPOST /chat 使用 ChatRequest 接收 query 和 max_steps。query 会去掉首尾 空白，空字符串和仅含空白的输入无法通过校验；max_steps 默认是五，必须大于或等于一。路由把校验后的字段传给 chat_service，服务直接调用 chat_with_ollama。是否需要知识库工具，由该次 Agent 执行中的模型选择；这一 HTTP 路径没有直接调用 answer_with_rag。ChatResponse 包含 answer、trace 和 stop_reason，表示回答、本次工具记录和停止原因。\n文档接口由另外的模 型约束：文档项包含文档标识、来源和分块数量，删除结果包含文档标识与状态。上传和更新接收非空、非空白的 UTF-8 TXT 内容 ；上传创建新标识，更新沿用指定标识。聊天结果与文档操作结果各自使用对应的响应结构。\n",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_api.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "agent_006",
+      "answer_correct": true,
+      "task_success": true,
+      "stop_reason": "completed",
+      "tool_call_count": 2,
+      "decision_steps": 3,
+      "required_tool_hit_rate": 1.0,
+      "forbidden_violation": false,
+      "invalid_tool_rate": 0.0,
+      "answer": "14",
+      "trace": [
+        {
+          "step": 1,
+          "tool": "search_knowledge_base",
+          "arguments": {
+            "query": "search_knowledge_base 返回的每条结果包含的字段数量"
+          },
+          "result": [
+            {
+              "content": "Top-K、Context 与 Generation\nTop-K 控制检索返回多少候选，不表示候选都相关。search 的 top_k 默认值为三，没有额外相似度阈值。answer_with_rag 先调用 search，再保留 similarity 大于或等于零点四的候选。零点四阈 值仅属于这条 pipeline。过滤后没有资料时，pipeline 返回资料不足的提示；有资料时，它把文本块构造成 Context，与问题组成提示，调用聊天模型生成答案。search_knowledge_base 是知识库 Tool，调用 search 后只返回 content 与 source，负责检索， 不保留分数和完整 metadata。Agent 根据 Observation 继续决策。retrieval 评测应使用保留候选顺序、分数与 metadata 的底层 search，区分检索质量与答案质量。\n\n离线检索指标与多块相关性\n检索评测需要明确相关资料并固定标注粒度。以文本块为粒 度时，Hit Rate@K 判断前 K 个结果是否至少命中一个相关块，再统计有相关资料的问题中命中的比例；Recall@K",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_rag.txt"
+            },
+            {
+              "content": "知识库 Tool 的检索边界\nsearch_knowledge_base 接收 query、top_k 和可选 document_id，调用 search 完成向量检索（retrieval）。top_k 控制候选数量，document_id 可限定文档。工具返回 content（候选文本）与 source（metadata 中的来源路径）。结果丢弃 similarity、document_id 和 chunk_index，评测需分数与标识时应使用 search。Tool 内没有额外 threshold，也不调用最终聊天模型。RAG pipeline 则先以默认零点四阈值过滤 Top-K，再将 context 交给生成模型。Tool 返回文本只说明获得候选资料，不意味着资料相关、充分或已回答问题。Agent 可依据 observation 总结资料并说明不足。source 用于追溯证据，不能把模型补充包装成 Tool 返回事实。\n",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_tools.txt"
+            },
+            {
+              "content": "Chroma 中的文档与来源\nChroma 保存文本块、向量、记录标识和 metadata，便于追溯检索来源。当 前使用余弦距离，search 将 distance 转成 similarity，计算方式是一减距离，返回文本、相似度与 metadata 的三元组。入库时，metadata 保存 document_id、source 和 chunk_index，记录标识由 document_id 与文本块序号组合。document_id 区分文档，source 记录入库文件路径，chunk_index 表示文档内部块位置。项目按字符切分文本，块大小为五百字符，相邻块重叠一百字符。重叠减少边界断裂，也可能让多个候选包含同一事实。块序号不是内容的永久身份：正文或切分参数改变后，同一序号可对应不同文字。离线评测应冻结语料、切分方式与标识映射；来源路径不能替代相关性标注，也不能证明候选覆盖完整答案。\n\nTop-K、Context 与 Generation\nTop-K 控制检索返回多少候选，不表示候选都相关。search 的 top_k 默认值为三，没有额外相似度阈值。answer_with_rag ",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_rag.txt"
+            }
+          ]
+        },
+        {
+          "step": 2,
+          "tool": "calculator",
+          "arguments": {
+            "a": 2,
+            "b": 7,
+            "operation": "multiply"
+          },
+          "result": 14
+        }
+      ]
+    },
+    {
+      "case_id": "agent_007",
+      "answer_correct": null,
+      "task_success": null,
+      "stop_reason": "completed",
+      "tool_call_count": 1,
+      "decision_steps": 2,
+      "required_tool_hit_rate": 1.0,
+      "forbidden_violation": false,
+      "invalid_tool_rate": 0.0,
+      "answer": "抱歉，知识库中没有关于 KnowledgePilot 计划迁移到 PostgreSQL 的具体日期信息。",
+      "trace": [
+        {
+          "step": 1,
+          "tool": "search_knowledge_base",
+          "arguments": {
+            "query": "KnowledgePilot 迁移到 PostgreSQL 的日期"
+          },
+          "result": [
+            {
+              "content": "HTTP API与分层职责\nKnowledgePilot V1.1.0 使用 FastAPI 为聊天和文档能力提供 HTTP API，调用者发送请求并读取结构化响应。接口划分为 Route、Service 和 Core：Route 接收请求、调用服务，并把已捕获异常转换为 HTTP  错误；Service 组织输入与业务调用；Core 保留模型交互、工具执行、检索和向量存储等逻辑。\n应用包含六个路由：GET /health、POST /chat、POST /documents、GET /documents、PUT /documents/{document_id} 和 DELETE /documents/{document_id}。它们分别承担健康检查、聊天、上传、列表、更新和删除。路由函数使用同步 def；文档上传与更新接收文件，把文件名和字节内容交给服务。服务通过既有函数复用核心能力。\n\n无状态聊天与请求内上下文\nV1.1.0 的 POST /chat 是 stateless 聊天入口。每个 HTTP 请求，chat_service 都重新创建 messages 列表，其中一条 sys",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_api.txt"
+            },
+            {
+              "content": "Memory 让系统在后续交互中继续使用已有信息。短期上下文通常由当前请求的 messages 承载，包括 系统提示、用户问题、工具调用和工具结果。模型据此理解当前任务并继续判断；其有效范围由传入的消息及本次运行过程决定。一轮请求中反复使用这些消息，可以支持多轮 Agent Decision。\n\n长期 Memory 关注跨请求或跨会话的信息保留，例如用户偏好、 已确认的事实和持续任务的进展。保存内容在后续交互中被重新读取和使用，才形成长期记忆能力。聊天记录、数据库或向量存储可以作为载体，系统还需要规定保存、读取和更新方式。用于检索参考文档的知识库，承担的是资料检索职责。\n\n当前 KnowledgePilot V1.1.0 的 /chat 为每个请求重新建立 system 与 user 消息。Agent 在运行中追加工具调用和 Observation，形成单次上下文；trace 记录工具执行事实。当前实现没有把用户历史、偏好或会话状态保存为长期 Memory，也没有在下一次请求中自动恢复这些 内容。现有边界是 stateless 请求与本次运行上下文。\n",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_memory.txt"
+            },
+            {
+              "content": "Latency 与已知技术债\nLatency 表示完成一次明确操作所需的时间。检索耗时可以包含 Query Embedding 和 Vector Search，完整 Agent 耗时还可能包含多轮 Decision、工具执行与最终回答。不同计时范围的数值不能直接混用， 首次模型加载和重复调用也应区分。KnowledgePilot 当前依赖外部运行的本地 Ollama 服务；服务是否可用、模型加载状态和机器 负载可能影响耗时，模型或运行参数变化也可能影响回答与工具选择。当前文档 update 存在非原子技术债：先删除旧 Chroma Chunk，再生成并写入新 Chunk；后续入库失败时，旧向量记录可能已丢失。原始文件的最小恢复保护不等于向量数据库事务回滚。评测 过程中应避免更新固定 Corpus，以免资料变化混入版本对比。发现异常应记录实际条件与失败现象，不能把基础设施故障自动解释 为检索或 Agent 能力下降。\n",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_engineering.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "agent_008",
+      "answer_correct": null,
+      "task_success": null,
+      "stop_reason": "completed",
+      "tool_call_count": 1,
+      "decision_steps": 2,
+      "required_tool_hit_rate": 1.0,
+      "forbidden_violation": false,
+      "invalid_tool_rate": 0.0,
+      "answer": "根据知识库检索的结果，我没有找到关于 V1.2 离线评测使用的 GPU 具体型号的信息。",
+      "trace": [
+        {
+          "step": 1,
+          "tool": "search_knowledge_base",
+          "arguments": {
+            "query": "V1.2 离线评测使用的 GPU 具体型号是什么？"
+          },
+          "result": [
+            {
+              "content": "HTTP API与分层职责\nKnowledgePilot V1.1.0 使用 FastAPI 为聊天和文档能力提供 HTTP API，调用者发送请求并读取结构化响应。接口划分为 Route、Service 和 Core：Route 接收请求、调用服务，并把已捕获异常转换为 HTTP  错误；Service 组织输入与业务调用；Core 保留模型交互、工具执行、检索和向量存储等逻辑。\n应用包含六个路由：GET /health、POST /chat、POST /documents、GET /documents、PUT /documents/{document_id} 和 DELETE /documents/{document_id}。它们分别承担健康检查、聊天、上传、列表、更新和删除。路由函数使用同步 def；文档上传与更新接收文件，把文件名和字节内容交给服务。服务通过既有函数复用核心能力。\n\n无状态聊天与请求内上下文\nV1.1.0 的 POST /chat 是 stateless 聊天入口。每个 HTTP 请求，chat_service 都重新创建 messages 列表，其中一条 sys",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_api.txt"
+            },
+            {
+              "content": "Top-K、Context 与 Generation\nTop-K 控制检索返回多少候选，不表示候选都相关。search 的 top_k 默认值为三，没有额外相似度阈值。answer_with_rag 先调用 search，再保留 similarity 大于或等于零点四的候选。零点四阈 值仅属于这条 pipeline。过滤后没有资料时，pipeline 返回资料不足的提示；有资料时，它把文本块构造成 Context，与问题组成提示，调用聊天模型生成答案。search_knowledge_base 是知识库 Tool，调用 search 后只返回 content 与 source，负责检索， 不保留分数和完整 metadata。Agent 根据 Observation 继续决策。retrieval 评测应使用保留候选顺序、分数与 metadata 的底层 search，区分检索质量与答案质量。\n\n离线检索指标与多块相关性\n检索评测需要明确相关资料并固定标注粒度。以文本块为粒 度时，Hit Rate@K 判断前 K 个结果是否至少命中一个相关块，再统计有相关资料的问题中命中的比例；Recall@K",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_rag.txt"
+            },
+            {
+              "content": "离线检索指标与多块相关性\n检索评测需要明确相关资料并固定标注粒度。以文本块为粒度时，Hit Rate@K 判断前 K 个结果是否至少命中一个相关块，再统计有相关资料的问题中命中的比例；Recall@K 计算前 K 个结果覆盖的相关块数占该问题全部相关块数的比例。MRR 使用第一条相关结果的排名倒数，未命中时记零，再对问题求平均。第一条相关结果排第二位，其倒数是二分之一。答案可能依赖多个块，此时命中一块可以提高 Hit Rate，却仍可能只有较低的 Recall。重叠块可能承载同一证据，应按预先确定的规则标注。若采用文档粒度，应先按 document_id 合并并明确排名规则，不能把文档命中与块级召回混为一 谈。知识库没有答案的问题应单独分析空结果、误检索或拒答，不把零相关块的比例硬算进 Recall；检索指标也不能直接代表生成 答案的正确率。\n",
+              "source": "D:\\AI_develop\\KnowledgePilot\\data\\evaluation\\corpus\\eval_rag.txt"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

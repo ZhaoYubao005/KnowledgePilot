@@ -67,3 +67,12 @@ desktop.ini
 !/data/evaluation/manifests/
 /data/evaluation/manifests/*
 !/data/evaluation/manifests/evaluation_v1.json
+
+# V1.2 Baseline evidence; keep every other report ignored.
+!/data/evaluation/reports/
+/data/evaluation/reports/*
+!/data/evaluation/reports/agent_batch_raw_v1.json
+!/data/evaluation/reports/agent_manual_reviews_v1.json
+!/data/evaluation/reports/agent_baseline_v1.json
+!/data/evaluation/reports/agent_baseline_validation_v1.json
+!/data/evaluation/reports/rag_baseline_v1_k3_20261010T143304_819842Z.json

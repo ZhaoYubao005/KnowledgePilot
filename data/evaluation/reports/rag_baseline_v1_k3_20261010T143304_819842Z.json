@@ -1,0 +1,160 @@
+{
+  "dataset_version": "v1",
+  "k": 3,
+  "retrieval_case_count": 16,
+  "summary": {
+    "hit_rate": 1.0,
+    "mean_recall": 0.8229166666666666,
+    "mrr": 0.96875,
+    "mean_fact_coverage": 1.0,
+    "evidence_sufficient_rate": 1.0,
+    "average_latency_ms": 287.60826250004357
+  },
+  "cases": [
+    {
+      "case_id": "rag_001",
+      "hit": 1,
+      "recall": 0.6666666666666666,
+      "rr": 1.0,
+      "fact_coverage": null,
+      "evidence_sufficient": null,
+      "latency_ms": 3509.2269000006127
+    },
+    {
+      "case_id": "rag_002",
+      "hit": 1,
+      "recall": 1.0,
+      "rr": 1.0,
+      "fact_coverage": null,
+      "evidence_sufficient": null,
+      "latency_ms": 147.28329999979906
+    },
+    {
+      "case_id": "rag_003",
+      "hit": 1,
+      "recall": 1.0,
+      "rr": 1.0,
+      "fact_coverage": null,
+      "evidence_sufficient": null,
+      "latency_ms": 53.885499999523745
+    },
+    {
+      "case_id": "rag_004",
+      "hit": 1,
+      "recall": 0.5,
+      "rr": 1.0,
+      "fact_coverage": null,
+      "evidence_sufficient": null,
+      "latency_ms": 50.25070000010601
+    },
+    {
+      "case_id": "rag_005",
+      "hit": 1,
+      "recall": 0.6,
+      "rr": 1.0,
+      "fact_coverage": null,
+      "evidence_sufficient": null,
+      "latency_ms": 69.4712000004074
+    },
+    {
+      "case_id": "rag_006",
+      "hit": 1,
+      "recall": 1.0,
+      "rr": 1.0,
+      "fact_coverage": null,
+      "evidence_sufficient": null,
+      "latency_ms": 62.36129999979312
+    },
+    {
+      "case_id": "rag_007",
+      "hit": 1,
+      "recall": 0.3,
+      "rr": 1.0,
+      "fact_coverage": 1.0,
+      "evidence_sufficient": 1,
+      "latency_ms": 85.98160000019561
+    },
+    {
+      "case_id": "rag_008",
+      "hit": 1,
+      "recall": 1.0,
+      "rr": 0.5,
+      "fact_coverage": 1.0,
+      "evidence_sufficient": 1,
+      "latency_ms": 54.96190000030765
+    },
+    {
+      "case_id": "rag_009",
+      "hit": 1,
+      "recall": 0.5,
+      "rr": 1.0,
+      "fact_coverage": 1.0,
+      "evidence_sufficient": 1,
+      "latency_ms": 82.4707000001581
+    },
+    {
+      "case_id": "rag_010",
+      "hit": 1,
+      "recall": 0.6,
+      "rr": 1.0,
+      "fact_coverage": 1.0,
+      "evidence_sufficient": 1,
+      "latency_ms": 143.46600000044418
+    },
+    {
+      "case_id": "rag_011",
+      "hit": 1,
+      "recall": 1.0,
+      "rr": 1.0,
+      "fact_coverage": null,
+      "evidence_sufficient": null,
+      "latency_ms": 63.959000000068045
+    },
+    {
+      "case_id": "rag_012",
+      "hit": 1,
+      "recall": 1.0,
+      "rr": 1.0,
+      "fact_coverage": null,
+      "evidence_sufficient": null,
+      "latency_ms": 54.4289999998
+    },
+    {
+      "case_id": "rag_013",
+      "hit": 1,
+      "recall": 1.0,
+      "rr": 1.0,
+      "fact_coverage": null,
+      "evidence_sufficient": null,
+      "latency_ms": 43.80049999963376
+    },
+    {
+      "case_id": "rag_014",
+      "hit": 1,
+      "recall": 1.0,
+      "rr": 1.0,
+      "fact_coverage": null,
+      "evidence_sufficient": null,
+      "latency_ms": 65.7842000000528
+    },
+    {
+      "case_id": "rag_015",
+      "hit": 1,
+      "recall": 1.0,
+      "rr": 1.0,
+      "fact_coverage": null,
+      "evidence_sufficient": null,
+      "latency_ms": 58.628900000258
+    },
+    {
+      "case_id": "rag_016",
+      "hit": 1,
+      "recall": 1.0,
+      "rr": 1.0,
+      "fact_coverage": null,
+      "evidence_sufficient": null,
+      "latency_ms": 55.7714999995369
+    }
+  ],
+  "generated_at_utc": "2026-10-10T14:33:04.819842+00:00"
+}

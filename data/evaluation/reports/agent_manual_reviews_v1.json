@@ -1,0 +1,513 @@
+{
+  "schema_version": "agent_manual_reviews_v1",
+  "run_id": "historical-agent-v1-056914368dbae1ee0d854672778787ea38c6fd277bbfe63edf29aac003bad865",
+  "dataset_sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+  "recorded_at_utc": "2026-10-11T06:16:38.973651+00:00",
+  "records": [
+    {
+      "run_id": "historical-agent-v1-056914368dbae1ee0d854672778787ea38c6fd277bbfe63edf29aac003bad865",
+      "dataset_sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+      "case_id": "agent_001",
+      "answer_sha256": "40510175845988f13f6162ed8526f0b09f73384467fa855e1e79b44a56562a58",
+      "agent_result_sha256": "7c5278715997e17bb2ca8e07c71f486b8892a674389db5d12ef2b664a3a181c8",
+      "answer_correct": null,
+      "task_relevance_by_trace": {},
+      "reviewer": "Codex explicit evidence review",
+      "rationale": "已核对原始答案为1000，Trace为空。本题要求calculator，但没有任何实际工具调用；没有可审核的执行，不能用答案正确替代必需行为。数值答案由Evaluator按冻结Decimal规则独立判定。",
+      "reviewed_at_utc": "2026-10-11T06:16:38.973651+00:00",
+      "review_method": "explicit_per_record_review_of_this_raw_run_not_an_automatic_classifier",
+      "answer_review_source": "not_manual_scored_by_frozen_numeric_rule",
+      "answer_excerpt": "1000",
+      "task_relevance_evidence": [],
+      "frozen_profile": "至少一次成功calculator执行本题计算，结果支持最终数字。",
+      "source_text_fidelity_note": "Raw result text was not changed. Diagnostic whitespace comparison does not certify historical database bytes and is not a scoring normalization."
+    },
+    {
+      "run_id": "historical-agent-v1-056914368dbae1ee0d854672778787ea38c6fd277bbfe63edf29aac003bad865",
+      "dataset_sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+      "case_id": "agent_002",
+      "answer_sha256": "fea625511fcbe7bbc1b8d17af3b150ffa2dc2973c575f7ad54ce5126af35e490",
+      "agent_result_sha256": "bf949a0e3e4f8facc8ef87cdcac2c9718dc2bf79b9193f9d605aefd6ed52f96d",
+      "answer_correct": true,
+      "task_relevance_by_trace": {
+        "0": true
+      },
+      "reviewer": "User-confirmed answer; Codex evidence review",
+      "rationale": "用户已确认本题答案正确，本次重新核对原始回答：每次HTTP请求重新创建messages，不复用上次messages，没有跨请求自动记忆。Trace[0]查询/chat为什么stateless，结果第0项直接提供上述事实，第1项补充单次上下文边界，支持最终解释。答案判断与该次检索的任务相关性分别复核。",
+      "reviewed_at_utc": "2026-10-11T06:16:38.973651+00:00",
+      "review_method": "explicit_per_record_review_of_this_raw_run_not_an_automatic_classifier",
+      "answer_review_source": "prior_user_confirmation_rechecked_against_this_exact_answer",
+      "answer_excerpt": "根据知识库提供的信息，`/chat` 之所以是**无状态 (stateless)** 的主要原因在于其处理聊天历史的方式：\n\n1.  **每次请求独立创建上下文：** 每一个 `/chat` 的 HTTP 请求，`chat_service` 都会**重新创建** `messages` 列表。\n2.  **不复用历史信息",
+      "task_relevance_evidence": [
+        {
+          "trace_index": 0,
+          "result_index": 0,
+          "document_id": "eval_api",
+          "chunk_index": 1,
+          "facts": [
+            "每个HTTP请求重新创建messages",
+            "不同HTTP请求不复用上一次messages"
+          ]
+        },
+        {
+          "trace_index": 0,
+          "result_index": 1,
+          "document_id": "eval_agent",
+          "chunk_index": 3,
+          "facts": [
+            "当前请求内上下文不等于长期Memory"
+          ]
+        }
+      ],
+      "frozen_profile": "至少一次成功search_knowledge_base检索；返回的固定Corpus资料支持stateless解释。",
+      "source_text_fidelity_note": "Raw result text was not changed. Diagnostic whitespace comparison does not certify historical database bytes and is not a scoring normalization."
+    },
+    {
+      "run_id": "historical-agent-v1-056914368dbae1ee0d854672778787ea38c6fd277bbfe63edf29aac003bad865",
+      "dataset_sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+      "case_id": "agent_003",
+      "answer_sha256": "6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918",
+      "agent_result_sha256": "18aa2b989c0acdbd5544ea2e42c6244b002d75edb95d68e67bfef45e2946e0be",
+      "answer_correct": null,
+      "task_relevance_by_trace": {},
+      "reviewer": "Codex explicit evidence review",
+      "rationale": "已核对原始答案为12，Trace为空。Query明确要求使用calculator计算144除以12，但不存在工具尝试或执行；任务失败由缺少必需行为确定，不根据答案相等猜测工具执行。数值答案由Evaluator独立判定。",
+      "reviewed_at_utc": "2026-10-11T06:16:38.973651+00:00",
+      "review_method": "explicit_per_record_review_of_this_raw_run_not_an_automatic_classifier",
+      "answer_review_source": "not_manual_scored_by_frozen_numeric_rule",
+      "answer_excerpt": "12",
+      "task_relevance_evidence": [],
+      "frozen_profile": "至少一次成功calculator执行本题计算，结果支持最终数字。",
+      "source_text_fidelity_note": "Raw result text was not changed. Diagnostic whitespace comparison does not certify historical database bytes and is not a scoring normalization."
+    },
+    {
+      "run_id": "historical-agent-v1-056914368dbae1ee0d854672778787ea38c6fd277bbfe63edf29aac003bad865",
+      "dataset_sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+      "case_id": "agent_004",
+      "answer_sha256": "bc3fcc095be236d04c9013bfd1da00dabdc5f2bb4da8bfa5cca0a09beb824577",
+      "agent_result_sha256": "ff9ee19510fead7714917028f46ef8985cef7f797be8b9cc71b1696d88b7ebf7",
+      "answer_correct": null,
+      "task_relevance_by_trace": {
+        "0": true
+      },
+      "reviewer": "Codex explicit evidence review",
+      "rationale": "Trace[0]查询Agent Result顶层字段数量，实际结果第2项明确answer、trace、stop_reason共同构成Agent Result，可得3个字段，检索执行与任务相关。原始最终回答却称没有具体数量，且没有calculator调用，未完成3乘8；相关检索不能替代答案正确或必需计算。",
+      "reviewed_at_utc": "2026-10-11T06:16:38.973651+00:00",
+      "review_method": "explicit_per_record_review_of_this_raw_run_not_an_automatic_classifier",
+      "answer_review_source": "not_manual_scored_by_frozen_numeric_rule",
+      "answer_excerpt": "信息不足，无法执行计算。知识库中没有提供“Agent Result”的顶层字段数量的具体数字。",
+      "task_relevance_evidence": [
+        {
+          "trace_index": 0,
+          "result_index": 2,
+          "document_id": "eval_agent",
+          "chunk_index": 3,
+          "facts": [
+            "Agent Result包含answer、trace、stop_reason三个顶层字段"
+          ]
+        }
+      ],
+      "frozen_profile": "成功知识库检索支持顶层字段数量，成功calculator完成题目要求的乘法。",
+      "source_text_fidelity_note": "Raw result text was not changed. Diagnostic whitespace comparison does not certify historical database bytes and is not a scoring normalization."
+    },
+    {
+      "run_id": "historical-agent-v1-056914368dbae1ee0d854672778787ea38c6fd277bbfe63edf29aac003bad865",
+      "dataset_sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+      "case_id": "agent_005",
+      "answer_sha256": "624b60c58c9d8bfb6ff1886c2fd605d2adeb6ea4da576068201b6c6958ce93f4",
+      "agent_result_sha256": "efef5797132ca3459107d9a939884662a1addf070b9c200805253abaab515c34",
+      "answer_correct": null,
+      "task_relevance_by_trace": {
+        "0": true
+      },
+      "reviewer": "Codex explicit evidence review",
+      "rationale": "Trace[0]查询max_steps默认值，实际结果第0项明确默认值五，第2项也给出默认五，足以提供乘法输入5；该检索执行相关。最终数字30符合答案，但Trace没有calculator，未满足成功计算5乘6的必要行为，仍为任务失败。",
+      "reviewed_at_utc": "2026-10-11T06:16:38.973651+00:00",
+      "review_method": "explicit_per_record_review_of_this_raw_run_not_an_automatic_classifier",
+      "answer_review_source": "not_manual_scored_by_frozen_numeric_rule",
+      "answer_excerpt": "30",
+      "task_relevance_evidence": [
+        {
+          "trace_index": 0,
+          "result_index": 0,
+          "document_id": "eval_agent",
+          "chunk_index": 2,
+          "facts": [
+            "max_steps默认值为五"
+          ]
+        },
+        {
+          "trace_index": 0,
+          "result_index": 2,
+          "document_id": "eval_api",
+          "chunk_index": 2,
+          "facts": [
+            "max_steps默认五"
+          ]
+        }
+      ],
+      "frozen_profile": "成功知识库检索支持默认max_steps，成功calculator完成题目要求的乘法。",
+      "source_text_fidelity_note": "Raw result text was not changed. Diagnostic whitespace comparison does not certify historical database bytes and is not a scoring normalization."
+    },
+    {
+      "run_id": "historical-agent-v1-056914368dbae1ee0d854672778787ea38c6fd277bbfe63edf29aac003bad865",
+      "dataset_sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+      "case_id": "agent_006",
+      "answer_sha256": "8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61",
+      "agent_result_sha256": "278f6ce769a4f398677a208a9841a32e08272fa17fe429ec036004b726187426",
+      "answer_correct": null,
+      "task_relevance_by_trace": {
+        "0": true,
+        "1": true
+      },
+      "reviewer": "Codex explicit evidence review",
+      "rationale": "Trace[0]检索返回字段数量，实际结果第0和第1项明确search_knowledge_base只返回content与source，即两个字段。Trace[1]原生calculator参数a=2、b=7、operation=multiply，结果为原生整数14，输入来自前述事实，执行支持最终答案14。两次任务相关性均在本次完整Trace上下文中逐条审核；这不是自动关键词或算式分类规则。",
+      "reviewed_at_utc": "2026-10-11T06:16:38.973651+00:00",
+      "review_method": "explicit_per_record_review_of_this_raw_run_not_an_automatic_classifier",
+      "answer_review_source": "not_manual_scored_by_frozen_numeric_rule",
+      "answer_excerpt": "14",
+      "task_relevance_evidence": [
+        {
+          "trace_index": 0,
+          "result_index": 0,
+          "document_id": "eval_rag",
+          "chunk_index": 2,
+          "facts": [
+            "search_knowledge_base只返回content与source"
+          ]
+        },
+        {
+          "trace_index": 0,
+          "result_index": 1,
+          "document_id": "eval_tools",
+          "chunk_index": 2,
+          "facts": [
+            "工具返回content与source两个字段"
+          ]
+        },
+        {
+          "trace_index": 1,
+          "facts": [
+            "基于检索给出的2个字段，执行2乘7，原生结果14"
+          ]
+        }
+      ],
+      "frozen_profile": "成功知识库检索支持结果字段数量，成功calculator完成题目要求的乘法。",
+      "source_text_fidelity_note": "Raw result text was not changed. Diagnostic whitespace comparison does not certify historical database bytes and is not a scoring normalization."
+    },
+    {
+      "run_id": "historical-agent-v1-056914368dbae1ee0d854672778787ea38c6fd277bbfe63edf29aac003bad865",
+      "dataset_sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+      "case_id": "agent_007",
+      "answer_sha256": "77d18e4ac2e0b76fd1f3bf13544f6e88b32082d16a687324095c1e49cb6c7fe9",
+      "agent_result_sha256": "4cf9cf6e7e4520a2566b6c44a51d042fadca9f0586694f346e0746c9bb95af52",
+      "answer_correct": true,
+      "task_relevance_by_trace": {
+        "0": true
+      },
+      "reviewer": "User-confirmed answer; Codex evidence review",
+      "rationale": "用户已确认本题答案正确，本次核对原文明确表示知识库没有PostgreSQL迁移具体日期，没有编造日期。Trace[0]查询目标日期，调用成功且返回契约合法；逐篇通读六篇冻结Corpus后，确认均未给出该迁移日期。依照顶层scoring_policy本题无答案profile，正确查询结合固定语料缺失证据支持拒答；非空但无答案候选不是正例Chunk命中。",
+      "reviewed_at_utc": "2026-10-11T06:16:38.973651+00:00",
+      "review_method": "explicit_per_record_review_of_this_raw_run_not_an_automatic_classifier",
+      "answer_review_source": "prior_user_confirmation_rechecked_against_this_exact_answer",
+      "answer_excerpt": "抱歉，知识库中没有关于 KnowledgePilot 计划迁移到 PostgreSQL 的具体日期信息。",
+      "task_relevance_evidence": [
+        {
+          "trace_index": 0,
+          "facts": [
+            "实际query明确针对KnowledgePilot迁移PostgreSQL的日期",
+            "返回候选未提供迁移日期",
+            "六篇冻结Corpus全文均未提供该日期",
+            "最终回答明确资料不足且未编造日期"
+          ],
+          "corpus_scope": "all_six_frozen_corpus_files",
+          "evidence_kind": "absence_aware_frozen_task_profile"
+        }
+      ],
+      "frozen_profile": "成功调用知识库工具，结合固定Corpus确认资料未提供迁移日期；最终明确资料不足，不编造日期。非空候选也可能没有答案。",
+      "source_text_fidelity_note": "Raw result text was not changed. Diagnostic whitespace comparison does not certify historical database bytes and is not a scoring normalization."
+    },
+    {
+      "run_id": "historical-agent-v1-056914368dbae1ee0d854672778787ea38c6fd277bbfe63edf29aac003bad865",
+      "dataset_sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+      "case_id": "agent_008",
+      "answer_sha256": "d99d9dcbdbcebeb0c54e3d2036fbbcda0c5f8b07ec2d20f5a8c963a1b9f49e46",
+      "agent_result_sha256": "74dce02d0102ac03cb3ceeb3e180eeeb7d91454c6b39e12c46e8e0cc05823ea4",
+      "answer_correct": true,
+      "task_relevance_by_trace": {
+        "0": true
+      },
+      "reviewer": "User-confirmed answer; Codex evidence review",
+      "rationale": "用户已确认本题答案正确，本次核对原文明确未找到V1.2离线评测GPU具体型号，没有猜测型号。Trace[0]针对该型号查询，成功返回合规候选；逐篇通读六篇冻结Corpus后，确认均未提供具体GPU型号。依据顶层scoring_policy无答案profile，查询与固定语料缺失证据支持拒答，不将这些无答案候选标为Retrieval正例。",
+      "reviewed_at_utc": "2026-10-11T06:16:38.973651+00:00",
+      "review_method": "explicit_per_record_review_of_this_raw_run_not_an_automatic_classifier",
+      "answer_review_source": "prior_user_confirmation_rechecked_against_this_exact_answer",
+      "answer_excerpt": "根据知识库检索的结果，我没有找到关于 V1.2 离线评测使用的 GPU 具体型号的信息。",
+      "task_relevance_evidence": [
+        {
+          "trace_index": 0,
+          "facts": [
+            "实际query明确针对V1.2离线评测GPU型号",
+            "返回候选未提供GPU具体型号",
+            "六篇冻结Corpus全文均未提供该型号",
+            "最终回答明确未找到型号且未猜测"
+          ],
+          "corpus_scope": "all_six_frozen_corpus_files",
+          "evidence_kind": "absence_aware_frozen_task_profile"
+        }
+      ],
+      "frozen_profile": "成功调用知识库工具，结合固定Corpus确认资料未提供GPU型号；最终明确资料不足，不猜测型号。非空候选也可能没有答案。",
+      "source_text_fidelity_note": "Raw result text was not changed. Diagnostic whitespace comparison does not certify historical database bytes and is not a scoring normalization."
+    }
+  ],
+  "source_artifact": {
+    "path": "data/evaluation/reports/agent_batch_raw_v1.json",
+    "sha256": "056914368dbae1ee0d854672778787ea38c6fd277bbfe63edf29aac003bad865",
+    "recovered_from": "C:\\Users\\lenovo\\Downloads\\agent_batch_raw_v1.json",
+    "kind": "historical_terminal_report",
+    "original_run_time": "unknown",
+    "original_environment": "unknown"
+  },
+  "source_text_audit": {
+    "returned_text_count": 18,
+    "exact_match_count": 1,
+    "non_whitespace_content_match_count": 18,
+    "normalization_scope": "diagnostic_only_not_scoring_or_source_rewrite",
+    "comparisons": [
+      {
+        "case_id": "agent_002",
+        "trace_index": 0,
+        "result_index": 0,
+        "document_id": "eval_api",
+        "chunk_index": 1,
+        "raw_text_sha256": "1061326e363997cb5e4910dd4584e19195d238b21c3c5ee4884f83a5d8695508",
+        "corpus_chunk_sha256": "fbb2ced40e7c927894965fe6cb5269f10a3f4511cd9198d40cd5d05ad421bda4",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 504,
+        "corpus_chars": 500
+      },
+      {
+        "case_id": "agent_002",
+        "trace_index": 0,
+        "result_index": 1,
+        "document_id": "eval_agent",
+        "chunk_index": 3,
+        "raw_text_sha256": "192e7d8cb836f2bdffdc43322039d0d73bcda91a41c4539722e87c4fbcef3270",
+        "corpus_chunk_sha256": "f6b95d47796844b521b462663b832ea628ae7aadeeac7de9f3d6d027448ce5d4",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 421,
+        "corpus_chars": 419
+      },
+      {
+        "case_id": "agent_002",
+        "trace_index": 0,
+        "result_index": 2,
+        "document_id": "eval_api",
+        "chunk_index": 2,
+        "raw_text_sha256": "3587ca8fe2e3ffc566b02deb389fdc99b324b89275d0248e5df65c0f8d8a5320",
+        "corpus_chunk_sha256": "0d68c735ee9345caa7b08cbe37c832d7c6c786b1074dfd09075633f978cbb0af",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 403,
+        "corpus_chars": 400
+      },
+      {
+        "case_id": "agent_004",
+        "trace_index": 0,
+        "result_index": 0,
+        "document_id": "eval_agent",
+        "chunk_index": 0,
+        "raw_text_sha256": "e839ecfc142d2a522b9ceb413ed947a6de766f0529ba07e2188299a4d626df49",
+        "corpus_chunk_sha256": "fb46d1be2c9811044a0ee29cadc9163ee2d0f32922aa24c18d1798923d2313b1",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 503,
+        "corpus_chars": 500
+      },
+      {
+        "case_id": "agent_004",
+        "trace_index": 0,
+        "result_index": 1,
+        "document_id": "eval_agent",
+        "chunk_index": 1,
+        "raw_text_sha256": "f93b884eb6cbdfa958f99015868afd8fb778a0eb80720d1d4d400184f7d26cb7",
+        "corpus_chunk_sha256": "d0b1201e407a81b440e7991e7bed88043d4d0690ab59ba44aafeb599d6a88320",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 504,
+        "corpus_chars": 500
+      },
+      {
+        "case_id": "agent_004",
+        "trace_index": 0,
+        "result_index": 2,
+        "document_id": "eval_agent",
+        "chunk_index": 3,
+        "raw_text_sha256": "192e7d8cb836f2bdffdc43322039d0d73bcda91a41c4539722e87c4fbcef3270",
+        "corpus_chunk_sha256": "f6b95d47796844b521b462663b832ea628ae7aadeeac7de9f3d6d027448ce5d4",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 421,
+        "corpus_chars": 419
+      },
+      {
+        "case_id": "agent_005",
+        "trace_index": 0,
+        "result_index": 0,
+        "document_id": "eval_agent",
+        "chunk_index": 2,
+        "raw_text_sha256": "2b317aec0667db1f9f7b5476ee9358fd0b706a547cc13708a1327657a8e1c7b7",
+        "corpus_chunk_sha256": "1db7bf0fd20e59344f40c908a8995770e2a8788d7446c1750da52f711945d534",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 503,
+        "corpus_chars": 500
+      },
+      {
+        "case_id": "agent_005",
+        "trace_index": 0,
+        "result_index": 1,
+        "document_id": "eval_agent",
+        "chunk_index": 1,
+        "raw_text_sha256": "f93b884eb6cbdfa958f99015868afd8fb778a0eb80720d1d4d400184f7d26cb7",
+        "corpus_chunk_sha256": "d0b1201e407a81b440e7991e7bed88043d4d0690ab59ba44aafeb599d6a88320",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 504,
+        "corpus_chars": 500
+      },
+      {
+        "case_id": "agent_005",
+        "trace_index": 0,
+        "result_index": 2,
+        "document_id": "eval_api",
+        "chunk_index": 2,
+        "raw_text_sha256": "3587ca8fe2e3ffc566b02deb389fdc99b324b89275d0248e5df65c0f8d8a5320",
+        "corpus_chunk_sha256": "0d68c735ee9345caa7b08cbe37c832d7c6c786b1074dfd09075633f978cbb0af",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 403,
+        "corpus_chars": 400
+      },
+      {
+        "case_id": "agent_006",
+        "trace_index": 0,
+        "result_index": 0,
+        "document_id": "eval_rag",
+        "chunk_index": 2,
+        "raw_text_sha256": "bb948262b146add3a98d8ce11914c69cc7f295371c0e0e3222f4b80226c1ad7a",
+        "corpus_chunk_sha256": "75a04e2dcb27a38dd337ddb387ca0bfd7e143558317ad90bac70b40e31690760",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 503,
+        "corpus_chars": 500
+      },
+      {
+        "case_id": "agent_006",
+        "trace_index": 0,
+        "result_index": 1,
+        "document_id": "eval_tools",
+        "chunk_index": 2,
+        "raw_text_sha256": "afe6949859832cfdcea62f4e09413f476d3c3b36ed4af42a5389a4f4ca855113",
+        "corpus_chunk_sha256": "afe6949859832cfdcea62f4e09413f476d3c3b36ed4af42a5389a4f4ca855113",
+        "exact_match": true,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 420,
+        "corpus_chars": 420
+      },
+      {
+        "case_id": "agent_006",
+        "trace_index": 0,
+        "result_index": 2,
+        "document_id": "eval_rag",
+        "chunk_index": 1,
+        "raw_text_sha256": "9748bcc88fd3227b700787f97ad949e8f39ad4ce03e699b2194495fb957f09b3",
+        "corpus_chunk_sha256": "4394ee35617784ff9879100419c207344439477be4b683346c12f45740f8eccd",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 501,
+        "corpus_chars": 500
+      },
+      {
+        "case_id": "agent_007",
+        "trace_index": 0,
+        "result_index": 0,
+        "document_id": "eval_api",
+        "chunk_index": 0,
+        "raw_text_sha256": "c5857208f5ef9dc8d3169f4921a191e30f03051290f263afdb56528373730c7c",
+        "corpus_chunk_sha256": "45a4db3bb503c40191689c595eac9304e9b3eec847a67dc8b6611236b32fcc9f",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 501,
+        "corpus_chars": 500
+      },
+      {
+        "case_id": "agent_007",
+        "trace_index": 0,
+        "result_index": 1,
+        "document_id": "eval_memory",
+        "chunk_index": 0,
+        "raw_text_sha256": "0cb4911857f81b748163f7bb2aab1f9e71e6db41d776f572dea6655b8ecf214b",
+        "corpus_chunk_sha256": "028b1d47944832ff619f80c428e4232639e8386671f66296d321c61a71d058dd",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 483,
+        "corpus_chars": 480
+      },
+      {
+        "case_id": "agent_007",
+        "trace_index": 0,
+        "result_index": 2,
+        "document_id": "eval_engineering",
+        "chunk_index": 3,
+        "raw_text_sha256": "8840cc6abe91b1cec13dbe491081f18a694036d681d521cbb06be5f13254e7df",
+        "corpus_chunk_sha256": "d0555113841f367e404d4285a6ff5fe82832b8659868e72454105b7c6b8a6010",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 414,
+        "corpus_chars": 410
+      },
+      {
+        "case_id": "agent_008",
+        "trace_index": 0,
+        "result_index": 0,
+        "document_id": "eval_api",
+        "chunk_index": 0,
+        "raw_text_sha256": "c5857208f5ef9dc8d3169f4921a191e30f03051290f263afdb56528373730c7c",
+        "corpus_chunk_sha256": "45a4db3bb503c40191689c595eac9304e9b3eec847a67dc8b6611236b32fcc9f",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 501,
+        "corpus_chars": 500
+      },
+      {
+        "case_id": "agent_008",
+        "trace_index": 0,
+        "result_index": 1,
+        "document_id": "eval_rag",
+        "chunk_index": 2,
+        "raw_text_sha256": "bb948262b146add3a98d8ce11914c69cc7f295371c0e0e3222f4b80226c1ad7a",
+        "corpus_chunk_sha256": "75a04e2dcb27a38dd337ddb387ca0bfd7e143558317ad90bac70b40e31690760",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 503,
+        "corpus_chars": 500
+      },
+      {
+        "case_id": "agent_008",
+        "trace_index": 0,
+        "result_index": 2,
+        "document_id": "eval_rag",
+        "chunk_index": 3,
+        "raw_text_sha256": "70dfef7a84e2427665887b43c163906e9929858f4e175f55ff76960b76cf6a0b",
+        "corpus_chunk_sha256": "7f210674c2c2b9323746e8f08cae22b9c064e53b0ea547d5b0fbb1849c0830e7",
+        "exact_match": false,
+        "equal_ignoring_whitespace": true,
+        "raw_chars": 377,
+        "corpus_chars": 375
+      }
+    ]
+  }
+}
