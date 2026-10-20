@@ -1,0 +1,822 @@
+{
+  "archive_schema_version": "retrieval_experiment_archive_v1",
+  "audited_at_utc": "2026-10-20T09:48:44.170740+00:00",
+  "audit_scope": "Offline audit of existing actual experiment evidence; no new model run",
+  "source_reports_unmodified": true,
+  "archive_is_byte_identical": true,
+  "sensitive_review": "No credential keys or recognizable secret/user-home patterns found; candidate text and generic absolute project source paths retained",
+  "dataset_identity": {
+    "path": "data/evaluation/cases_v1.json",
+    "sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+    "bytes": 189145
+  },
+  "manifest_identity": {
+    "path": "data/evaluation/manifests/evaluation_v1.json",
+    "sha256": "97f48e9a6bb46ca6aff499b71f936e1a1414d250667e35ef4cfe0f98a0d5777f",
+    "bytes": 13666
+  },
+  "total_report_bytes": 716654,
+  "reports": [
+    {
+      "original_path": "data/evaluation/reports/dense_v13_k3_20261020T075936_904246Z.json",
+      "archive_path": "docs/evaluation/v1.3_reports/dense_v13_k3_20261020T075936_904246Z.json",
+      "bytes": 71689,
+      "sha256": "e167a0b53bd31624bb7acb300e37aa9cfe6f21fe85bb8ef97d10a487e5e36d9b",
+      "schema_version": "retrieval_run_report_v1",
+      "run_id": "dense-v13-20261020T075939-138374Z",
+      "strategy": "dense_chroma_cosine",
+      "strategy_config": {
+        "embedding": {
+          "model_identifier": "bge-m3",
+          "resolved_model": "bge-m3:latest",
+          "digest": "7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab",
+          "dimensions": 1024,
+          "digest_must_match_before_rebuild": true
+        },
+        "collection": {
+          "name": "knowledge_pilot_docs",
+          "distance_metric": "cosine",
+          "configuration": {
+            "hnsw": {
+              "space": "cosine",
+              "ef_construction": 100,
+              "ef_search": 100,
+              "max_neighbors": 16,
+              "resize_factor": 1.2,
+              "sync_threshold": 1000
+            },
+            "spann": null,
+            "embedding_function": null
+          },
+          "cross_environment_identity": [
+            "document_id",
+            "chunk_index",
+            "chunk_sha256"
+          ],
+          "source_metadata": "environment_local_path_not_portable_identity"
+        },
+        "top_k": 3,
+        "similarity": "1 - cosine_distance",
+        "runtime_isolation": "temporary byte-for-byte copy of frozen runtime",
+        "frozen_runtime_source": "data/evaluation/runtime/corpus_v1",
+        "collection_record_count": 19,
+        "initialization_ms": {
+          "runtime_copy": 24.152899997716304,
+          "chroma_import_and_collection_open": 1656.474100000196
+        },
+        "latency_boundary": "search_fn(query, k) only; excludes dataset load, index copy/open, provenance, and JSON write",
+        "first_query_may_include_embedding_model_cold_start": true
+      },
+      "dataset_version": "v1",
+      "corpus_version": "corpus_v1",
+      "case_count": 16,
+      "metrics_recomputed": {
+        "hit_rate": 1,
+        "mean_recall": 0.8229166666666666,
+        "mrr": 0.96875
+      },
+      "provenance": {
+        "git_commit": "7eca62c15e9de044e3e6fef84b41da069e078881",
+        "git_worktree_dirty": true,
+        "dataset": {
+          "path": "data/evaluation/cases_v1.json",
+          "sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+          "bytes": 189145
+        },
+        "manifest": {
+          "path": "data/evaluation/manifests/evaluation_v1.json",
+          "sha256": "97f48e9a6bb46ca6aff499b71f936e1a1414d250667e35ef4cfe0f98a0d5777f",
+          "bytes": 13666
+        },
+        "corpus_files": [
+          {
+            "path": "data/evaluation/corpus/eval_agent.txt",
+            "document_id": "eval_agent",
+            "sha256": "b5b711b2410256257d17415b45263cec554c412c0e9b92576855577515b5d5d7",
+            "bytes": 3365
+          },
+          {
+            "path": "data/evaluation/corpus/eval_api.txt",
+            "document_id": "eval_api",
+            "sha256": "57cee7d5417915d5ccd2846e3b1fd8d10d4542aad55842fa8ee085ca0dd88c22",
+            "bytes": 2540
+          },
+          {
+            "path": "data/evaluation/corpus/eval_engineering.txt",
+            "document_id": "eval_engineering",
+            "sha256": "9f505b1e1030ca3c6a5176036733c28171676364681ec2e9abb1d5c2d3ccdbf6",
+            "bytes": 3906
+          },
+          {
+            "path": "data/evaluation/corpus/eval_memory.txt",
+            "document_id": "eval_memory",
+            "sha256": "028b1d47944832ff619f80c428e4232639e8386671f66296d321c61a71d058dd",
+            "bytes": 1178
+          },
+          {
+            "path": "data/evaluation/corpus/eval_rag.txt",
+            "document_id": "eval_rag",
+            "sha256": "b97f268dd066bd47fb962de35bfa512c5776beeaff593eb254386cfb5328dcb8",
+            "bytes": 3531
+          },
+          {
+            "path": "data/evaluation/corpus/eval_tools.txt",
+            "document_id": "eval_tools",
+            "sha256": "2f80d505c18f27e6b263993a030a896d28eecb2cdaf85e76ecdedaea0b50dea1",
+            "bytes": 2680
+          }
+        ],
+        "code_files": [
+          {
+            "path": "scripts/run_dense_baseline_v13.py",
+            "sha256": "537b40f3939febd96ad6bc4427265fff8dcdba9e67f89cd2533c8ff49c57acc4",
+            "bytes": 6913
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/case_evidence.py",
+            "sha256": "b8ce448b7f37e7d98a16e397a5f5f17c149347747b7edfd6315ad5270cc3c2fe",
+            "bytes": 2392
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/dense_baseline.py",
+            "sha256": "5c38d745f2e25efa7dcdae3e66fa50de43dd112f43bec7780aae2a60766d734d",
+            "bytes": 4842
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/evidence_collector.py",
+            "sha256": "86748a32f7b22207c898da679e11109d99c7030bc5fc4dc815e13fd5a1392562",
+            "bytes": 1097
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/json_writer.py",
+            "sha256": "b1df9c0c9c02249cd7c9b23cd1233632f7807ce44f3a806a52549322d6924fc6",
+            "bytes": 1184
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/rag_evaluator.py",
+            "sha256": "c9d858951e9a06d35c95c288223534d36011a55553c1ea7bc9d5dedfb851ab90",
+            "bytes": 2064
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/rag_metrics.py",
+            "sha256": "a029b75244bcfcf5e5631d8c4cd7dccc5542b4b85bdc665ff5912f0cfc0ab777",
+            "bytes": 3570
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/run_provenance.py",
+            "sha256": "8f5823d5d3ebb49cb14e684bedb1cfbdf149e8e9bdbaef320344ae8110987f6f",
+            "bytes": 7337
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/run_report.py",
+            "sha256": "ed8e37d62918ab76a565b97b75aa90e8566b948cefcb6659cac5d4c3b09326a0",
+            "bytes": 1573
+          },
+          {
+            "path": "src/knowledge_pilot/retrieval/embedding.py",
+            "sha256": "38f57e2855f33b464390a7bcfe6dfa6a1d8b67da1325e9976f8867ab39b63993",
+            "bytes": 1445
+          },
+          {
+            "path": "src/knowledge_pilot/vector_store/chroma_store.py",
+            "sha256": "0e2c726e35ee46805a7c15bfca576e56b96edfaf43caa7282f3b5263c0d222fc",
+            "bytes": 2848
+          }
+        ],
+        "python_version": "3.11.16",
+        "observation_errors": []
+      },
+      "code_drift_since_run": [
+        {
+          "path": "src/knowledge_pilot/evaluation/run_report.py",
+          "recorded_sha256": "ed8e37d62918ab76a565b97b75aa90e8566b948cefcb6659cac5d4c3b09326a0",
+          "current_sha256": "8f4c0ad9b1c807b937b6badc7bd1d7270882f8affd644a9c570e0b62a62ae974",
+          "explained_type_only": true
+        }
+      ],
+      "copy_sha256_verified": true,
+      "model_applicability": "embedding model verified from report against frozen Manifest"
+    },
+    {
+      "original_path": "data/evaluation/reports/bm25_v13_k3_20261020T082317_766419Z.json",
+      "archive_path": "docs/evaluation/v1.3_reports/bm25_v13_k3_20261020T082317_766419Z.json",
+      "bytes": 76885,
+      "sha256": "7cc185b6de6084036c3d15c08c6ab677a7b52b7384c298b9556a21ac45d1ebcb",
+      "schema_version": "retrieval_run_report_v1",
+      "run_id": "bm25-v13-20261020T082320-212628Z",
+      "strategy": "bm25_okapi",
+      "strategy_config": {
+        "algorithm": "Okapi BM25",
+        "k1": 1.2,
+        "b": 0.75,
+        "idf_formula": "ln(1 + (N - df + 0.5) / (df + 0.5))",
+        "score_type": "bm25_okapi",
+        "tokenizer": {
+          "name": "technical_identifier_cjk_unigram_bigram_v1",
+          "version": "1",
+          "language_model": "none",
+          "cjk": "contiguous CJK emits character unigrams and adjacent bigrams",
+          "technical_identifiers": "lowercased whole Python identifiers, API paths, alphanumeric and hyphenated terms"
+        },
+        "top_k": 3,
+        "index": {
+          "document_count": 19,
+          "average_document_length_tokens": 502.36842105263156,
+          "unique_terms": 2852,
+          "build_ms": 3.6731000000145286
+        },
+        "runtime_isolation": "temporary byte-for-byte copy of frozen Chroma runtime",
+        "chunk_export": "collection.get documents+metadatas; all 19 text hashes verified against manifest",
+        "runtime_copy_ms": 19.395199997234158,
+        "chroma_open_ms": 2126.586700000189,
+        "query_latency_boundary": "BM25 tokenization and in-memory scoring only; excludes chunk export, index build, provenance, and JSON write"
+      },
+      "dataset_version": "v1",
+      "corpus_version": "corpus_v1",
+      "case_count": 16,
+      "metrics_recomputed": {
+        "hit_rate": 0.9375,
+        "mean_recall": 0.7322916666666667,
+        "mrr": 0.90625
+      },
+      "provenance": {
+        "git_commit": "7eca62c15e9de044e3e6fef84b41da069e078881",
+        "git_worktree_dirty": true,
+        "dataset": {
+          "path": "data/evaluation/cases_v1.json",
+          "sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+          "bytes": 189145
+        },
+        "manifest": {
+          "path": "data/evaluation/manifests/evaluation_v1.json",
+          "sha256": "97f48e9a6bb46ca6aff499b71f936e1a1414d250667e35ef4cfe0f98a0d5777f",
+          "bytes": 13666
+        },
+        "corpus_files": [
+          {
+            "path": "data/evaluation/corpus/eval_agent.txt",
+            "document_id": "eval_agent",
+            "sha256": "b5b711b2410256257d17415b45263cec554c412c0e9b92576855577515b5d5d7",
+            "bytes": 3365
+          },
+          {
+            "path": "data/evaluation/corpus/eval_api.txt",
+            "document_id": "eval_api",
+            "sha256": "57cee7d5417915d5ccd2846e3b1fd8d10d4542aad55842fa8ee085ca0dd88c22",
+            "bytes": 2540
+          },
+          {
+            "path": "data/evaluation/corpus/eval_engineering.txt",
+            "document_id": "eval_engineering",
+            "sha256": "9f505b1e1030ca3c6a5176036733c28171676364681ec2e9abb1d5c2d3ccdbf6",
+            "bytes": 3906
+          },
+          {
+            "path": "data/evaluation/corpus/eval_memory.txt",
+            "document_id": "eval_memory",
+            "sha256": "028b1d47944832ff619f80c428e4232639e8386671f66296d321c61a71d058dd",
+            "bytes": 1178
+          },
+          {
+            "path": "data/evaluation/corpus/eval_rag.txt",
+            "document_id": "eval_rag",
+            "sha256": "b97f268dd066bd47fb962de35bfa512c5776beeaff593eb254386cfb5328dcb8",
+            "bytes": 3531
+          },
+          {
+            "path": "data/evaluation/corpus/eval_tools.txt",
+            "document_id": "eval_tools",
+            "sha256": "2f80d505c18f27e6b263993a030a896d28eecb2cdaf85e76ecdedaea0b50dea1",
+            "bytes": 2680
+          }
+        ],
+        "code_files": [
+          {
+            "path": "scripts/run_bm25_baseline_v13.py",
+            "sha256": "e762044b34fb9d87c82df59daf82c1aaed7c4f6640d8275c606e2acea5848800",
+            "bytes": 7797
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/bm25.py",
+            "sha256": "ee7a4fab4ec268639d160458a249278a4d1923bffc2c2cb975f9085f0b0b07b7",
+            "bytes": 4446
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/bm25_baseline.py",
+            "sha256": "7e5efe5f1938a9d7dbbb1576ce73b9d00995c83776b4ba6b01e42cffbcbca4ee",
+            "bytes": 4544
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/dense_baseline.py",
+            "sha256": "5c38d745f2e25efa7dcdae3e66fa50de43dd112f43bec7780aae2a60766d734d",
+            "bytes": 4842
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/json_writer.py",
+            "sha256": "b1df9c0c9c02249cd7c9b23cd1233632f7807ce44f3a806a52549322d6924fc6",
+            "bytes": 1184
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/rag_evaluator.py",
+            "sha256": "c9d858951e9a06d35c95c288223534d36011a55553c1ea7bc9d5dedfb851ab90",
+            "bytes": 2064
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/rag_metrics.py",
+            "sha256": "a029b75244bcfcf5e5631d8c4cd7dccc5542b4b85bdc665ff5912f0cfc0ab777",
+            "bytes": 3570
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/run_provenance.py",
+            "sha256": "8f5823d5d3ebb49cb14e684bedb1cfbdf149e8e9bdbaef320344ae8110987f6f",
+            "bytes": 7337
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/run_report.py",
+            "sha256": "ed8e37d62918ab76a565b97b75aa90e8566b948cefcb6659cac5d4c3b09326a0",
+            "bytes": 1573
+          },
+          {
+            "path": "src/knowledge_pilot/vector_store/chroma_store.py",
+            "sha256": "0e2c726e35ee46805a7c15bfca576e56b96edfaf43caa7282f3b5263c0d222fc",
+            "bytes": 2848
+          }
+        ],
+        "python_version": "3.11.16",
+        "observation_errors": []
+      },
+      "code_drift_since_run": [
+        {
+          "path": "src/knowledge_pilot/evaluation/run_report.py",
+          "recorded_sha256": "ed8e37d62918ab76a565b97b75aa90e8566b948cefcb6659cac5d4c3b09326a0",
+          "current_sha256": "8f4c0ad9b1c807b937b6badc7bd1d7270882f8affd644a9c570e0b62a62ae974",
+          "explained_type_only": true
+        }
+      ],
+      "copy_sha256_verified": true,
+      "model_applicability": "not_used"
+    },
+    {
+      "original_path": "data/evaluation/reports/hybrid_rrf_v13_depth3_k3_20261020T093101_130584Z.json",
+      "archive_path": "docs/evaluation/v1.3_reports/hybrid_rrf_v13_depth3_k3_20261020T093101_130584Z.json",
+      "bytes": 239917,
+      "sha256": "4fafd44156aa539865ad5a9ae48ab5c9d3eb9ade00d176f7b5f41e9ef56709ef",
+      "schema_version": "retrieval_run_report_v1",
+      "run_id": "hybrid-rrf-depth3-20261020T093101_130584Z",
+      "strategy": "hybrid_rrf",
+      "strategy_config": {
+        "branch_top_k": 3,
+        "final_top_k": 3,
+        "rrf_constant": 60,
+        "rrf_formula": "sum(1 / (60 + one_based_rank)); missing branch contribution = 0",
+        "deduplication_key": [
+          "document_id",
+          "chunk_index"
+        ],
+        "tie_break": [
+          "score descending",
+          "document_id ascending",
+          "chunk_index numeric ascending"
+        ],
+        "embedding": {
+          "resolved_model": "bge-m3:latest",
+          "digest": "7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab"
+        },
+        "collection": {
+          "name": "knowledge_pilot_docs",
+          "configuration": {
+            "hnsw": {
+              "space": "cosine",
+              "ef_construction": 100,
+              "ef_search": 100,
+              "max_neighbors": 16,
+              "resize_factor": 1.2,
+              "sync_threshold": 1000
+            },
+            "spann": null,
+            "embedding_function": null
+          }
+        },
+        "dense_similarity": "1 - cosine_distance",
+        "bm25": {
+          "k1": 1.2,
+          "b": 0.75,
+          "idf_formula": "ln(1 + (N - df + 0.5) / (df + 0.5))",
+          "tokenizer": {
+            "name": "technical_identifier_cjk_unigram_bigram_v1",
+            "version": "1"
+          }
+        },
+        "index": {
+          "chunk_count": 19,
+          "average_document_length_tokens": 502.36842105263156,
+          "all_chunk_text_hashes_verified": true,
+          "index_build_ms": 2.8629999978875276
+        },
+        "initialization_ms": {
+          "runtime_copy": 19.24009999856935,
+          "chroma_open": 1425.2307999995537
+        },
+        "runtime_isolation": "temporary byte-for-byte frozen runtime copy; no ingestion",
+        "frozen_runtime_files": {
+          "data/evaluation/runtime/corpus_v1/data/vector_store/5d5cfced-3075-4f67-bf98-70e8e1445a61/data_level0.bin": "ee90cba3f20fd616526ad880abb851cf423792d3dda714911d11fa21513f3587",
+          "data/evaluation/runtime/corpus_v1/data/vector_store/5d5cfced-3075-4f67-bf98-70e8e1445a61/header.bin": "bf12d4486518c7addf488cb4854526902c78e91951990e1e2f4e055cec814e5d",
+          "data/evaluation/runtime/corpus_v1/data/vector_store/5d5cfced-3075-4f67-bf98-70e8e1445a61/length.bin": "1344dc8650bb101f079c7c36ed9b67de0e40839ac2705540f9988ac784c94be9",
+          "data/evaluation/runtime/corpus_v1/data/vector_store/5d5cfced-3075-4f67-bf98-70e8e1445a61/link_lists.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data/evaluation/runtime/corpus_v1/data/vector_store/chroma.sqlite3": "4aa716ee5aad96308949cefe455a7c3d3a239fe184750f834d4dcc0b05d8f0f2",
+          "data/evaluation/runtime/corpus_v1/initialization_manifest.json": "1df07488185ec810c405a36273348c22eb778e404eaacf50034aa9955a0b359b"
+        },
+        "execution": "sequential Dense then BM25; depth 3 arm before depth 5; fresh retrieval per arm",
+        "latency_boundary": "sequential Dense retrieval (embedding + Chroma), BM25 retrieval, validation and RRF; excludes scoring, runtime copy/open, index build, provenance and JSON write"
+      },
+      "dataset_version": "v1",
+      "corpus_version": "corpus_v1",
+      "case_count": 16,
+      "metrics_recomputed": {
+        "hit_rate": 1,
+        "mean_recall": 0.7947916666666667,
+        "mrr": 0.9270833333333334
+      },
+      "provenance": {
+        "git_commit": "7eca62c15e9de044e3e6fef84b41da069e078881",
+        "git_worktree_dirty": true,
+        "dataset": {
+          "path": "data/evaluation/cases_v1.json",
+          "sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+          "bytes": 189145
+        },
+        "manifest": {
+          "path": "data/evaluation/manifests/evaluation_v1.json",
+          "sha256": "97f48e9a6bb46ca6aff499b71f936e1a1414d250667e35ef4cfe0f98a0d5777f",
+          "bytes": 13666
+        },
+        "corpus_files": [
+          {
+            "path": "data/evaluation/corpus/eval_agent.txt",
+            "document_id": "eval_agent",
+            "sha256": "b5b711b2410256257d17415b45263cec554c412c0e9b92576855577515b5d5d7",
+            "bytes": 3365
+          },
+          {
+            "path": "data/evaluation/corpus/eval_api.txt",
+            "document_id": "eval_api",
+            "sha256": "57cee7d5417915d5ccd2846e3b1fd8d10d4542aad55842fa8ee085ca0dd88c22",
+            "bytes": 2540
+          },
+          {
+            "path": "data/evaluation/corpus/eval_engineering.txt",
+            "document_id": "eval_engineering",
+            "sha256": "9f505b1e1030ca3c6a5176036733c28171676364681ec2e9abb1d5c2d3ccdbf6",
+            "bytes": 3906
+          },
+          {
+            "path": "data/evaluation/corpus/eval_memory.txt",
+            "document_id": "eval_memory",
+            "sha256": "028b1d47944832ff619f80c428e4232639e8386671f66296d321c61a71d058dd",
+            "bytes": 1178
+          },
+          {
+            "path": "data/evaluation/corpus/eval_rag.txt",
+            "document_id": "eval_rag",
+            "sha256": "b97f268dd066bd47fb962de35bfa512c5776beeaff593eb254386cfb5328dcb8",
+            "bytes": 3531
+          },
+          {
+            "path": "data/evaluation/corpus/eval_tools.txt",
+            "document_id": "eval_tools",
+            "sha256": "2f80d505c18f27e6b263993a030a896d28eecb2cdaf85e76ecdedaea0b50dea1",
+            "bytes": 2680
+          }
+        ],
+        "code_files": [
+          {
+            "path": "scripts/run_bm25_baseline_v13.py",
+            "sha256": "e762044b34fb9d87c82df59daf82c1aaed7c4f6640d8275c606e2acea5848800",
+            "bytes": 7797
+          },
+          {
+            "path": "scripts/run_dense_baseline_v13.py",
+            "sha256": "537b40f3939febd96ad6bc4427265fff8dcdba9e67f89cd2533c8ff49c57acc4",
+            "bytes": 6913
+          },
+          {
+            "path": "scripts/run_hybrid_baseline_v13.py",
+            "sha256": "099acc9288b2a4f106aaf8af220d25f31b271a0665fb622d9e007cb03e2436dc",
+            "bytes": 9270
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/bm25.py",
+            "sha256": "ee7a4fab4ec268639d160458a249278a4d1923bffc2c2cb975f9085f0b0b07b7",
+            "bytes": 4446
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/bm25_baseline.py",
+            "sha256": "7e5efe5f1938a9d7dbbb1576ce73b9d00995c83776b4ba6b01e42cffbcbca4ee",
+            "bytes": 4544
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/case_evidence.py",
+            "sha256": "b8ce448b7f37e7d98a16e397a5f5f17c149347747b7edfd6315ad5270cc3c2fe",
+            "bytes": 2392
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/dense_baseline.py",
+            "sha256": "5c38d745f2e25efa7dcdae3e66fa50de43dd112f43bec7780aae2a60766d734d",
+            "bytes": 4842
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/evidence_collector.py",
+            "sha256": "86748a32f7b22207c898da679e11109d99c7030bc5fc4dc815e13fd5a1392562",
+            "bytes": 1097
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/hybrid.py",
+            "sha256": "f9b2bb20ae346ef0f52becc5de0c72619a8227dd80812b62c62f62e7d7829a11",
+            "bytes": 7851
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/hybrid_evaluation.py",
+            "sha256": "b3a178ce1f38020be2a12093cf91983229c89aeda6ef60b70411cd974a8600fd",
+            "bytes": 4905
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/hybrid_runtime.py",
+            "sha256": "c339e2b75ee27e890bd7af7b9ec352f2c5e7fa2ce0fd50ae444911ca09004ed3",
+            "bytes": 3235
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/json_writer.py",
+            "sha256": "b1df9c0c9c02249cd7c9b23cd1233632f7807ce44f3a806a52549322d6924fc6",
+            "bytes": 1184
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/rag_evaluator.py",
+            "sha256": "c9d858951e9a06d35c95c288223534d36011a55553c1ea7bc9d5dedfb851ab90",
+            "bytes": 2064
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/rag_metrics.py",
+            "sha256": "a029b75244bcfcf5e5631d8c4cd7dccc5542b4b85bdc665ff5912f0cfc0ab777",
+            "bytes": 3570
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/run_provenance.py",
+            "sha256": "8f5823d5d3ebb49cb14e684bedb1cfbdf149e8e9bdbaef320344ae8110987f6f",
+            "bytes": 7337
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/run_report.py",
+            "sha256": "8f4c0ad9b1c807b937b6badc7bd1d7270882f8affd644a9c570e0b62a62ae974",
+            "bytes": 1799
+          },
+          {
+            "path": "src/knowledge_pilot/retrieval/embedding.py",
+            "sha256": "38f57e2855f33b464390a7bcfe6dfa6a1d8b67da1325e9976f8867ab39b63993",
+            "bytes": 1445
+          },
+          {
+            "path": "src/knowledge_pilot/vector_store/chroma_store.py",
+            "sha256": "0e2c726e35ee46805a7c15bfca576e56b96edfaf43caa7282f3b5263c0d222fc",
+            "bytes": 2848
+          }
+        ],
+        "python_version": "3.11.16",
+        "observation_errors": []
+      },
+      "code_drift_since_run": [],
+      "copy_sha256_verified": true,
+      "model_applicability": "embedding model verified from report against frozen Manifest"
+    },
+    {
+      "original_path": "data/evaluation/reports/hybrid_rrf_v13_depth5_k3_20261020T093108_710661Z.json",
+      "archive_path": "docs/evaluation/v1.3_reports/hybrid_rrf_v13_depth5_k3_20261020T093108_710661Z.json",
+      "bytes": 328163,
+      "sha256": "9ebdb8855fcb139cee3820f2c8f318d750d8122aeacca35b25a3a7871fd3754d",
+      "schema_version": "retrieval_run_report_v1",
+      "run_id": "hybrid-rrf-depth5-20261020T093108_710661Z",
+      "strategy": "hybrid_rrf",
+      "strategy_config": {
+        "branch_top_k": 5,
+        "final_top_k": 3,
+        "rrf_constant": 60,
+        "rrf_formula": "sum(1 / (60 + one_based_rank)); missing branch contribution = 0",
+        "deduplication_key": [
+          "document_id",
+          "chunk_index"
+        ],
+        "tie_break": [
+          "score descending",
+          "document_id ascending",
+          "chunk_index numeric ascending"
+        ],
+        "embedding": {
+          "resolved_model": "bge-m3:latest",
+          "digest": "7907646426070047a77226ac3e684fbbe8410524f7b4a74d02837e43f2146bab"
+        },
+        "collection": {
+          "name": "knowledge_pilot_docs",
+          "configuration": {
+            "hnsw": {
+              "space": "cosine",
+              "ef_construction": 100,
+              "ef_search": 100,
+              "max_neighbors": 16,
+              "resize_factor": 1.2,
+              "sync_threshold": 1000
+            },
+            "spann": null,
+            "embedding_function": null
+          }
+        },
+        "dense_similarity": "1 - cosine_distance",
+        "bm25": {
+          "k1": 1.2,
+          "b": 0.75,
+          "idf_formula": "ln(1 + (N - df + 0.5) / (df + 0.5))",
+          "tokenizer": {
+            "name": "technical_identifier_cjk_unigram_bigram_v1",
+            "version": "1"
+          }
+        },
+        "index": {
+          "chunk_count": 19,
+          "average_document_length_tokens": 502.36842105263156,
+          "all_chunk_text_hashes_verified": true,
+          "index_build_ms": 2.8629999978875276
+        },
+        "initialization_ms": {
+          "runtime_copy": 19.24009999856935,
+          "chroma_open": 1425.2307999995537
+        },
+        "runtime_isolation": "temporary byte-for-byte frozen runtime copy; no ingestion",
+        "frozen_runtime_files": {
+          "data/evaluation/runtime/corpus_v1/data/vector_store/5d5cfced-3075-4f67-bf98-70e8e1445a61/data_level0.bin": "ee90cba3f20fd616526ad880abb851cf423792d3dda714911d11fa21513f3587",
+          "data/evaluation/runtime/corpus_v1/data/vector_store/5d5cfced-3075-4f67-bf98-70e8e1445a61/header.bin": "bf12d4486518c7addf488cb4854526902c78e91951990e1e2f4e055cec814e5d",
+          "data/evaluation/runtime/corpus_v1/data/vector_store/5d5cfced-3075-4f67-bf98-70e8e1445a61/length.bin": "1344dc8650bb101f079c7c36ed9b67de0e40839ac2705540f9988ac784c94be9",
+          "data/evaluation/runtime/corpus_v1/data/vector_store/5d5cfced-3075-4f67-bf98-70e8e1445a61/link_lists.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data/evaluation/runtime/corpus_v1/data/vector_store/chroma.sqlite3": "4aa716ee5aad96308949cefe455a7c3d3a239fe184750f834d4dcc0b05d8f0f2",
+          "data/evaluation/runtime/corpus_v1/initialization_manifest.json": "1df07488185ec810c405a36273348c22eb778e404eaacf50034aa9955a0b359b"
+        },
+        "execution": "sequential Dense then BM25; depth 3 arm before depth 5; fresh retrieval per arm",
+        "latency_boundary": "sequential Dense retrieval (embedding + Chroma), BM25 retrieval, validation and RRF; excludes scoring, runtime copy/open, index build, provenance and JSON write"
+      },
+      "dataset_version": "v1",
+      "corpus_version": "corpus_v1",
+      "case_count": 16,
+      "metrics_recomputed": {
+        "hit_rate": 1,
+        "mean_recall": 0.7947916666666667,
+        "mrr": 0.96875
+      },
+      "provenance": {
+        "git_commit": "7eca62c15e9de044e3e6fef84b41da069e078881",
+        "git_worktree_dirty": true,
+        "dataset": {
+          "path": "data/evaluation/cases_v1.json",
+          "sha256": "71ddd071e0fd4a732106d9a5d2ee8b0ea4c3a938c1461ffc45477f34d93bed28",
+          "bytes": 189145
+        },
+        "manifest": {
+          "path": "data/evaluation/manifests/evaluation_v1.json",
+          "sha256": "97f48e9a6bb46ca6aff499b71f936e1a1414d250667e35ef4cfe0f98a0d5777f",
+          "bytes": 13666
+        },
+        "corpus_files": [
+          {
+            "path": "data/evaluation/corpus/eval_agent.txt",
+            "document_id": "eval_agent",
+            "sha256": "b5b711b2410256257d17415b45263cec554c412c0e9b92576855577515b5d5d7",
+            "bytes": 3365
+          },
+          {
+            "path": "data/evaluation/corpus/eval_api.txt",
+            "document_id": "eval_api",
+            "sha256": "57cee7d5417915d5ccd2846e3b1fd8d10d4542aad55842fa8ee085ca0dd88c22",
+            "bytes": 2540
+          },
+          {
+            "path": "data/evaluation/corpus/eval_engineering.txt",
+            "document_id": "eval_engineering",
+            "sha256": "9f505b1e1030ca3c6a5176036733c28171676364681ec2e9abb1d5c2d3ccdbf6",
+            "bytes": 3906
+          },
+          {
+            "path": "data/evaluation/corpus/eval_memory.txt",
+            "document_id": "eval_memory",
+            "sha256": "028b1d47944832ff619f80c428e4232639e8386671f66296d321c61a71d058dd",
+            "bytes": 1178
+          },
+          {
+            "path": "data/evaluation/corpus/eval_rag.txt",
+            "document_id": "eval_rag",
+            "sha256": "b97f268dd066bd47fb962de35bfa512c5776beeaff593eb254386cfb5328dcb8",
+            "bytes": 3531
+          },
+          {
+            "path": "data/evaluation/corpus/eval_tools.txt",
+            "document_id": "eval_tools",
+            "sha256": "2f80d505c18f27e6b263993a030a896d28eecb2cdaf85e76ecdedaea0b50dea1",
+            "bytes": 2680
+          }
+        ],
+        "code_files": [
+          {
+            "path": "scripts/run_bm25_baseline_v13.py",
+            "sha256": "e762044b34fb9d87c82df59daf82c1aaed7c4f6640d8275c606e2acea5848800",
+            "bytes": 7797
+          },
+          {
+            "path": "scripts/run_dense_baseline_v13.py",
+            "sha256": "537b40f3939febd96ad6bc4427265fff8dcdba9e67f89cd2533c8ff49c57acc4",
+            "bytes": 6913
+          },
+          {
+            "path": "scripts/run_hybrid_baseline_v13.py",
+            "sha256": "099acc9288b2a4f106aaf8af220d25f31b271a0665fb622d9e007cb03e2436dc",
+            "bytes": 9270
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/bm25.py",
+            "sha256": "ee7a4fab4ec268639d160458a249278a4d1923bffc2c2cb975f9085f0b0b07b7",
+            "bytes": 4446
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/bm25_baseline.py",
+            "sha256": "7e5efe5f1938a9d7dbbb1576ce73b9d00995c83776b4ba6b01e42cffbcbca4ee",
+            "bytes": 4544
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/case_evidence.py",
+            "sha256": "b8ce448b7f37e7d98a16e397a5f5f17c149347747b7edfd6315ad5270cc3c2fe",
+            "bytes": 2392
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/dense_baseline.py",
+            "sha256": "5c38d745f2e25efa7dcdae3e66fa50de43dd112f43bec7780aae2a60766d734d",
+            "bytes": 4842
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/evidence_collector.py",
+            "sha256": "86748a32f7b22207c898da679e11109d99c7030bc5fc4dc815e13fd5a1392562",
+            "bytes": 1097
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/hybrid.py",
+            "sha256": "f9b2bb20ae346ef0f52becc5de0c72619a8227dd80812b62c62f62e7d7829a11",
+            "bytes": 7851
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/hybrid_evaluation.py",
+            "sha256": "b3a178ce1f38020be2a12093cf91983229c89aeda6ef60b70411cd974a8600fd",
+            "bytes": 4905
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/hybrid_runtime.py",
+            "sha256": "c339e2b75ee27e890bd7af7b9ec352f2c5e7fa2ce0fd50ae444911ca09004ed3",
+            "bytes": 3235
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/json_writer.py",
+            "sha256": "b1df9c0c9c02249cd7c9b23cd1233632f7807ce44f3a806a52549322d6924fc6",
+            "bytes": 1184
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/rag_evaluator.py",
+            "sha256": "c9d858951e9a06d35c95c288223534d36011a55553c1ea7bc9d5dedfb851ab90",
+            "bytes": 2064
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/rag_metrics.py",
+            "sha256": "a029b75244bcfcf5e5631d8c4cd7dccc5542b4b85bdc665ff5912f0cfc0ab777",
+            "bytes": 3570
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/run_provenance.py",
+            "sha256": "8f5823d5d3ebb49cb14e684bedb1cfbdf149e8e9bdbaef320344ae8110987f6f",
+            "bytes": 7337
+          },
+          {
+            "path": "src/knowledge_pilot/evaluation/run_report.py",
+            "sha256": "8f4c0ad9b1c807b937b6badc7bd1d7270882f8affd644a9c570e0b62a62ae974",
+            "bytes": 1799
+          },
+          {
+            "path": "src/knowledge_pilot/retrieval/embedding.py",
+            "sha256": "38f57e2855f33b464390a7bcfe6dfa6a1d8b67da1325e9976f8867ab39b63993",
+            "bytes": 1445
+          },
+          {
+            "path": "src/knowledge_pilot/vector_store/chroma_store.py",
+            "sha256": "0e2c726e35ee46805a7c15bfca576e56b96edfaf43caa7282f3b5263c0d222fc",
+            "bytes": 2848
+          }
+        ],
+        "python_version": "3.11.16",
+        "observation_errors": []
+      },
+      "code_drift_since_run": [],
+      "copy_sha256_verified": true,
+      "model_applicability": "embedding model verified from report against frozen Manifest"
+    }
+  ]
+}

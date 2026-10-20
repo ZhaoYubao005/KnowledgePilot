@@ -20,3 +20,20 @@ data/evaluation/reports/rag_baseline_v1_k3_20261010T143304_819842Z.json -text wh
 src/knowledge_pilot/evaluation/agent_evaluator.py -text whitespace=cr-at-eol
 src/knowledge_pilot/evaluation/agent_report.py -text
 scripts/finalize_agent_report.py -text
+
+# Preserve exact V1.3 experiment evidence and recorded source bytes.
+docs/evaluation/v1.3_reports/*.json -text
+src/knowledge_pilot/evaluation/evidence_collector.py -text
+src/knowledge_pilot/evaluation/case_evidence.py -text
+src/knowledge_pilot/evaluation/run_report.py -text
+src/knowledge_pilot/evaluation/run_provenance.py -text
+src/knowledge_pilot/evaluation/json_writer.py -text
+src/knowledge_pilot/evaluation/dense_baseline.py -text
+src/knowledge_pilot/evaluation/bm25.py -text whitespace=-blank-at-eof
+src/knowledge_pilot/evaluation/bm25_baseline.py -text
+src/knowledge_pilot/evaluation/hybrid.py -text
+src/knowledge_pilot/evaluation/hybrid_evaluation.py -text
+src/knowledge_pilot/evaluation/hybrid_runtime.py -text
+scripts/run_dense_baseline_v13.py -text
+scripts/run_bm25_baseline_v13.py -text
+scripts/run_hybrid_baseline_v13.py -text

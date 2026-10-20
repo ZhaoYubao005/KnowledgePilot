@@ -265,12 +265,44 @@ def test_historical_normalization_preserves_legacy_report_and_unknown_runtime():
     assert legacy == before
 
 
-def test_build_does_not_import_model_database_or_registry():
-    _build()
-    for name in ("knowledge_pilot.tools.registry",
-                 "knowledge_pilot.vector_store.chroma_store",
-                 "knowledge_pilot.llm.ollama_client"):
-        assert name not in sys.modules
+def test_build_does_not_import_model_database_or_registry(tmp_path):
+    # Other tests can preload tools during collection. Check the real offline
+    # import/build contract in a fresh interpreter without mutating their cache.
+    script = """
+import runpy
+import sys
+
+sys.path.insert(0, sys.argv[1])
+forbidden = (
+    "knowledge_pilot.tools.registry",
+    "knowledge_pilot.vector_store.chroma_store",
+    "knowledge_pilot.llm.ollama_client",
+)
+
+def assert_isolated(stage):
+    loaded = [name for name in forbidden if name in sys.modules]
+    assert not loaded, f"{stage}: unexpected runtime imports: {loaded}"
+
+assert_isolated("before fixture loading")
+fixtures = runpy.run_path(sys.argv[2])
+assert_isolated("before report import")
+assert "knowledge_pilot.evaluation.agent_report" not in sys.modules
+fixtures["_api"]()
+assert_isolated("after report import")
+fixtures["_build"]()
+assert_isolated("after report build")
+"""
+    test_path = Path(__file__).resolve()
+    source_root = test_path.parents[2] / "src"
+    completed = subprocess.run(
+        [sys.executable, "-I", "-B", "-c", script, str(source_root), str(test_path)],
+        cwd=tmp_path, capture_output=True, text=True,
+        encoding="utf-8", errors="replace", timeout=30,
+    )
+    assert completed.returncode == 0, (
+        f"Offline report import/build check exited {completed.returncode}"
+        f"\nstdout:\n{completed.stdout}\nstderr:\n{completed.stderr}"
+    )
 
 
 def test_offline_cli_supports_historical_input_and_refuses_overwrite(tmp_path):

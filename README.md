@@ -2,7 +2,28 @@
 
 KnowledgePilot 是一个用于学习和实践大语言模型应用开发的本地项目。项目从本地 Ollama 对话逐步扩展到文档检索、RAG、Tool Calling 和受控 Agent Loop，并保持每个版本的能力边界清晰、可验证。
 
-## 当前版本：V1.2 Offline Evaluation Baseline（1.2.0）
+## 当前版本：V1.3.0 — RAG Retrieval Optimization
+
+V1.3 增加独立的 Dense、BM25 和 Hybrid + RRF 检索实验链路，复用 V1.2 冻结 Dataset、Corpus 和评分规则；不改动生产 RAG Pipeline、Agent Loop 或 HTTP API 契约。默认检索仍为 Dense。
+
+- Evidence Collector / CaseEvidence：保留 Chunk 身份、顺序、原始分数和逐题状态。
+- RunReport / RunProvenance / JSON Writer：记录实际文件 SHA-256、Git/Python 身份，并独占保存 UTF-8 报告。
+- Okapi BM25：k1=1.2、b=0.75；标准库中文字符 unigram/bigram 与技术标识符 Tokenizer，不是中文词级分词。
+- Hybrid：Dense + BM25 每路 Top-5、RRF 常数60、最终 Top-3；身份去重，记录原始排名/分数与融合贡献，支持明确故障降级。
+- 完整单进程安全测试：435 Passed / 0 Failed / 1 Skipped。唯一跳过项需显式启用真实 Ollama/Chroma 集成环境；未新增 Skip/XFail。
+
+四组真实实验统一为 Dataset v1、Corpus corpus_v1、16 条 Retrieval Case、19 个冻结 Chunk、最终 Top-K=3。以下依次为 Hit@3 / Mean Recall@3 / MRR@3：
+
+- Dense：1.000000 / 0.822917 / 0.968750。
+- BM25：0.937500 / 0.732292 / 0.906250。
+- Hybrid RRF Depth-3：1.000000 / 0.794792 / 0.927083。
+- Hybrid RRF Depth-5：1.000000 / 0.794792 / 0.968750。
+
+Hybrid 未全面优于 Dense；16 条固定 Case 和单轮延迟不足以证明普遍优势。降级机制有合成测试，未执行真实故障注入。本版不包含 jieba、Reranker、Hybrid 生产默认切换或其他新算法。
+
+配置、逐 Case 收益/退化、独立 Runtime 复现命令和测试隔离修复见[V1.3 消融与验收说明](docs/evaluation/hybrid_rrf_v13.md)。四份原字节真实报告及 SHA-256 见[归档索引](docs/evaluation/v1.3_reports/archive_index.json)。数据库、缓存和原始运行目录不纳入 Git。
+
+## V1.2 Offline Evaluation Baseline（1.2.0，历史基础）
 
 V1.2 增加固定数据上的 RAG Retrieval 与 Agent 离线评测，保留 V1.0 Agent Loop、V1.1 API、RAG Core 和工具实现。正式 Dataset V1 已冻结：24 条 Case（16 Retrieval、8 Agent），六篇 Corpus 按 500 字符、100 字符 overlap 切为 19 个 Chunk。
 
