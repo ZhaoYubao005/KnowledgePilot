@@ -1,0 +1,71 @@
+{
+  "run_id": "20261023T070821Z-5cf687",
+  "scope": "real Docker, host Ollama, fresh Chroma",
+  "project": "kp-step1-20261023t070821z-5cf687",
+  "data_root": "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\data\\docker-step1-20261023T070821Z-5cf687",
+  "checks": {
+    "compose_config": "exit 0"
+  },
+  "commands": [
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t070821z-5cf687",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "config",
+        "--quiet"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "image",
+        "inspect",
+        "knowledgepilot:v1.4-step1",
+        "--format",
+        "{{json .}}"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error response from daemon: No such image: knowledgepilot:v1.4-step1"
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t070821z-5cf687",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "logs",
+        "--tail",
+        "80",
+        "api"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t070821z-5cf687",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "down"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "api_base": "http://127.0.0.1:59558",
+  "status": "failed",
+  "error": "RuntimeError: Command failed (1): ['C:\\\\Users\\\\lenovo\\\\AppData\\\\Local\\\\Programs\\\\DockerDesktop\\\\resources\\\\bin\\\\docker.exe', 'image', 'inspect', 'knowledgepilot:v1.4-step1', '--format', '{{json .}}']\nError response from daemon: No such image: knowledgepilot:v1.4-step1\n",
+  "cleanup": "own project containers/network removed; fresh test data retained"
+}

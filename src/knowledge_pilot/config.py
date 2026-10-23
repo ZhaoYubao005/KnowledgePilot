@@ -1,7 +1,30 @@
-# Ollama 配置
-OLLAMA_URL = "http://localhost:11434/api/chat"
+"""Process-environment configuration; .env loading belongs to the launcher."""
+import os
+from pathlib import Path
+from urllib.parse import urlsplit
 
-MODEL_NAME = "gemma4:e2b"
+
+def _setting(name, default):
+    value = os.environ.get(name, default).strip()
+    if not value:
+        raise ValueError(f"{name} must not be blank")
+    return value
+
+
+OLLAMA_BASE_URL = _setting("KP_OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
+_url = urlsplit(OLLAMA_BASE_URL)
+if (_url.scheme not in {"http", "https"} or not _url.hostname
+        or _url.path or _url.query or _url.fragment or _url.username or _url.password):
+    raise ValueError("KP_OLLAMA_BASE_URL must be an HTTP(S) origin without credentials or path")
+_url.port  # Validate a supplied port before making any network request.
+OLLAMA_URL = f"{OLLAMA_BASE_URL}/api/chat"
+EMBEDDING_URL = f"{OLLAMA_BASE_URL}/api/embed"
+MODEL_NAME = _setting("KP_CHAT_MODEL", "gemma4:e2b")
+EMBEDDING_MODEL = _setting("KP_EMBED_MODEL", "bge-m3")
+# Preserve the historical CWD-relative default, including isolated evaluation runs.
+DATA_DIR = Path(_setting("KP_DATA_DIR", "data"))
+if "KP_DATA_DIR" in os.environ and not DATA_DIR.is_absolute():
+    raise ValueError("KP_DATA_DIR must be an absolute path when explicitly configured")
 
 
 SYSTEM_PROMPT = """

@@ -1,0 +1,19 @@
+services:
+  api:
+    build: .
+    image: knowledgepilot:v1.4-step1
+    ports:
+      - "127.0.0.1:${KP_API_PORT:-8000}:8000"
+    environment:
+      KP_OLLAMA_BASE_URL: ${KP_OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      KP_CHAT_MODEL: ${KP_CHAT_MODEL:-gemma4:e2b}
+      KP_EMBED_MODEL: ${KP_EMBED_MODEL:-bge-m3}
+      KP_DATA_DIR: /app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - type: bind
+        source: ${KP_HOST_DATA_DIR:-./data}
+        target: /app/data
+        bind:
+          create_host_path: false

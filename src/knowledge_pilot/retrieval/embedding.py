@@ -1,11 +1,12 @@
 import requests
+from knowledge_pilot.config import EMBEDDING_URL, EMBEDDING_MODEL
 from knowledge_pilot.document.text_loader import load_text, chunk_text
 from knowledge_pilot.retrieval.similarity import cosine_similarity
 def embed_text(text):
-    url = "http://localhost:11434/api/embed"
+    url = EMBEDDING_URL
 
     payload = {
-        "model": "bge-m3",
+        "model": EMBEDDING_MODEL,
         "input": text
     }
     response = requests.post(url, json=payload)

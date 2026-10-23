@@ -1,0 +1,280 @@
+{
+  "run_id": "20261023T075418Z-8fba4c",
+  "scope": "real Docker, host Ollama, fresh Chroma",
+  "project": "kp-step1-20261023t075418z-8fba4c",
+  "data_root": "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\data\\docker-step1-20261023T075418Z-8fba4c",
+  "checks": {
+    "compose_config": "exit 0",
+    "image": "sha256:e2385118a0313ad0b00622b1ccefaa84f012756e76c8cbe0cd07db936cb55790",
+    "health": {
+      "status": 200,
+      "container_id": "b52c9e5d7e129cdb3e0136960364d1c17fbd0fd7af04eedacd5df4f43981868b"
+    },
+    "container_config": [
+      "http://host.docker.internal:11434/api/chat",
+      "http://host.docker.internal:11434/api/embed",
+      "gemma4:e2b",
+      "bge-m3",
+      "/app/data"
+    ],
+    "container_ollama_tags": {
+      "status": 200,
+      "models": [
+        "gemma4:e2b",
+        "bge-m3:latest"
+      ]
+    },
+    "container_real_embedding": {
+      "status": 200,
+      "dimensions": 1024
+    },
+    "upload_and_host_files": {
+      "document_id": "3f70c03b-bbe1-4292-ae62-d4b90bd6d62d",
+      "source": "docker-probe.txt",
+      "chunk_count": 1
+    },
+    "mount": {
+      "Type": "bind",
+      "Source": "C:/Users/lenovo/.codex/.chatgpt-projects/g-p-6a9c0574f0648191afc307eb07a1456b/KnowledgePilot-v14-step1/data/docker-step1-20261023T075418Z-8fba4c",
+      "Destination": "/app/data",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    },
+    "delete_recreate_persistence": {
+      "old_container": "b52c9e5d7e129cdb3e0136960364d1c17fbd0fd7af04eedacd5df4f43981868b",
+      "new_container": "237cf91aae7d8b54ef9ef855260f6a6ac1230931792ee854664a10eecdf3e9fe",
+      "document": {
+        "document_id": "3f70c03b-bbe1-4292-ae62-d4b90bd6d62d",
+        "source": "docker-probe.txt",
+        "chunk_count": 1
+      },
+      "store": {
+        "count": 1,
+        "documents": [
+          "KnowledgePilot Docker persistence acceptance document."
+        ]
+      }
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t075418z-8fba4c",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "config",
+        "--quiet"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "image",
+        "inspect",
+        "knowledgepilot:v1.4-step1",
+        "--format",
+        "{{json .}}"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"Id\":\"sha256:e2385118a0313ad0b00622b1ccefaa84f012756e76c8cbe0cd07db936cb55790\",\"RepoTags\":[\"knowledgepilot:v1.4-step1\"],\"RepoDigests\":[\"knowledgepilot@sha256:e2385118a0313ad0b00622b1ccefaa84f012756e76c8cbe0cd07db936cb55790\"],\"Comment\":\"buildkit.dockerfile.v0\",\"Created\":\"2026-10-23T07:53:17.719478521Z\",\"Config\":{\"User\":\"app\",\"ExposedPorts\":{\"8000/tcp\":{}},\"Env\":[\"PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\",\"LANG=C.UTF-8\",\"GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D\",\"PYTHON_VERSION=3.11.17\",\"PYTHON_SHA256=bfb74ad39efae27cda510f134ab408e00f9992c56851cfc0b1cdb5646da11599\",\"PYTHONDONTWRITEBYTECODE=1\",\"PYTHONUNBUFFERED=1\",\"KP_DATA_DIR=/app/data\"],\"Cmd\":[\"python\",\"-m\",\"uvicorn\",\"knowledge_pilot.api.app:app\",\"--host\",\"0.0.0.0\",\"--port\",\"8000\",\"--workers\",\"1\"],\"WorkingDir\":\"/app\",\"ArgsEscaped\":true},\"Architecture\":\"amd64\",\"Os\":\"linux\",\"Size\":844260377,\"RootFS\":{\"Type\":\"layers\",\"Layers\":[\"sha256:a70f6272827f64e1427d048ced77491aab5d64ab95725e56920802ff391197d7\",\"sha256:535a5d38abecfac4fa49da33fa942b53c53c463bd0d39a860967e46eb03faafe\",\"sha256:6972161a9a77e7c1afb997daac15abc54f5b70c7b40b814601f53e038d8c398c\",\"sha256:d86e9bd004831a6069b9a02e5caac80b73526315f52719079b4017b099956ed2\",\"sha256:395d1e96827df1690f5d4b908ae6b7f6ed32a7dc02395bcbe8d0be688cd8b9f7\",\"sha256:2ac43f3a56fac8547a4e2f4e8f01d3760e60412255bcb9b802dc0384a28abdc5\",\"sha256:f02f77f289e243e3e0e125c3b9df4ac0d13c8338c81862d11a0ca4c8227ce7ac\",\"sha256:c96dc6827fa0721bf635b58a267d385b23cefb2cde7683f35f43058e26cd65d2\"]},\"Metadata\":{\"LastTagTime\":\"2026-10-23T07:53:27.857014864Z\"},\"Descriptor\":{\"mediaType\":\"application/vnd.oci.image.index.v1+json\",\"digest\":\"sha256:e2385118a0313ad0b00622b1ccefaa84f012756e76c8cbe0cd07db936cb55790\",\"size\":856},\"Identity\":{\"Build\":[{\"Ref\":\"tsmi1mflol94o5rdx7a486w5y\",\"CreatedAt\":\"2026-10-23T07:53:30.593722312Z\"}]}}",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t075418z-8fba4c",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "up",
+        "-d",
+        "--no-build",
+        "api"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "Network kp-step1-20261023t075418z-8fba4c_default Creating \n Network kp-step1-20261023t075418z-8fba4c_default Creating \n Network kp-step1-20261023t075418z-8fba4c_default Created \n Network kp-step1-20261023t075418z-8fba4c_default Created \n Container kp-step1-20261023t075418z-8fba4c-api-1 Creating \n Container kp-step1-20261023t075418z-8fba4c-api-1 Created \n Container kp-step1-20261023t075418z-8fba4c-api-1 Starting \n Container kp-step1-20261023t075418z-8fba4c-api-1 Started"
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t075418z-8fba4c",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "ps",
+        "-q",
+        "api"
+      ],
+      "exit_code": 0,
+      "stdout": "b52c9e5d7e129cdb3e0136960364d1c17fbd0fd7af04eedacd5df4f43981868b",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t075418z-8fba4c",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "exec",
+        "-T",
+        "api",
+        "python",
+        "-c",
+        "import json; from knowledge_pilot import config as c; print(json.dumps([c.OLLAMA_URL,c.EMBEDDING_URL,c.MODEL_NAME,c.EMBEDDING_MODEL,str(c.DATA_DIR)]))"
+      ],
+      "exit_code": 0,
+      "stdout": "[\"http://host.docker.internal:11434/api/chat\", \"http://host.docker.internal:11434/api/embed\", \"gemma4:e2b\", \"bge-m3\", \"/app/data\"]",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t075418z-8fba4c",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "exec",
+        "-T",
+        "api",
+        "python",
+        "-c",
+        "import json,urllib.request; r=urllib.request.urlopen(\"http://host.docker.internal:11434/api/tags\",timeout=10); print(json.dumps({\"status\":r.status,\"models\":[m[\"name\"] for m in json.load(r)[\"models\"]]}))"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"status\": 200, \"models\": [\"gemma4:e2b\", \"bge-m3:latest\"]}",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t075418z-8fba4c",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "exec",
+        "-T",
+        "api",
+        "python",
+        "-c",
+        "import json,urllib.request; q=urllib.request.Request(\"http://host.docker.internal:11434/api/embed\",data=json.dumps({\"model\":\"bge-m3\",\"input\":\"Step 1 Docker probe\"}).encode(),headers={\"Content-Type\":\"application/json\"}); r=urllib.request.urlopen(q,timeout=120); d=json.load(r); print(json.dumps({\"status\":r.status,\"dimensions\":len(d[\"embeddings\"][0])}))"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"status\": 200, \"dimensions\": 1024}",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe",
+        "inspect",
+        "b52c9e5d7e129cdb3e0136960364d1c17fbd0fd7af04eedacd5df4f43981868b",
+        "--format",
+        "{{json .Mounts}}"
+      ],
+      "exit_code": 0,
+      "stdout": "[{\"Type\":\"bind\",\"Source\":\"C:/Users/lenovo/.codex/.chatgpt-projects/g-p-6a9c0574f0648191afc307eb07a1456b/KnowledgePilot-v14-step1/data/docker-step1-20261023T075418Z-8fba4c\",\"Destination\":\"/app/data\",\"Mode\":\"\",\"RW\":true,\"Propagation\":\"rprivate\"}]",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t075418z-8fba4c",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "stop",
+        "api"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "Container kp-step1-20261023t075418z-8fba4c-api-1 Stopping \n Container kp-step1-20261023t075418z-8fba4c-api-1 Stopped"
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t075418z-8fba4c",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "rm",
+        "-f",
+        "api"
+      ],
+      "exit_code": 0,
+      "stdout": "Going to remove kp-step1-20261023t075418z-8fba4c-api-1",
+      "stderr": "Container kp-step1-20261023t075418z-8fba4c-api-1 Removing \n Container kp-step1-20261023t075418z-8fba4c-api-1 Removed"
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t075418z-8fba4c",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "up",
+        "-d",
+        "--no-build",
+        "api"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "Container kp-step1-20261023t075418z-8fba4c-api-1 Creating \n Container kp-step1-20261023t075418z-8fba4c-api-1 Created \n Container kp-step1-20261023t075418z-8fba4c-api-1 Starting \n Container kp-step1-20261023t075418z-8fba4c-api-1 Started"
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t075418z-8fba4c",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "ps",
+        "-q",
+        "api"
+      ],
+      "exit_code": 0,
+      "stdout": "237cf91aae7d8b54ef9ef855260f6a6ac1230931792ee854664a10eecdf3e9fe",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t075418z-8fba4c",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "exec",
+        "-T",
+        "api",
+        "python",
+        "-c",
+        "import json; from knowledge_pilot.vector_store.chroma_store import collection; d=collection.get(include=[\"documents\"]); print(json.dumps({\"count\":len(d[\"ids\"]),\"documents\":d[\"documents\"]}))"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"count\": 1, \"documents\": [\"KnowledgePilot Docker persistence acceptance document.\"]}",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins\\docker-compose.exe",
+        "-p",
+        "kp-step1-20261023t075418z-8fba4c",
+        "-f",
+        "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step1\\compose.yaml",
+        "down"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "Container kp-step1-20261023t075418z-8fba4c-api-1 Stopping \n Container kp-step1-20261023t075418z-8fba4c-api-1 Stopped \n Container kp-step1-20261023t075418z-8fba4c-api-1 Removing \n Container kp-step1-20261023t075418z-8fba4c-api-1 Removed \n Network kp-step1-20261023t075418z-8fba4c_default Removing \n Network kp-step1-20261023t075418z-8fba4c_default Removed"
+    }
+  ],
+  "api_base": "http://127.0.0.1:58515",
+  "status": "passed",
+  "cleanup": "own project containers/network removed; fresh test data retained"
+}

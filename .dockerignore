@@ -1,0 +1,11 @@
+# Allow only the files used by Dockerfile; exclude local data, secrets and caches.
+**
+!Dockerfile
+!.dockerignore
+!pyproject.toml
+!README.md
+!src/
+!src/**
+**/__pycache__/
+**/*.py[cod]
+**/*.egg-info/
