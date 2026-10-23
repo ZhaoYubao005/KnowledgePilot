@@ -1,5 +1,5 @@
 """Service layer for the KnowledgePilot V1.1 API."""
-from knowledge_pilot.config import SYSTEM_PROMPT
+from knowledge_pilot.config import SYSTEM_PROMPT, DATA_DIR
 from knowledge_pilot.llm.ollama_client import chat_with_ollama
 from knowledge_pilot.vector_store.chroma_store import (
     collection,
@@ -43,7 +43,7 @@ def create_document(filename: str, content: bytes):
 
     safe_filename = Path(filename).name
 
-    document_dir = Path("data/raw_documents") / document_id
+    document_dir = DATA_DIR / "raw_documents" / document_id
     document_dir.mkdir(parents=True, exist_ok=True)
 
     file_path = document_dir / safe_filename
@@ -115,7 +115,7 @@ def delete_document_service(document_id: str):
     )
 
     file_path = Path(source)
-    raw_root = Path("data/raw_documents")
+    raw_root = DATA_DIR / "raw_documents"
 
     if file_path.is_relative_to(raw_root):
         if file_path.exists():
@@ -157,7 +157,7 @@ def update_document_service(
     if not text.strip():
         raise ValueError("file content cannot be blank")
     safe_filename = Path(filename).name
-    raw_root = Path("data/raw_documents")
+    raw_root = DATA_DIR / "raw_documents"
 
     document_dir = raw_root / document_id
     document_dir.mkdir(parents=True, exist_ok=True)

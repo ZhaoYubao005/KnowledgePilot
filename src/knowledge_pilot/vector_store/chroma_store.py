@@ -1,4 +1,5 @@
 import chromadb
+from knowledge_pilot.config import DATA_DIR
 from chromadb.api.collection_configuration import (
     CreateCollectionConfiguration,
     CreateHNSWConfiguration,
@@ -18,7 +19,7 @@ collection_config = CreateCollectionConfiguration(
 
 # 将数据保存在磁盘
 client = chromadb.PersistentClient(
-    path="data/vector_store"
+    path=str(DATA_DIR / "vector_store")
 )
 
 # 创建 collection
