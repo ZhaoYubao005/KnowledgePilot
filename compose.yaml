@@ -9,6 +9,9 @@ services:
       KP_CHAT_MODEL: ${KP_CHAT_MODEL:-gemma4:e2b}
       KP_EMBED_MODEL: ${KP_EMBED_MODEL:-bge-m3}
       KP_DATA_DIR: /app/data
+      KP_LOG_LEVEL: ${KP_LOG_LEVEL:-INFO}
+      KP_OLLAMA_CONNECT_TIMEOUT_SECONDS: ${KP_OLLAMA_CONNECT_TIMEOUT_SECONDS:-5}
+      KP_OLLAMA_READ_TIMEOUT_SECONDS: ${KP_OLLAMA_READ_TIMEOUT_SECONDS:-120}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:

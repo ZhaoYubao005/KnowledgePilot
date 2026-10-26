@@ -1,4 +1,7 @@
 import requests
+import logging
+from knowledge_pilot.errors import ModelResponseError
+from knowledge_pilot.llm.transport import post_json
 from knowledge_pilot.config import (
     OLLAMA_URL,
     MODEL_NAME,
@@ -11,6 +14,7 @@ from knowledge_pilot.tools.schemas import (
 from knowledge_pilot.tools.registry import execute_tool_call
 
 url = OLLAMA_URL
+logger = logging.getLogger(__name__)
 
 
 def chat_with_ollama(messages,max_steps=5):
@@ -25,8 +29,15 @@ def chat_with_ollama(messages,max_steps=5):
                      ],
             "stream": False,
         }
-        response = requests.post(url, json=payload)
-        data = response.json()
+        data = post_json(url, payload, operation='llm', post=requests.post)
+        message = data.get('message')
+        if (not isinstance(message, dict)
+                or (not message.get('tool_calls') and not isinstance(message.get('content'), str))
+                or (message.get('tool_calls') is not None
+                    and (not isinstance(message['tool_calls'], list)
+                         or any(not isinstance(call, dict) or not isinstance(call.get('function', {}), dict)
+                                for call in message['tool_calls'])))):
+            raise ModelResponseError('llm')
         assistant_message = data["message"]
         tool_calls = assistant_message.get("tool_calls")
 
@@ -63,6 +74,7 @@ def chat_with_ollama(messages,max_steps=5):
                 result = execute_tool_call(tool_call)
 
             except Exception as e:
+                logger.exception('tool_failed', extra={'category': 'tool'})
                 result = f"Tool execution failed: {e}"
 
             trace.append({

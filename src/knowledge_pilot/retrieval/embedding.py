@@ -1,4 +1,7 @@
 import requests
+import math
+from knowledge_pilot.errors import ModelResponseError
+from knowledge_pilot.llm.transport import post_json
 from knowledge_pilot.config import EMBEDDING_URL, EMBEDDING_MODEL
 from knowledge_pilot.document.text_loader import load_text, chunk_text
 from knowledge_pilot.retrieval.similarity import cosine_similarity
@@ -9,8 +12,17 @@ def embed_text(text):
         "model": EMBEDDING_MODEL,
         "input": text
     }
-    response = requests.post(url, json=payload)
-    data = response.json()
+    data = post_json(url, payload, operation='embedding', post=requests.post)
+    vectors = data.get('embeddings')
+    try:
+        valid = (isinstance(vectors, list) and len(vectors) == 1
+                 and isinstance(vectors[0], list) and bool(vectors[0])
+                 and all(not isinstance(value, bool) and isinstance(value, (int, float))
+                         and math.isfinite(value) for value in vectors[0]))
+    except OverflowError:
+        valid = False
+    if not valid:
+        raise ModelResponseError('embedding')
     return data["embeddings"][0]
 
 def embed_chunks(chunks):

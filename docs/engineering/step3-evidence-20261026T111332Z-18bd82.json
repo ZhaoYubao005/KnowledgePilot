@@ -1,0 +1,22 @@
+{
+  "run_id": "20261026T111332Z-18bd82",
+  "scope": "real local API/Chroma with controlled HTTP upstream fixture",
+  "real_ollama": false,
+  "docker_linux_deployment": "NOT_RUN",
+  "checks": {
+    "health": 200,
+    "ok": 200,
+    "http_error": 502,
+    "invalid_json": 502,
+    "bad_schema": 502,
+    "slow": 504,
+    "temporary_chroma_upload": 201,
+    "redacted_validation": 422,
+    "connection_observed_status": 503,
+    "connection_failure": 503,
+    "unique_request_ids": true,
+    "real_process_log_redaction": true,
+    "safe_traceback_frames": true
+  },
+  "status": "passed"
+}

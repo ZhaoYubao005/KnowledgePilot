@@ -1,5 +1,6 @@
 """Service layer for the KnowledgePilot V1.1 API."""
 from knowledge_pilot.config import SYSTEM_PROMPT, DATA_DIR
+from knowledge_pilot.errors import InputError
 from knowledge_pilot.llm.ollama_client import chat_with_ollama
 from knowledge_pilot.vector_store.chroma_store import (
     collection,
@@ -29,15 +30,15 @@ def chat_service(query: str, max_steps: int = 5):
 
 def create_document(filename: str, content: bytes):
     if not filename.lower().endswith(".txt"):
-        raise ValueError("only txt files are supported")
+        raise InputError("only txt files are supported")
 
     if not content:
-        raise ValueError("file cannot be empty")
+        raise InputError("file cannot be empty")
 
     text = content.decode("utf-8")
 
     if not text.strip():
-        raise ValueError("file content cannot be blank")
+        raise InputError("file content cannot be blank")
 
     document_id = str(uuid.uuid4())
 
@@ -147,15 +148,15 @@ def update_document_service(
 
     old_source = result["metadatas"][0]["source"]
     if not filename.lower().endswith(".txt"):
-        raise ValueError("only txt files are supported")
+        raise InputError("only txt files are supported")
 
     if not content:
-        raise ValueError("file cannot be empty")
+        raise InputError("file cannot be empty")
 
     text = content.decode("utf-8")
 
     if not text.strip():
-        raise ValueError("file content cannot be blank")
+        raise InputError("file content cannot be blank")
     safe_filename = Path(filename).name
     raw_root = DATA_DIR / "raw_documents"
 

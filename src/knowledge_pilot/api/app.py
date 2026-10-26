@@ -4,6 +4,12 @@ Routes use the API service layer to access the existing Agent and document
 capabilities. Importing the service layer initializes the Chroma collection.
 """
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from knowledge_pilot.config import LOG_LEVEL
+from knowledge_pilot.errors import ConfigurationError
+from knowledge_pilot.logging_config import configure_logging
+from knowledge_pilot.api.reliability import install_reliability, INPUT_DETAILS, safe_input_detail
+
+configure_logging(LOG_LEVEL)
 from knowledge_pilot.api.schemas import (
     ChatRequest,
     ChatResponse,
@@ -20,7 +26,8 @@ from knowledge_pilot.api.services import (
 )
 from requests.exceptions import ConnectionError as RequestsConnectionError
 
-app = FastAPI(version="1.1.0")
+app = FastAPI(version="1.1.0", responses={500: {"description": "Internal service error"}})
+install_reliability(app)
 
 @app.get("/health")
 def health():
@@ -34,6 +41,7 @@ def health():
     responses={
         502: {"description": "LLM service returned an invalid response"},
         503: {"description": "LLM service unavailable"},
+        504: {"description": "LLM service timed out"},
     },
 )
 def chat(request: ChatRequest):
@@ -63,6 +71,7 @@ def chat(request: ChatRequest):
         400: {"description": "Invalid document"},
         502: {"description": "Embedding service returned an invalid response"},
         503: {"description": "Embedding service unavailable"},
+        504: {"description": "Embedding service timed out"},
     },
 )
 def upload_document(file: UploadFile = File(...)):
@@ -86,9 +95,11 @@ def upload_document(file: UploadFile = File(...)):
             detail="embedding service returned an invalid response",
         )
     except ValueError as exc:
+        if isinstance(exc, ConfigurationError) or str(exc) not in INPUT_DETAILS:
+            raise
         raise HTTPException(
             status_code=400,
-            detail=str(exc),
+            detail=safe_input_detail(exc),
         )
 
     except RequestsConnectionError:
@@ -117,7 +128,9 @@ def remove_document(document_id: str):
     try:
         result = delete_document_service(document_id)
 
-    except KeyError:
+    except KeyError as exc:
+        if exc.args != (document_id,):
+            raise
         raise HTTPException(
             status_code=404,
             detail="document not found",
@@ -132,6 +145,7 @@ def remove_document(document_id: str):
         404: {"description": "Document not found"},
         502: {"description": "Embedding service returned an invalid response"},
         503: {"description": "Embedding service unavailable"},
+        504: {"description": "Embedding service timed out"},
     },
 )
 def update_document_route(
@@ -148,7 +162,9 @@ def update_document_route(
             content=content,
         )
 
-    except KeyError:
+    except KeyError as exc:
+        if exc.args != (document_id,):
+            raise
         raise HTTPException(
             status_code=404,
             detail="document not found",
@@ -167,9 +183,11 @@ def update_document_route(
         )
 
     except ValueError as exc:
+        if isinstance(exc, ConfigurationError) or str(exc) not in INPUT_DETAILS:
+            raise
         raise HTTPException(
             status_code=400,
-            detail=str(exc),
+            detail=safe_input_detail(exc),
         )
 
     except RequestsConnectionError:

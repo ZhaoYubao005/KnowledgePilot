@@ -47,7 +47,26 @@ class ConfigurationTests(unittest.TestCase):
             with self.subTest(overrides=overrides):
                 result = self.probe(overrides)
                 self.assertNotEqual(result.returncode, 0)
-                self.assertIn('ValueError', result.stderr)
+                self.assertIn('ConfigurationError', result.stderr)
+
+    def test_configuration_error_remains_a_value_error(self):
+        from knowledge_pilot.errors import ConfigurationError
+        self.assertTrue(issubclass(ConfigurationError, ValueError))
+
+    def test_reliability_settings_are_validated_and_overridable(self):
+        code = ('import json; from knowledge_pilot import config as c; '
+                'print(json.dumps([c.LOG_LEVEL,c.OLLAMA_CONNECT_TIMEOUT,c.OLLAMA_READ_TIMEOUT]))')
+        result = self.probe({'KP_LOG_LEVEL': 'warning', 'KP_OLLAMA_CONNECT_TIMEOUT_SECONDS': '0.5',
+                             'KP_OLLAMA_READ_TIMEOUT_SECONDS': '30'}, code=code)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout), ['WARNING', 0.5, 30.0])
+        for settings in ({'KP_LOG_LEVEL': 'private-level'}, {'KP_OLLAMA_READ_TIMEOUT_SECONDS': 'NaN'},
+                         {'KP_OLLAMA_CONNECT_TIMEOUT_SECONDS': '0'}, {'KP_OLLAMA_READ_TIMEOUT_SECONDS': '-1'},
+                         {'KP_OLLAMA_READ_TIMEOUT_SECONDS': 'inf'}):
+            with self.subTest(settings=settings):
+                result = self.probe(settings, code=code)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn('ConfigurationError', result.stderr)
 
     def test_embedding_uses_environment_address_and_model(self):
         result = self.probe({'KP_OLLAMA_BASE_URL': 'http://example.invalid:11434',
