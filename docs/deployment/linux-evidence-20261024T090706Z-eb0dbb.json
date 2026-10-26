@@ -1,0 +1,59 @@
+{
+  "schema": "kp_linux_runtime_v1",
+  "run_id": "20261024T090706Z-eb0dbb",
+  "started_at_utc": "2026-10-24T09:07:06.506211+00:00",
+  "host_platform": "Windows",
+  "project": "kp-step2-20261024t090706z-eb0dbb",
+  "data_root": "C:\\Users\\lenovo\\.codex\\.chatgpt-projects\\g-p-6a9c0574f0648191afc307eb07a1456b\\KnowledgePilot-v14-step2\\data\\acceptance\\step2-20261024T090706Z-eb0dbb",
+  "checks": {},
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "d7463c9701a1e1869caf4ebfcb2d8e28fa889b10",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ],
+      "exit_code": 0,
+      "stdout": "M .env.example\n M .gitattributes\n?? scripts/linux/down.sh\n?? scripts/linux/preflight.py\n?? scripts/linux/up.sh\n?? scripts/linux/verify_persistence.py\n?? tests/deployment/test_linux_preflight.py",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "C:/Users/lenovo/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe",
+        "info",
+        "--format",
+        "{\"OperatingSystem\":{{json .OperatingSystem}},\"OSType\":{{json .OSType}},\"KernelVersion\":{{json .KernelVersion}},\"ServerVersion\":{{json .ServerVersion}}}"
+      ],
+      "exit_code": 1,
+      "stdout": "{\"OperatingSystem\":\"\",\"OSType\":\"\",\"KernelVersion\":\"\",\"ServerVersion\":\"\"}",
+      "stderr": "failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+    }
+  ],
+  "status": "failed",
+  "native_linux_acceptance": "BLOCKED_NOT_RUN",
+  "api_base": "http://127.0.0.1:61459",
+  "git_commit": "d7463c9701a1e1869caf4ebfcb2d8e28fa889b10",
+  "git_status": "M .env.example\n M .gitattributes\n?? scripts/linux/down.sh\n?? scripts/linux/preflight.py\n?? scripts/linux/up.sh\n?? scripts/linux/verify_persistence.py\n?? tests/deployment/test_linux_preflight.py",
+  "source_sha256": {
+    "compose.yaml": "0b680a9e0f4ab9d9d2b295c5e26c899a323e645e9e636c20cc4971b3294311fe",
+    "Dockerfile": "855ba1c988cd683955405cadb0def4bd910029a2d1e17f12c2b1a0bad77621f2",
+    "scripts/linux/down.sh": "a70cb054ce40ceec318e4a3233ccbe4186c11684fc460bb5f8417b962236b564",
+    "scripts/linux/preflight.py": "100dfe0cba363d2ba2d23ca85f0550335951175a363027a37091c3d4d61d0b3a",
+    "scripts/linux/up.sh": "77b2f594f4869e13dca90a698da145b2ddd40e1473530c893f5e3a0039ec9bd9",
+    "scripts/linux/verify_persistence.py": "dbc9b953f21abf3bc9faf5f2b355b661022b9d73b3d5397a5c76be7b7546349a"
+  },
+  "error": "RuntimeError: Command exit 1: failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.\n",
+  "cleanup": "not needed; no container resources attempted",
+  "finished_at_utc": "2026-10-24T09:07:31.467624+00:00"
+}

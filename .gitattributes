@@ -37,3 +37,6 @@ src/knowledge_pilot/evaluation/hybrid_runtime.py -text
 scripts/run_dense_baseline_v13.py -text
 scripts/run_bm25_baseline_v13.py -text
 scripts/run_hybrid_baseline_v13.py -text
+
+# Linux launch scripts must also survive a Windows checkout.
+scripts/linux/*.sh text eol=lf
