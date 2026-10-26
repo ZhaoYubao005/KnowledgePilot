@@ -1,0 +1,439 @@
+{
+  "schema": "kp_step4_api_v1",
+  "run_id": "20261026T114901Z-9dc9a6",
+  "status": "passed",
+  "acceptance_scope": "mandatory_local_api",
+  "upstream": "deterministic_local_http_fixture",
+  "requests": [
+    {
+      "label": "health",
+      "method": "GET",
+      "route": "/health",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "3f6f5882f74f4526b7549c986bb6a2c4",
+      "status": "passed"
+    },
+    {
+      "label": "initial_list",
+      "method": "GET",
+      "route": "/documents",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "9578569de3a74c67ab55a24dbfe7d41e",
+      "status": "passed"
+    },
+    {
+      "label": "upload",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "64b596bdfae84495a2e212c9a33def64",
+      "status": "passed"
+    },
+    {
+      "label": "list_upload",
+      "method": "GET",
+      "route": "/documents",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "691d6f56c7f34f67b1e789c824d8f21d",
+      "status": "passed"
+    },
+    {
+      "label": "update",
+      "method": "PUT",
+      "route": "/documents/{document_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "b0d08d63435d4326b08b7ff0ef76d0fb",
+      "status": "passed"
+    },
+    {
+      "label": "list_updated",
+      "method": "GET",
+      "route": "/documents",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "96747e29e1ba48aa98a9c90316395144",
+      "status": "passed"
+    },
+    {
+      "label": "chat_direct",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "358d4621bc054200b989ee0e89f622f7",
+      "status": "passed"
+    },
+    {
+      "label": "chat_tools",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "a896f329e76640c7bac11f3475066259",
+      "status": "passed"
+    },
+    {
+      "label": "chat_step_limit",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "b0ed96d8c3b145e2be2febd92b73b82b",
+      "status": "passed"
+    },
+    {
+      "label": "bad_extension",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 400,
+      "expected_status": 400,
+      "request_id": "0163e134367548a5bdf0d4ef1c070dbc",
+      "status": "passed"
+    },
+    {
+      "label": "empty_file",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 400,
+      "expected_status": 400,
+      "request_id": "b85aa057017349d787b2813cb987ef01",
+      "status": "passed"
+    },
+    {
+      "label": "blank_file",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 400,
+      "expected_status": 400,
+      "request_id": "5091ac66c9e14297a42a5a996be02e5f",
+      "status": "passed"
+    },
+    {
+      "label": "bad_utf8",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 400,
+      "expected_status": 400,
+      "request_id": "14a88ae26a6d4dc687d36191170fa603",
+      "status": "passed"
+    },
+    {
+      "label": "blank_query",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 422,
+      "expected_status": 422,
+      "request_id": "b8a086043ea24f37b0246ae6461b81bf",
+      "status": "passed"
+    },
+    {
+      "label": "bad_steps",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 422,
+      "expected_status": 422,
+      "request_id": "5fa85ed85c3641818e3b89bbde929811",
+      "status": "passed"
+    },
+    {
+      "label": "private_invalid_input",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 422,
+      "expected_status": 422,
+      "request_id": "1d8058b5ed4c4c9e8377db600e8f1891",
+      "status": "passed"
+    },
+    {
+      "label": "missing_file",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 422,
+      "expected_status": 422,
+      "request_id": "ae0ba8110454440dac238241632f0150",
+      "status": "passed"
+    },
+    {
+      "label": "missing_delete",
+      "method": "DELETE",
+      "route": "/documents/{document_id}",
+      "actual_status": 404,
+      "expected_status": 404,
+      "request_id": "7500d16df2ce406d88d12dbc30c15bed",
+      "status": "passed"
+    },
+    {
+      "label": "missing_update",
+      "method": "PUT",
+      "route": "/documents/{document_id}",
+      "actual_status": 404,
+      "expected_status": 404,
+      "request_id": "c04530ebaeaa47e6be102d7f12fdc21d",
+      "status": "passed"
+    },
+    {
+      "label": "http_error",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 502,
+      "expected_status": 502,
+      "request_id": "ae9d1c873a35413ba8e9f7827ad02c04",
+      "status": "passed"
+    },
+    {
+      "label": "invalid_json",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 502,
+      "expected_status": 502,
+      "request_id": "7af9ecf9ad504d96975fb6c866cde1c9",
+      "status": "passed"
+    },
+    {
+      "label": "schema_error",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 502,
+      "expected_status": 502,
+      "request_id": "222dcabda8fd48ad9a571c5ba5e73995",
+      "status": "passed"
+    },
+    {
+      "label": "slow",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 504,
+      "expected_status": 504,
+      "request_id": "641941a16a224798bf71d739b7d69a9f",
+      "status": "passed"
+    },
+    {
+      "label": "embedding_failure",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 502,
+      "expected_status": 502,
+      "request_id": "f90492fd0ff645b6b2cb6a593ee450b8",
+      "status": "passed"
+    },
+    {
+      "label": "internal_filesystem_error",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 500,
+      "expected_status": 500,
+      "request_id": "f071ab3bcb504eeca8060d49bddab96c",
+      "status": "passed"
+    },
+    {
+      "label": "delete",
+      "method": "DELETE",
+      "route": "/documents/{document_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "05db624f72a448a48de44660449812fc",
+      "status": "passed"
+    },
+    {
+      "label": "list_deleted",
+      "method": "GET",
+      "route": "/documents",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "a737e3b289fb496b95bc7f13a491d5c2",
+      "status": "passed"
+    },
+    {
+      "label": "delete_again",
+      "method": "DELETE",
+      "route": "/documents/{document_id}",
+      "actual_status": 404,
+      "expected_status": 404,
+      "request_id": "fb94f3c38fd944c6b98b87d4080d176f",
+      "status": "passed"
+    },
+    {
+      "label": "connection_failure",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 503,
+      "expected_status": 503,
+      "request_id": "1aaf465d3ff14ddca9d93f27ae92cc80",
+      "status": "passed"
+    }
+  ],
+  "checks": {
+    "health_contract": {
+      "status": "passed"
+    },
+    "empty_store": {
+      "status": "passed"
+    },
+    "upload_contract": {
+      "status": "passed"
+    },
+    "list_after_upload": {
+      "status": "passed"
+    },
+    "store_after_upload": {
+      "status": "passed"
+    },
+    "update_contract": {
+      "status": "passed"
+    },
+    "store_after_update": {
+      "status": "passed"
+    },
+    "raw_files": {
+      "status": "passed"
+    },
+    "chat_contract": {
+      "status": "passed"
+    },
+    "agent_tool_loop": {
+      "status": "passed"
+    },
+    "agent_step_limit": {
+      "status": "passed"
+    },
+    "blank_query_redacted": {
+      "status": "passed"
+    },
+    "bad_steps_redacted": {
+      "status": "passed"
+    },
+    "private_invalid_input_redacted": {
+      "status": "passed"
+    },
+    "http_error_safe": {
+      "status": "passed"
+    },
+    "invalid_json_safe": {
+      "status": "passed"
+    },
+    "schema_error_safe": {
+      "status": "passed"
+    },
+    "slow_safe": {
+      "status": "passed"
+    },
+    "internal_error_safe": {
+      "status": "passed"
+    },
+    "delete_contract": {
+      "status": "passed"
+    },
+    "store_after_delete": {
+      "status": "passed"
+    },
+    "failed_upload_rollback": {
+      "status": "passed"
+    },
+    "logs": {
+      "status": "passed",
+      "requests_correlated": 29,
+      "json_events": 67
+    }
+  },
+  "environment": {
+    "python": "3.11.16",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "dependencies": {
+      "fastapi": "0.141.1",
+      "requests": "2.34.2",
+      "chromadb": "1.5.9",
+      "pydantic": "2.13.5",
+      "uvicorn": "0.52.4"
+    }
+  },
+  "optional": {
+    "real_ollama": {
+      "status": "passed",
+      "upstream": "real_host_ollama",
+      "requests": [
+        {
+          "label": "real_chat",
+          "method": "POST",
+          "route": "/chat",
+          "actual_status": 200,
+          "expected_status": 200,
+          "request_id": "e437e6467f624eeea2c60e831fa13065",
+          "status": "passed"
+        },
+        {
+          "label": "real_upload",
+          "method": "POST",
+          "route": "/documents",
+          "actual_status": 201,
+          "expected_status": 201,
+          "request_id": "18fde1e7947f49c3847daff1f2ecc1a6",
+          "status": "passed"
+        },
+        {
+          "label": "real_delete",
+          "method": "DELETE",
+          "route": "/documents/{document_id}",
+          "actual_status": 200,
+          "expected_status": 200,
+          "request_id": "50231401d73a4861bca4b2acab8233a4",
+          "status": "passed"
+        }
+      ],
+      "models": [
+        "bge-m3:latest",
+        "gemma4:e2b"
+      ],
+      "chat_completed": true,
+      "real_embedding_upload": true,
+      "embedding_dimensions": 1024,
+      "real_document_retrieval": true,
+      "cleanup": {
+        "children_exited": true,
+        "temporary_data_removed": true
+      }
+    },
+    "docker": {
+      "status": "BLOCKED",
+      "commands": [
+        {
+          "check": "engine",
+          "exit_code": 1,
+          "stdout": "null",
+          "stderr": "failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        },
+        {
+          "check": "compose_config",
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "container_validation": "NOT_RUN",
+      "reason": "Engine or Compose check unavailable; no Docker repair attempted"
+    },
+    "native_linux": {
+      "status": "DEFERRED_DEBT"
+    }
+  },
+  "cleanup": {
+    "children_exited": true,
+    "temporary_data_removed": true
+  },
+  "git_commit": "d63547de128482fdca3a01676273be002fd10faf",
+  "git_status": "?? docs/engineering/step4-evidence-20261026T114109Z-8f915b.json\n?? docs/engineering/step4-plan.md\n?? scripts/integration/model_fixture.py\n?? scripts/integration/processes.py\n?? scripts/verify_step4_api.py\n?? tests/integration/test_api_e2e.py\n?? tests/integration/test_process_cleanup.py",
+  "source_sha256": {
+    "scripts/verify_step4_api.py": "6725c24df896ae895334bf7ec8ed5ea228bc4655595d6f23478d72d0358bbc4c",
+    "scripts/integration/model_fixture.py": "e80477063901de8d8d1db486bdaf92e37f814229336b3ba056c0e20f9f3abd01",
+    "src/knowledge_pilot/api/app.py": "dfa417ebf5ca6584f31e963723dcf631ed585b0b65b71680d3ee3b2a93ebab16",
+    "src/knowledge_pilot/api/services.py": "cfc4ba0610f42616c3652686b8e44ec586157e19e95959152b2270388bfcf56e",
+    "src/knowledge_pilot/llm/ollama_client.py": "9319723d1d0c29a64a9ef1635558996fed230e35504d5fe7e5b801a2735da011",
+    "src/knowledge_pilot/retrieval/embedding.py": "cff458f9e7e4aa11513afe6d07c084a2be7a31d3c5c415797720b4f6d8ccc470",
+    "src/knowledge_pilot/vector_store/chroma_store.py": "ec5d74f968bd8d24441422223d5f5c532a5f0485d182580c7da03e8116ac54d0"
+  },
+  "finished_at_utc": "2026-10-26T11:49:48.120426+00:00"
+}
