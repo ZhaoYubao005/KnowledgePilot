@@ -28,6 +28,8 @@ from requests.exceptions import ConnectionError as RequestsConnectionError
 
 app = FastAPI(version="1.1.0", responses={500: {"description": "Internal service error"}})
 install_reliability(app)
+from knowledge_pilot.api.workflow import router as workflow_router
+app.include_router(workflow_router)
 
 @app.get("/health")
 def health():

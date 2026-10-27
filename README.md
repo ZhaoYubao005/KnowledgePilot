@@ -403,3 +403,33 @@ data/ 仅追踪指定 Evaluation 冻结材料和五份 Baseline 报告，其余�
 ## V1.0 边界（历史）
 
 V1.0 的范围是受 `max_steps` 约束的单 Agent 循环式 Tool Calling。Memory、长期记忆、Planner、Multi-Agent、MCP、FastAPI、Web UI 和并行 Tool 执行均未包含在 V1.0 中。FastAPI API 是 V1.1 新增能力；其余能力仍不能作为当前版本功能声明。
+
+## V1.5 LangGraph Workflow 开发分支
+
+新增独立 `POST /workflow/chat`，原 `/chat` 保持原 Agent Loop。
+工作流：初始化 → Schema 路由 → 直接回答 / 知识库检索 / 计算器 → 生成 → 结束。
+默认 `route=auto` 通过 Ollama 结构化输出判断；也可显式指定 `direct`、`rag`、`tool`。
+
+```powershell
+python -m pip install -r requirements.txt -c requirements-workflow-lock.txt
+python -m pip install --no-deps -e .
+python -m uvicorn knowledge_pilot.api.app:app --host 127.0.0.1 --port 8000
+Invoke-RestMethod http://127.0.0.1:8000/workflow/chat -Method Post -ContentType 'application/json' -Body '{"query":"Calculate 6 * 7 using calculator."}'
+```
+
+Python 独立入口：
+
+```python
+from knowledge_pilot.workflow.graph import run_workflow
+result = run_workflow({"query": "我的上传文档介绍了什么？", "route": "rag", "top_k": 3})
+print(result["status"], result["answer"], result["trace"])
+```
+
+工作流错误必须检查 `status` 和 `error`；HTTP 200 不代表领域执行成功。
+无证据返回 `no_results`；工具/路由失败返回 `failed`；模型错误映射为 502/503/504。
+
+验收：`python scripts/verify_v15_workflow.py --evidence ./data/v15-http.json`。
+真实 Ollama：在同一命令追加 `--real-ollama http://localhost:11434`。
+验收器只创建自有临时数据，不使用日常 Chroma；真实模式不下载模型。
+[源码教学交接](docs/engineering/v1.5-source-handoff.md) · [测试与发布准备](docs/engineering/v1.5-validation.md)。
+V1.4 Docker / 原生 Linux 验证缺口继续保留；本分支不是正式版本发布。
