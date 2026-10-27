@@ -1,0 +1,439 @@
+{
+  "schema": "kp_step4_api_v1",
+  "run_id": "20261027T085100Z-5a1b30",
+  "status": "passed",
+  "acceptance_scope": "mandatory_local_api",
+  "upstream": "deterministic_local_http_fixture",
+  "requests": [
+    {
+      "label": "health",
+      "method": "GET",
+      "route": "/health",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "f78eee324b854fedbb5551bd649b5652",
+      "status": "passed"
+    },
+    {
+      "label": "initial_list",
+      "method": "GET",
+      "route": "/documents",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "4fa4fba8d8e341a89e78d7a8af8ce6eb",
+      "status": "passed"
+    },
+    {
+      "label": "upload",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "b6b6e48b504e452ba4288e8e1d12c2d2",
+      "status": "passed"
+    },
+    {
+      "label": "list_upload",
+      "method": "GET",
+      "route": "/documents",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "ebae741a93fa47769b550085d43d17f4",
+      "status": "passed"
+    },
+    {
+      "label": "update",
+      "method": "PUT",
+      "route": "/documents/{document_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "9e7e0200b3134ea182f5c64dce967835",
+      "status": "passed"
+    },
+    {
+      "label": "list_updated",
+      "method": "GET",
+      "route": "/documents",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "e1ae8da0e8b64eeda716d01952ac78fa",
+      "status": "passed"
+    },
+    {
+      "label": "chat_direct",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "7c7bc72bf00d49b692dc939f3088f406",
+      "status": "passed"
+    },
+    {
+      "label": "chat_tools",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "a3785857c9274dfb8d4d9aab9f0c0aea",
+      "status": "passed"
+    },
+    {
+      "label": "chat_step_limit",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "e411b633a1d947c89d43f693d406c521",
+      "status": "passed"
+    },
+    {
+      "label": "bad_extension",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 400,
+      "expected_status": 400,
+      "request_id": "a4afe9a181764207b62484b343e15645",
+      "status": "passed"
+    },
+    {
+      "label": "empty_file",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 400,
+      "expected_status": 400,
+      "request_id": "37dde33be7a04288b54ecfcbc3a2a7dc",
+      "status": "passed"
+    },
+    {
+      "label": "blank_file",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 400,
+      "expected_status": 400,
+      "request_id": "21655457445b40b882cf05c7f1cd3569",
+      "status": "passed"
+    },
+    {
+      "label": "bad_utf8",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 400,
+      "expected_status": 400,
+      "request_id": "17e32411a3d44d35a4bbcec8b7ace25f",
+      "status": "passed"
+    },
+    {
+      "label": "blank_query",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 422,
+      "expected_status": 422,
+      "request_id": "05389ebb5f37470193602ee37925bb1d",
+      "status": "passed"
+    },
+    {
+      "label": "bad_steps",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 422,
+      "expected_status": 422,
+      "request_id": "263e1b1d837e4568ad03e9a34c4cb362",
+      "status": "passed"
+    },
+    {
+      "label": "private_invalid_input",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 422,
+      "expected_status": 422,
+      "request_id": "33846110cbb44153b87c2bd0b0b90e2b",
+      "status": "passed"
+    },
+    {
+      "label": "missing_file",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 422,
+      "expected_status": 422,
+      "request_id": "8c355acf0cae4bb6abf597a7570ec9e9",
+      "status": "passed"
+    },
+    {
+      "label": "missing_delete",
+      "method": "DELETE",
+      "route": "/documents/{document_id}",
+      "actual_status": 404,
+      "expected_status": 404,
+      "request_id": "2fc38ceb96234ddda8f8f984befcbaf0",
+      "status": "passed"
+    },
+    {
+      "label": "missing_update",
+      "method": "PUT",
+      "route": "/documents/{document_id}",
+      "actual_status": 404,
+      "expected_status": 404,
+      "request_id": "1a718d1440574a8eb84ce107b025cd79",
+      "status": "passed"
+    },
+    {
+      "label": "http_error",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 502,
+      "expected_status": 502,
+      "request_id": "e28d40ccb8074a38a7230fb25c8deedf",
+      "status": "passed"
+    },
+    {
+      "label": "invalid_json",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 502,
+      "expected_status": 502,
+      "request_id": "41835d03fdcf459d813458aec0a94b6d",
+      "status": "passed"
+    },
+    {
+      "label": "schema_error",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 502,
+      "expected_status": 502,
+      "request_id": "578b0997687e40e89f6889eb1ace712e",
+      "status": "passed"
+    },
+    {
+      "label": "slow",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 504,
+      "expected_status": 504,
+      "request_id": "12a4b2cc16d94a349db31b2fb48fb3ba",
+      "status": "passed"
+    },
+    {
+      "label": "embedding_failure",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 502,
+      "expected_status": 502,
+      "request_id": "cee4aeed42454b70a42e55c4f93620e3",
+      "status": "passed"
+    },
+    {
+      "label": "internal_filesystem_error",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 500,
+      "expected_status": 500,
+      "request_id": "82625ac0ab17485391b5451fe6f53c7c",
+      "status": "passed"
+    },
+    {
+      "label": "delete",
+      "method": "DELETE",
+      "route": "/documents/{document_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "cc2e5621dab44f18b79e81f6e397cfed",
+      "status": "passed"
+    },
+    {
+      "label": "list_deleted",
+      "method": "GET",
+      "route": "/documents",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "53c78c6970ac4e34bb13c57f0e552a14",
+      "status": "passed"
+    },
+    {
+      "label": "delete_again",
+      "method": "DELETE",
+      "route": "/documents/{document_id}",
+      "actual_status": 404,
+      "expected_status": 404,
+      "request_id": "2617115c5bdc40758071e238ab0d721e",
+      "status": "passed"
+    },
+    {
+      "label": "connection_failure",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 503,
+      "expected_status": 503,
+      "request_id": "3543bd88bbef476ab03805eb7b3eefec",
+      "status": "passed"
+    }
+  ],
+  "checks": {
+    "health_contract": {
+      "status": "passed"
+    },
+    "empty_store": {
+      "status": "passed"
+    },
+    "upload_contract": {
+      "status": "passed"
+    },
+    "list_after_upload": {
+      "status": "passed"
+    },
+    "store_after_upload": {
+      "status": "passed"
+    },
+    "update_contract": {
+      "status": "passed"
+    },
+    "store_after_update": {
+      "status": "passed"
+    },
+    "raw_files": {
+      "status": "passed"
+    },
+    "chat_contract": {
+      "status": "passed"
+    },
+    "agent_tool_loop": {
+      "status": "passed"
+    },
+    "agent_step_limit": {
+      "status": "passed"
+    },
+    "blank_query_redacted": {
+      "status": "passed"
+    },
+    "bad_steps_redacted": {
+      "status": "passed"
+    },
+    "private_invalid_input_redacted": {
+      "status": "passed"
+    },
+    "http_error_safe": {
+      "status": "passed"
+    },
+    "invalid_json_safe": {
+      "status": "passed"
+    },
+    "schema_error_safe": {
+      "status": "passed"
+    },
+    "slow_safe": {
+      "status": "passed"
+    },
+    "internal_error_safe": {
+      "status": "passed"
+    },
+    "delete_contract": {
+      "status": "passed"
+    },
+    "store_after_delete": {
+      "status": "passed"
+    },
+    "failed_upload_rollback": {
+      "status": "passed"
+    },
+    "logs": {
+      "status": "passed",
+      "requests_correlated": 29,
+      "json_events": 67
+    }
+  },
+  "environment": {
+    "python": "3.11.16",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "dependencies": {
+      "fastapi": "0.141.1",
+      "requests": "2.34.2",
+      "chromadb": "1.5.9",
+      "pydantic": "2.13.5",
+      "uvicorn": "0.52.4"
+    }
+  },
+  "optional": {
+    "real_ollama": {
+      "status": "passed",
+      "upstream": "real_host_ollama",
+      "requests": [
+        {
+          "label": "real_chat",
+          "method": "POST",
+          "route": "/chat",
+          "actual_status": 200,
+          "expected_status": 200,
+          "request_id": "acd1cf19eaa1487f800ba4eb01b5671c",
+          "status": "passed"
+        },
+        {
+          "label": "real_upload",
+          "method": "POST",
+          "route": "/documents",
+          "actual_status": 201,
+          "expected_status": 201,
+          "request_id": "b06bee9303a5486db68ec05b02b5c61e",
+          "status": "passed"
+        },
+        {
+          "label": "real_delete",
+          "method": "DELETE",
+          "route": "/documents/{document_id}",
+          "actual_status": 200,
+          "expected_status": 200,
+          "request_id": "91ca08497bde4d5b99937f42ec91f821",
+          "status": "passed"
+        }
+      ],
+      "models": [
+        "bge-m3:latest",
+        "gemma4:e2b"
+      ],
+      "chat_completed": true,
+      "real_embedding_upload": true,
+      "embedding_dimensions": 1024,
+      "real_document_retrieval": true,
+      "cleanup": {
+        "children_exited": true,
+        "temporary_data_removed": true
+      }
+    },
+    "docker": {
+      "status": "BLOCKED",
+      "commands": [
+        {
+          "check": "engine",
+          "exit_code": 1,
+          "stdout": "null",
+          "stderr": "failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified."
+        },
+        {
+          "check": "compose_config",
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "container_validation": "NOT_RUN",
+      "reason": "Engine or Compose check unavailable; no Docker repair attempted"
+    },
+    "native_linux": {
+      "status": "DEFERRED_DEBT"
+    }
+  },
+  "cleanup": {
+    "children_exited": true,
+    "temporary_data_removed": true
+  },
+  "git_commit": "07f0dc3cb8f734814ba41dcbdcbcf60721df90b0",
+  "git_status": "",
+  "source_sha256": {
+    "scripts/verify_step4_api.py": "bee5ce3f198ecc6953f7bddab5ef872a80e663c9f685ded31afc11473a6cb82f",
+    "scripts/integration/model_fixture.py": "c04d5bddc8ad45a125d45c3c98963c03b05d265f236ef29f04003850a9c2c983",
+    "src/knowledge_pilot/api/app.py": "dfa417ebf5ca6584f31e963723dcf631ed585b0b65b71680d3ee3b2a93ebab16",
+    "src/knowledge_pilot/api/services.py": "cfc4ba0610f42616c3652686b8e44ec586157e19e95959152b2270388bfcf56e",
+    "src/knowledge_pilot/llm/ollama_client.py": "9319723d1d0c29a64a9ef1635558996fed230e35504d5fe7e5b801a2735da011",
+    "src/knowledge_pilot/retrieval/embedding.py": "cff458f9e7e4aa11513afe6d07c084a2be7a31d3c5c415797720b4f6d8ccc470",
+    "src/knowledge_pilot/vector_store/chroma_store.py": "ec5d74f968bd8d24441422223d5f5c532a5f0485d182580c7da03e8116ac54d0"
+  },
+  "finished_at_utc": "2026-10-27T08:52:18.614011+00:00"
+}

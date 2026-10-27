@@ -2,7 +2,25 @@
 
 KnowledgePilot 是一个用于学习和实践大语言模型应用开发的本地项目。项目从本地 Ollama 对话逐步扩展到文档检索、RAG、Tool Calling 和受控 Agent Loop，并保持每个版本的能力边界清晰、可验证。
 
-## 当前版本：V1.3.0 — RAG Retrieval Optimization
+## V1.4 发布候选工程集成（等待人工审查）
+
+正式封版仍为 V1.3.0；V1.4 尚未合并 main、创建 Tag 或正式发布。Step 1～4 的配置、Docker 最小部署、Linux 工具、日志/错误处理和 API 集成测试已在独立分支集成。Step 5 的当前验收与 Go/No-Go 见 [最终集成报告](docs/engineering/step5-integration-report.md)，变更与限制见 [V1.4 发布准备说明](docs/engineering/v1.4-release-readiness.md)。
+
+当前全量回归为 479 passed、1 skipped。真正 Uvicorn + 明确模拟的模型 HTTP 上游验证 CRUD、实际 Chroma 和 Agent 工具循环；真实宿主 Ollama 的聊天、Embedding、检索另行记录，不将模拟工具选择描述为真实模型自主决策。Docker 历史 Step 1 验收通过不代表当前候选镜像已重新验收；当前 Engine 状态和原生 Linux 技术债需独立阅读报告。
+
+当前 Python 配置读取进程环境，不自动加载 `.env`；未设置时保持 localhost:11434、原模型和 CWD/data。显式 `KP_DATA_DIR` 必须是绝对路径，包含 `raw_documents` 与 `vector_store`。Compose 读取 `.env`，内部固定 `/app/data`，宿主 Ollama 默认使用 `host.docker.internal:11434`，API 默认仅绑定宿主 127.0.0.1。使用专用数据目录，禁止将验收工具指向原始库或冻结评测库。
+
+本地启动（先设置专用绝对数据路径，并确认已有模型可用）：
+
+```powershell
+$env:PYTHONPATH = Join-Path (Get-Location) 'src'
+$env:KP_DATA_DIR = Join-Path (Get-Location) 'data'
+python -m uvicorn knowledge_pilot.api.app:app --host 127.0.0.1 --port 8000 --workers 1
+```
+
+部署操作见 [当前候选部署入口](docs/deployment/release-candidate.md) 和 [Linux 运行说明](docs/deployment/linux-runtime.md)。`/health` 只证明轻量路由可用，不证明模型或数据写入就绪。项目尚无 API 身份认证，不应直接公开暴露。
+
+## 已封版版本：V1.3.0 — RAG Retrieval Optimization
 
 V1.3 增加独立的 Dense、BM25 和 Hybrid + RRF 检索实验链路，复用 V1.2 冻结 Dataset、Corpus 和评分规则；不改动生产 RAG Pipeline、Agent Loop 或 HTTP API 契约。默认检索仍为 Dense。
 
@@ -112,11 +130,11 @@ V1.1 在 V1.0 Agent Loop、RAG、Tool Calling 和 Chroma 能力之上增加 HTTP
 - `PUT /documents/{document_id}`：更新文档，成功为 200；文件无效为 400、文档不存在为 404、请求校验为 422、Embedding 返回非 JSON 为 502、连接不可用为 503。
 - `DELETE /documents/{document_id}`：删除文档及受管理的 raw 文件，成功为 200；文档不存在为 404、请求校验为 422。
 
-上传与更新使用 `data/raw_documents/{document_id}/` 保存原始 TXT。Pydantic 定义请求/响应模型；各 Route 的已处理状态码在 OpenAPI / Swagger 中声明。当前版本不包含 Memory、MCP、LangChain、Docker 或 Web UI。
+上传与更新使用 `data/raw_documents/{document_id}/` 保存原始 TXT。Pydantic 定义请求/响应模型；各 Route 的已处理状态码在 OpenAPI / Swagger 中声明。V1.1 当时不包含 Memory、MCP、LangChain、Docker 或 Web UI；V1.4 候选已补 Docker 和可配置数据根。
 
 ### V1.1 已知限制
 
-`PUT /documents/{document_id}` 不是原子更新：旧 Chroma Chunk 先删除，再写入新 Chunk；失败时 raw 文件有最小回滚保护，但旧 Chunk 可能丢失。Ollama HTTP 调用尚缺完整的 timeout、状态码检查和响应结构校验。其他风险与真实故障注入结果见 [V1.1 开发与技术债记录](docs/devlog/V1.1.md)。
+`PUT /documents/{document_id}` 不是原子更新：旧 Chroma Chunk 先删除，再写入新 Chunk；失败时 raw 文件有最小回滚保护，但旧 Chunk 可能丢失。此风险在 V1.4 候选仍存在。V1.1 当时缺少的 Ollama timeout、状态码与响应结构检查已由 V1.4 Step 3 补充。历史风险与故障记录见 [V1.1 开发与技术债记录](docs/devlog/V1.1.md)。
 
 ## V1.0 Agent Loop（历史基础）
 
@@ -229,7 +247,7 @@ completed 或 max_steps
 
 ### 原有 API / CLI 的 Working Directory 与 PYTHONPATH
 
-原有 API / CLI 必须从项目根目录 `D:\AI_develop\KnowledgePilot` 运行。`chroma_store.py` 使用相对路径：
+以下为未设置 `KP_DATA_DIR` 时的历史本地运行约定；V1.4 候选可通过绝对数据路径消除数据位置对 CWD 的依赖。原有 API / CLI 从项目根目录 `D:\AI_develop\KnowledgePilot` 运行时，默认库等价于：
 
 ```python
 chromadb.PersistentClient(path="data/vector_store")
