@@ -1,0 +1,231 @@
+{
+  "status": "passed",
+  "upstream": "deterministic_local_http_fixture",
+  "requests": [
+    {
+      "label": "direct",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "0b4f89eb8c0b47edbd7c9e391960e745",
+      "status": "passed"
+    },
+    {
+      "label": "auto_tool",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "33942f27e1b6445b8359461fdf989aec",
+      "status": "passed"
+    },
+    {
+      "label": "upload",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "ceb19351d74c40b39e977c02350299a2",
+      "status": "passed"
+    },
+    {
+      "label": "auto_rag",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "cc0ede24f9cc40f5b84a3de1e61d5577",
+      "status": "passed"
+    },
+    {
+      "label": "delete",
+      "method": "DELETE",
+      "route": "/documents/{document_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "e05fa6fd376c4a4abfb26e0ad2b87cdb",
+      "status": "passed"
+    },
+    {
+      "label": "no_results",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "d4fccbfd958e4b8f99714a1c3d030c58",
+      "status": "passed"
+    },
+    {
+      "label": "tool_failure",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "a74e72e7bbb6494e97209c312d42b57d",
+      "status": "passed"
+    },
+    {
+      "label": "input_validation",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 422,
+      "expected_status": 422,
+      "request_id": "9595dfddee6a4947a19863ea024fed76",
+      "status": "passed"
+    },
+    {
+      "label": "chat_compatibility",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "febcc4daa2974c979e78da4a3a369306",
+      "status": "passed"
+    },
+    {
+      "label": "invalid_route",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "077738d9bcb44598aee19fd393227606",
+      "status": "passed"
+    },
+    {
+      "label": "model_schema",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 502,
+      "expected_status": 502,
+      "request_id": "0089e5fabc3f49be8f34cdd999d30702",
+      "status": "passed"
+    },
+    {
+      "label": "model_timeout",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 504,
+      "expected_status": 504,
+      "request_id": "d1090e9f8d0f4441b0b5dd2f5844da49",
+      "status": "passed"
+    },
+    {
+      "label": "model_connection",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 503,
+      "expected_status": 503,
+      "request_id": "430528b07f204dbaa3362b5ef6e0a566",
+      "status": "passed"
+    }
+  ],
+  "checks": {
+    "direct": "passed",
+    "auto_tool": "passed",
+    "auto_rag": "passed",
+    "no_results": "passed",
+    "tool_failure": "passed",
+    "input_validation": "passed",
+    "chat_compatibility": "passed",
+    "invalid_route": "passed",
+    "model_schema": "passed",
+    "model_timeout": "passed",
+    "model_connection": "passed",
+    "log_privacy": "passed"
+  },
+  "time_utc": "2026-10-27T09:29:18.398293+00:00",
+  "versions": {
+    "langgraph": "1.2.18",
+    "pydantic": "2.13.5",
+    "fastapi": "0.141.1",
+    "chromadb": "1.5.9"
+  },
+  "source_head": "9f5208fb4e654421394ececf429a14c8bc55608f",
+  "source_dirty": true,
+  "workflow_results": {
+    "tool": {
+      "route": "tool",
+      "value": 42.0,
+      "trace": [
+        "initialize",
+        "decide",
+        "tool",
+        "generate",
+        "finish"
+      ],
+      "answer_contains_expected_value": true
+    },
+    "rag": {
+      "route": "rag",
+      "evidence_count": 1,
+      "trace": [
+        "initialize",
+        "decide",
+        "retrieve",
+        "generate",
+        "finish"
+      ],
+      "answer_contains_document_fact": true
+    }
+  },
+  "retrieval": {
+    "embedding": "deterministic_1024_vector",
+    "store": "real_isolated_persistent_chroma",
+    "tool": "production_registry"
+  },
+  "upstream_calls": [
+    {
+      "path": "/api/chat",
+      "structured": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": true
+    },
+    {
+      "path": "/api/chat",
+      "structured": false
+    },
+    {
+      "path": "/api/embed",
+      "structured": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": true
+    },
+    {
+      "path": "/api/embed",
+      "structured": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": false
+    },
+    {
+      "path": "/api/embed",
+      "structured": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": true
+    },
+    {
+      "path": "/api/chat",
+      "structured": true
+    },
+    {
+      "path": "/api/chat",
+      "structured": true
+    }
+  ],
+  "cleanup": {
+    "temporary_data_removed": true,
+    "children_exited": true
+  }
+}

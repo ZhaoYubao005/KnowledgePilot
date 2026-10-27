@@ -1,0 +1,141 @@
+{
+  "status": "passed",
+  "upstream": "real_host_ollama",
+  "requests": [
+    {
+      "label": "direct",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "5134be8a920940dd87697c32ebad8fbe",
+      "status": "passed"
+    },
+    {
+      "label": "auto_tool",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "f23fc73bc7764b11811a731fb96e0ed1",
+      "status": "passed"
+    },
+    {
+      "label": "upload",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "a4d53c035d13487c90bd89a0a1e5fce7",
+      "status": "passed"
+    },
+    {
+      "label": "auto_rag",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "92a73294a5ca4602ad1f7e9f412524fc",
+      "status": "passed"
+    },
+    {
+      "label": "delete",
+      "method": "DELETE",
+      "route": "/documents/{document_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "c1b3acd47791471d985c567eeb677270",
+      "status": "passed"
+    },
+    {
+      "label": "no_results",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "140e720715bb437c89d14c31c56e31bd",
+      "status": "passed"
+    },
+    {
+      "label": "tool_failure",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "8717154a843e4009879ef48e3ec39b98",
+      "status": "passed"
+    },
+    {
+      "label": "input_validation",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 422,
+      "expected_status": 422,
+      "request_id": "55f42cf8dc024d77bd69f247b09ec776",
+      "status": "passed"
+    },
+    {
+      "label": "chat_compatibility",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "3efec89a73e94f15aacc9f90866ca7e3",
+      "status": "passed"
+    }
+  ],
+  "checks": {
+    "direct": "passed",
+    "auto_tool": "passed",
+    "auto_rag": "passed",
+    "no_results": "passed",
+    "tool_failure": "passed",
+    "input_validation": "passed",
+    "chat_compatibility": "passed",
+    "log_privacy": "passed"
+  },
+  "time_utc": "2026-10-27T09:29:13.365145+00:00",
+  "versions": {
+    "langgraph": "1.2.18",
+    "pydantic": "2.13.5",
+    "fastapi": "0.141.1",
+    "chromadb": "1.5.9"
+  },
+  "source_head": "9f5208fb4e654421394ececf429a14c8bc55608f",
+  "source_dirty": true,
+  "workflow_results": {
+    "tool": {
+      "route": "tool",
+      "value": 42.0,
+      "trace": [
+        "initialize",
+        "decide",
+        "tool",
+        "generate",
+        "finish"
+      ],
+      "answer_contains_expected_value": true
+    },
+    "rag": {
+      "route": "rag",
+      "evidence_count": 1,
+      "trace": [
+        "initialize",
+        "decide",
+        "retrieve",
+        "generate",
+        "finish"
+      ],
+      "answer_contains_document_fact": true
+    }
+  },
+  "retrieval": {
+    "embedding": "real_bge_m3",
+    "store": "real_isolated_persistent_chroma",
+    "tool": "production_registry"
+  },
+  "cleanup": {
+    "temporary_data_removed": true,
+    "children_exited": true
+  }
+}
