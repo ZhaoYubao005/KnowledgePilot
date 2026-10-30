@@ -30,6 +30,8 @@ app = FastAPI(version="1.1.0", responses={500: {"description": "Internal service
 install_reliability(app)
 from knowledge_pilot.api.workflow import router as workflow_router
 app.include_router(workflow_router)
+from knowledge_pilot.api.sessions import router as sessions_router, session_http
+app.include_router(sessions_router)
 
 @app.get("/health")
 def health():
@@ -48,6 +50,9 @@ def health():
 )
 def chat(request: ChatRequest):
     try:
+        if request.session_id is not None:
+            from knowledge_pilot.memory.service import session_chat
+            return session_http(lambda: session_chat(request.query, request.session_id, max_steps=request.max_steps))
         result = chat_service(
             query=request.query,
             max_steps=request.max_steps,

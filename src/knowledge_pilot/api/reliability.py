@@ -13,7 +13,7 @@ from knowledge_pilot.logging_config import request_id
 
 logger = logging.getLogger(__name__)
 INPUT_DETAILS = {'only txt files are supported', 'file cannot be empty',
-                 'file content cannot be blank', 'invalid document'}
+                 'file content cannot be blank', 'invalid document', 'invalid session query'}
 
 
 def safe_input_detail(error: ValueError) -> str:
@@ -39,7 +39,10 @@ async def service_error_handler(request, error: Exception) -> JSONResponse:
     logger.log(logging.WARNING if status < 500 else logging.ERROR, 'service_error',
                extra={'category': category, 'status': status},
                exc_info=(type(error), error, error.__traceback__) if status >= 500 else None)
-    return JSONResponse(status_code=status, content={'detail': detail})
+    content = {'detail': detail}
+    if isinstance(error, ModelError) and getattr(error, 'diagnostics', None):
+        content['diagnostics'] = error.diagnostics
+    return JSONResponse(status_code=status, content=content)
 
 
 async def validation_error_handler(request, error: RequestValidationError) -> JSONResponse:

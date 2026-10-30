@@ -30,6 +30,7 @@ class Decision(StrictModel):
 
 
 class WorkflowRequest(StrictModel):
+    session_id: str | None = Field(default=None, min_length=43, max_length=43)
     query: str = Field(min_length=1, max_length=8000)
     route: Literal['auto', 'direct', 'rag', 'tool'] = 'auto'
     tool: ToolCall | None = None
@@ -56,6 +57,7 @@ class Evidence(StrictModel):
 
 
 class WorkflowResponse(StrictModel):
+    diagnostics: list[dict] | None = None
     query: str
     route: Literal['auto', 'direct', 'rag', 'tool']
     tool_result: float | None

@@ -433,3 +433,41 @@ print(result["status"], result["answer"], result["trace"])
 验收器只创建自有临时数据，不使用日常 Chroma；真实模式不下载模型。
 [源码教学交接](docs/engineering/v1.5-source-handoff.md) · [测试与发布准备](docs/engineering/v1.5-validation.md)。
 V1.4 Docker / 原生 Linux 验证缺口继续保留；本分支不是正式版本发布。
+
+## V1.6 Agent Reliability & Memory 开发候选
+
+两个聊天入口均可选传入 `session_id`；省略时保持既有无会话行为。
+
+```powershell
+# 在 V1.6 worktree，使用本地独立 .venv
+./.venv/Scripts/python.exe -m uvicorn knowledge_pilot.api.app:app --host 127.0.0.1 --port 8000
+$session = Invoke-RestMethod http://127.0.0.1:8000/sessions -Method Post
+$body = @{query='My embedding model is bge-m3'; route='direct'; session_id=$session.session_id} | ConvertTo-Json
+Invoke-RestMethod http://127.0.0.1:8000/workflow/chat -Method Post -ContentType 'application/json' -Body $body
+$body = @{query='How many dimensions does that model use?'; route='direct'; session_id=$session.session_id} | ConvertTo-Json
+Invoke-RestMethod http://127.0.0.1:8000/workflow/chat -Method Post -ContentType 'application/json' -Body $body
+Invoke-RestMethod "http://127.0.0.1:8000/sessions/$($session.session_id)" -Method Get
+Invoke-RestMethod "http://127.0.0.1:8000/sessions/$($session.session_id)" -Method Delete
+```
+
+`DELETE` 清空历史并保留会话标识；SQLite 位于 `KP_DATA_DIR/sessions.sqlite3`，重启保留。
+同一会话同时生成回答时使用 revision 校验；冲突返回 409，不覆盖先完成的历史。
+ID 是随机访问凭证；没有认证、过期策略或用户权限系统，只用于受控本地使用。
+
+默认历史最多10个完整对话轮次、12000字符；配置 `KP_SESSION_MAX_TURNS`（1..100）、
+`KP_SESSION_MAX_CHARS`（256..100000）。这是历史字符预算，不是精确 token 或全请求预算。
+当前问题始终单独传给模型；过大的历史轮次可被整体舍弃。
+
+Workflow 的只读检索遇到明确临时连接/超时错误时有限重试；`KP_TOOL_MAX_ATTEMPTS` 默认2，范围1..3。
+计算器参数错误、除零、未知工具不自动重试。恢复信息见可选 `diagnostics`，原节点 `trace` 不变。
+旧 Agent Loop 本身仍保持原有行为；此恢复策略在 Workflow 工具边界生效。
+
+验收命令（自有临时数据）：
+
+```powershell
+./.venv/Scripts/python.exe -B -m pytest tests -q -p no:cacheprovider --basetemp ./data/pytest-v16
+./.venv/Scripts/python.exe -B scripts/verify_v16_memory.py --evidence ./data/v16-simulated.json
+./.venv/Scripts/python.exe -B scripts/verify_v16_memory.py --evidence ./data/v16-real.json --real-ollama http://localhost:11434
+```
+
+[源码教学包](docs/engineering/v1.6-source-handoff.md) · [验收与限制](docs/engineering/v1.6-validation.md)。

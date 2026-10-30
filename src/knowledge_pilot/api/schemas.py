@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class ChatRequest(BaseModel):
+    session_id: str | None = Field(default=None, min_length=43, max_length=43)
     query:str=Field(min_length=1)
     max_steps:int=Field(default=5,ge=1)
 
