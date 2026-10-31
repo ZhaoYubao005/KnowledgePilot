@@ -1,0 +1,282 @@
+{
+  "schema": "kp_v16_memory_http_v1",
+  "status": "failed",
+  "upstream": "real_host_ollama",
+  "acceptance_scope": "actual_http_sqlite_chroma_real_host_ollama",
+  "time_utc": "2026-10-30T14:23:01.989217+00:00",
+  "requests": [
+    {
+      "label": "session_create_a",
+      "method": "POST",
+      "route": "/sessions",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "7ef5cedc7c044686a82c42c1654d3afc",
+      "status": "passed"
+    },
+    {
+      "label": "session_create_b",
+      "method": "POST",
+      "route": "/sessions",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "e02cd2b92de74bc98975e34f439b8a32",
+      "status": "passed"
+    },
+    {
+      "label": "session_initial_read",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "2ee514c780b7486191e9688ce0e47efe",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_remember",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "56800d7bd582472d84522c14bfdd95f6",
+      "status": "passed"
+    },
+    {
+      "label": "session_after_remember",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "4ad094382379463f9a534215fa3855f3",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_recall",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "1a370e360f364a249db23e5cf3fcda4d",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_other_session",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "e65235b9e3df471dba35a71b11066894",
+      "status": "passed"
+    },
+    {
+      "label": "session_before_restart",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "3ebf841f44b54ac4bc7f7fd8053c7b45",
+      "status": "passed"
+    },
+    {
+      "label": "session_after_restart",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "33313f52a29a430ca492669d05b875ed",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_recall_after_restart",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "1a9a0937e0914376982ea620604dbf42",
+      "status": "passed"
+    }
+  ],
+  "checks": {
+    "session_create_read": {
+      "status": "passed"
+    },
+    "workflow_multiturn": {
+      "status": "passed",
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+    },
+    "session_isolation": {
+      "status": "passed",
+      "completed": true,
+      "answer_chars": 4,
+      "answer_fact_present": false,
+      "answer_sha256": "c44e6dd700593104019ffce7eeda189212379ba13862b09d70cab34c513210d9"
+    },
+    "sqlite_persistence_file": {
+      "status": "passed"
+    },
+    "restart_persistence": {
+      "status": "passed",
+      "snapshot_equal": true,
+      "source_note_retained": true,
+      "history_chars": 179,
+      "api_processes_started": 2,
+      "revision": 2
+    },
+    "restart_recall": {
+      "status": "failed",
+      "completed": true,
+      "answer_chars": 4,
+      "answer_fact_present": false,
+      "answer_sha256": "c44e6dd700593104019ffce7eeda189212379ba13862b09d70cab34c513210d9",
+      "source_note_retained": true,
+      "query_fact_present": true,
+      "answer_fact_in_history": true
+    }
+  },
+  "recovery": {},
+  "upstream_requests": [],
+  "memory_stages": {
+    "workflow_remember": {
+      "response": {
+        "completed": true,
+        "answer_chars": 3,
+        "answer_fact_present": false,
+        "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+      },
+      "submitted_pair_chars": 95,
+      "store": {
+        "revision": 1,
+        "stored_turns": 1,
+        "history_chars": 95,
+        "source_note_retained": true,
+        "query_fact_present": true,
+        "answer_fact_present": false,
+        "history_sha256": "6e75a7686f3915e40b3419823272f5ab866ccbfbc47be3f4d6adcd45e8937fc4",
+        "turns": [
+          {
+            "query_chars": 92,
+            "answer_chars": 3,
+            "query_fact_present": true,
+            "answer_fact_present": false,
+            "query_sha256": "533d7928c98a4ea3d75908539cee1c18735214a01e1bf78b9d4235bc9f44adca",
+            "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+          }
+        ]
+      }
+    },
+    "workflow_recall": {
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+    },
+    "before_restart": {
+      "revision": 2,
+      "stored_turns": 2,
+      "history_chars": 179,
+      "source_note_retained": true,
+      "query_fact_present": true,
+      "answer_fact_present": true,
+      "history_sha256": "b58631c07a208f4bad647586966991c65b3257221c80bdf8c7f653fcffed281e",
+      "turns": [
+        {
+          "query_chars": 92,
+          "answer_chars": 3,
+          "query_fact_present": true,
+          "answer_fact_present": false,
+          "query_sha256": "533d7928c98a4ea3d75908539cee1c18735214a01e1bf78b9d4235bc9f44adca",
+          "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+        },
+        {
+          "query_chars": 76,
+          "answer_chars": 8,
+          "query_fact_present": false,
+          "answer_fact_present": true,
+          "query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+          "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+        }
+      ]
+    },
+    "after_restart": {
+      "revision": 2,
+      "stored_turns": 2,
+      "history_chars": 179,
+      "source_note_retained": true,
+      "query_fact_present": true,
+      "answer_fact_present": true,
+      "history_sha256": "b58631c07a208f4bad647586966991c65b3257221c80bdf8c7f653fcffed281e",
+      "turns": [
+        {
+          "query_chars": 92,
+          "answer_chars": 3,
+          "query_fact_present": true,
+          "answer_fact_present": false,
+          "query_sha256": "533d7928c98a4ea3d75908539cee1c18735214a01e1bf78b9d4235bc9f44adca",
+          "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+        },
+        {
+          "query_chars": 76,
+          "answer_chars": 8,
+          "query_fact_present": false,
+          "answer_fact_present": true,
+          "query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+          "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+        }
+      ]
+    },
+    "restart_recall": {
+      "completed": true,
+      "answer_chars": 4,
+      "answer_fact_present": false,
+      "answer_sha256": "c44e6dd700593104019ffce7eeda189212379ba13862b09d70cab34c513210d9"
+    }
+  },
+  "provenance": {
+    "source_head": "9be3671ae5b159804dce163ca4fba1797c0b6b95",
+    "source_dirty": true,
+    "source_sha256": {
+      "scripts/verify_v16_memory.py": "564f612af4dec82ca2d9e575e9405bf55edeca7613351471be3764d3841f9488",
+      "scripts/verify_step4_api.py": "bee5ce3f198ecc6953f7bddab5ef872a80e663c9f685ded31afc11473a6cb82f",
+      "src/knowledge_pilot/api/app.py": "eb012603b77990b5221791f344151e1b709fd9a859cfc523184211f5cf56f33f",
+      "src/knowledge_pilot/api/sessions.py": "299f3c818e68647036fc271c638f52342484e0875dcaa9b310059d1e81089f6d",
+      "src/knowledge_pilot/memory/store.py": "56be00de025be130a1207db9569e7ff2c384be8208933a7360d6bbc927a45099",
+      "src/knowledge_pilot/memory/service.py": "6d281193ba49f676ac1a81a51a0bfc16b915e10eafc6a84a95a8157a1a4ddc12",
+      "src/knowledge_pilot/memory/context.py": "e89fd788b92b17e6e868e65cf4334ea5b279515c7f656b238e6d245225b621fc",
+      "src/knowledge_pilot/tools/recovery.py": "8d99ce17074e6be35dbc1ab3f8ecf4136a351185ad8858be716e01258a41c585",
+      "src/knowledge_pilot/workflow/graph.py": "115bec5bec4f288d2485f4ef75c03e1335a5da4bd38d2937fb6813794124edfa",
+      "src/knowledge_pilot/api/reliability.py": "27f7855343dd8cca5e6dc0367cde6544344bcd2a8105d80307c7e903cb7a4cea"
+    },
+    "versions": {
+      "langgraph": "1.2.18",
+      "pydantic": "2.13.5",
+      "fastapi": "0.141.1",
+      "chromadb": "1.5.9",
+      "requests": "2.34.2"
+    }
+  },
+  "real_models": {
+    "chat_model": "gemma4:e2b",
+    "embedding_model": "bge-m3",
+    "models_present": true,
+    "downloads": false
+  },
+  "isolation": {
+    "store": "owned_temporary_data_directory",
+    "database": "data/sessions.sqlite3",
+    "max_turns": 2,
+    "max_chars": 512,
+    "tool_max_attempts": 2,
+    "normal_user_store_accessed": false
+  },
+  "error_type": "AssertionError",
+  "failure_phase": "restart_recall",
+  "cleanup": {
+    "temporary_data_removed": true,
+    "children_exited": true,
+    "fixture_stopped": true
+  },
+  "finished_at_utc": "2026-10-30T14:23:13.683711+00:00"
+}

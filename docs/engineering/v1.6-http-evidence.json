@@ -1,0 +1,846 @@
+{
+  "schema": "kp_v16_memory_http_v1",
+  "status": "passed",
+  "upstream": "deterministic_local_http_fixture",
+  "acceptance_scope": "actual_http_sqlite_chroma_simulated_model",
+  "time_utc": "2026-10-30T14:25:55.308278+00:00",
+  "requests": [
+    {
+      "label": "session_create_a",
+      "method": "POST",
+      "route": "/sessions",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "8174aa732c614b38bc109f9fd371229c",
+      "status": "passed"
+    },
+    {
+      "label": "session_create_b",
+      "method": "POST",
+      "route": "/sessions",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "c4ef54919b404accb696576b43a54a6a",
+      "status": "passed"
+    },
+    {
+      "label": "session_initial_read",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "bcba33eb2b0f4be288769a70b04cc0a9",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_remember",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "8f1632103ff740b6a113fa434d1b6b69",
+      "status": "passed"
+    },
+    {
+      "label": "session_after_remember",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "b3479a449f20400998fa5d4f383deb8d",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_recall",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "4a19afd76249445e828b118602e9fce8",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_other_session",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "a3d9ec62182049a1a0d4585de51d373c",
+      "status": "passed"
+    },
+    {
+      "label": "session_before_restart",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "e5f895ac21f545cc87c2112a50e07653",
+      "status": "passed"
+    },
+    {
+      "label": "session_after_restart",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "3b2d8b01a35f4b099b19ac66c9177498",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_recall_after_restart",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "141340c97b9943c7a29fbaac494a48d3",
+      "status": "passed"
+    },
+    {
+      "label": "session_before_clear",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "276e7b79f54a4d0aad3115efa64b3c43",
+      "status": "passed"
+    },
+    {
+      "label": "session_clear",
+      "method": "DELETE",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "c96289db35124eecb2c7ad05df5f766a",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_after_clear",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "addfdc4da03b4132b79908bb978d8545",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_bound_fill_0",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "2a6ee183867e4f1790ff0ac747aeb3fc",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_bound_fill_1",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "796208905def47dbb98068dbe743fa1d",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_bound_fill_2",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "e420a4e7f59848af849ee6c6cd5a1a92",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_current_query",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "a8c15bbee01f4010a93dc9cc23208b54",
+      "status": "passed"
+    },
+    {
+      "label": "session_bounded_read",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "881bc374d6884c6194246c242834a971",
+      "status": "passed"
+    },
+    {
+      "label": "legacy_session_clear",
+      "method": "DELETE",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "64e05214f5ac4afb8016655de9544855",
+      "status": "passed"
+    },
+    {
+      "label": "chat_remember",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "62bfd9866bce4ba6aaac169c6a711b04",
+      "status": "passed"
+    },
+    {
+      "label": "chat_recall",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "35a7b62b277e4bbaac15f8b46cb4581b",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_without_session",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "5f87b00b298d49ae9803cb3153899755",
+      "status": "passed"
+    },
+    {
+      "label": "chat_without_session",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "889df62a44ce46d5978abd05bb035ede",
+      "status": "passed"
+    },
+    {
+      "label": "calculator_deterministic_failure",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "139a18d31413497fb2e3df94110ed878",
+      "status": "passed"
+    },
+    {
+      "label": "upload_retrieval_document",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "e88848f1437b45c99b8bd0327eaf9120",
+      "status": "passed"
+    },
+    {
+      "label": "retrieval_after_one_timeout",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "4022bd0da14649eb89ad247a6639010d",
+      "status": "passed"
+    },
+    {
+      "label": "session_before_failed_turn",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "d42cd740516f4cd3bee1487229daeefe",
+      "status": "passed"
+    },
+    {
+      "label": "retrieval_timeout_exhausted",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 504,
+      "expected_status": 504,
+      "request_id": "ac85f53bc4a94988a93a47e3bde2f0b5",
+      "status": "passed"
+    },
+    {
+      "label": "session_after_failed_turn",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "45ccee126bf14e65ab44f839ccf331fd",
+      "status": "passed"
+    },
+    {
+      "label": "delete_retrieval_document",
+      "method": "DELETE",
+      "route": "/documents/{document_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "45b325bc1a134efe897abbfa4983db48",
+      "status": "passed"
+    }
+  ],
+  "checks": {
+    "session_create_read": {
+      "status": "passed"
+    },
+    "workflow_multiturn": {
+      "status": "passed",
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+    },
+    "session_isolation": {
+      "status": "passed",
+      "completed": true,
+      "answer_chars": 4,
+      "answer_fact_present": false,
+      "answer_sha256": "c44e6dd700593104019ffce7eeda189212379ba13862b09d70cab34c513210d9"
+    },
+    "sqlite_persistence_file": {
+      "status": "passed"
+    },
+    "restart_persistence": {
+      "status": "passed",
+      "snapshot_equal": true,
+      "source_note_retained": true,
+      "history_chars": 179,
+      "api_processes_started": 2,
+      "revision": 2
+    },
+    "restart_recall": {
+      "status": "passed",
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011",
+      "source_note_retained": true,
+      "query_fact_present": true,
+      "answer_fact_in_history": true
+    },
+    "clear_history": {
+      "status": "passed"
+    },
+    "bounded_history_current_query": {
+      "status": "passed",
+      "stored_turns": 2,
+      "answer_chars": 22,
+      "current_marker_present": true,
+      "current_query_stored": true
+    },
+    "chat_multiturn": {
+      "status": "passed",
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011",
+      "current_query_last": true
+    },
+    "no_session_compatibility": {
+      "status": "passed"
+    },
+    "calculator_no_retry": {
+      "status": "passed"
+    },
+    "retrieval_evidence": {
+      "status": "passed"
+    },
+    "retrieval_recovered": {
+      "status": "passed"
+    },
+    "retrieval_exhausted": {
+      "status": "passed"
+    },
+    "failed_turn_not_saved": {
+      "status": "passed"
+    },
+    "log_privacy": {
+      "status": "passed"
+    },
+    "request_log_correlation": {
+      "status": "passed",
+      "requests_correlated": 30
+    }
+  },
+  "recovery": {
+    "recovered": {
+      "embedding_http_calls": 2,
+      "diagnostics": [
+        {
+          "stage": "retrieve",
+          "attempt": 1,
+          "status": "failed",
+          "category": "model_timeout",
+          "retryable": true
+        },
+        {
+          "stage": "retrieve",
+          "attempt": 2,
+          "status": "succeeded",
+          "category": null,
+          "retryable": false
+        }
+      ],
+      "actual_evidence_count": 1
+    },
+    "exhausted": {
+      "embedding_http_calls": 2,
+      "actual_status": 504,
+      "diagnostics": [
+        {
+          "stage": "retrieve",
+          "attempt": 1,
+          "status": "failed",
+          "category": "model_timeout",
+          "retryable": true
+        },
+        {
+          "stage": "retrieve",
+          "attempt": 2,
+          "status": "failed",
+          "category": "model_timeout",
+          "retryable": true
+        }
+      ]
+    }
+  },
+  "upstream_requests": [
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user"
+      ],
+      "message_count": 2,
+      "history_user_count": 0,
+      "current_query_sha256": "533d7928c98a4ea3d75908539cee1c18735214a01e1bf78b9d4235bc9f44adca",
+      "messages_sha256": "e923ad9de1eebc82d808a9fafb052472e1fcae10439f6fe103748de03657f3d5",
+      "answer_derivation": "acknowledgement",
+      "history_fact_present": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user",
+        "assistant",
+        "user"
+      ],
+      "message_count": 4,
+      "history_user_count": 1,
+      "current_query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+      "messages_sha256": "fa9ad961b8b54223c62d81ff52b4dae4f2524ca9f15f502870feb5a8fd36167f",
+      "answer_derivation": "received_user_history",
+      "history_fact_present": true
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user"
+      ],
+      "message_count": 2,
+      "history_user_count": 0,
+      "current_query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+      "messages_sha256": "79663235e92c9635a5b140e65abedc0ac4ddb20c147163c5eb9386315f143379",
+      "answer_derivation": "received_history_unknown",
+      "history_fact_present": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user",
+        "assistant",
+        "user",
+        "assistant",
+        "user"
+      ],
+      "message_count": 6,
+      "history_user_count": 2,
+      "current_query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+      "messages_sha256": "c9067e6652cfaa0c21be061c12ee0df34e896e7ecb0ba799e479386427c3001e",
+      "answer_derivation": "received_user_history",
+      "history_fact_present": true
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user"
+      ],
+      "message_count": 2,
+      "history_user_count": 0,
+      "current_query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+      "messages_sha256": "79663235e92c9635a5b140e65abedc0ac4ddb20c147163c5eb9386315f143379",
+      "answer_derivation": "received_history_unknown",
+      "history_fact_present": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user",
+        "assistant",
+        "user"
+      ],
+      "message_count": 4,
+      "history_user_count": 1,
+      "current_query_sha256": "4ea922bd69141f025afc9930d2d2349d845c5ed4bff7922cf85e110516f36946",
+      "messages_sha256": "791353b820d1839adce2fca6c2969304ef40bc7230e42a8b4edde81e63e64583",
+      "answer_derivation": "acknowledgement",
+      "history_fact_present": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user",
+        "assistant",
+        "user",
+        "assistant",
+        "user"
+      ],
+      "message_count": 6,
+      "history_user_count": 2,
+      "current_query_sha256": "80427221fbcfeefb5cecf95e001312bb6627d55af4ecdab57994538f3f50d756",
+      "messages_sha256": "12a9647fe3c7804184fcfeaf464f5baace120a6ab1ce3a23501f1c97fbd8a024",
+      "answer_derivation": "acknowledgement",
+      "history_fact_present": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user",
+        "assistant",
+        "user",
+        "assistant",
+        "user"
+      ],
+      "message_count": 6,
+      "history_user_count": 2,
+      "current_query_sha256": "4619598a4b8e0eb04b7cfc540b00a1600d9eefc38bd9433248b9432139a60266",
+      "messages_sha256": "fe3b41971fc39084567031d7e0da644df21567001066344ae08c1288b098b399",
+      "answer_derivation": "acknowledgement",
+      "history_fact_present": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user",
+        "assistant",
+        "user",
+        "assistant",
+        "user"
+      ],
+      "message_count": 6,
+      "history_user_count": 2,
+      "current_query_sha256": "07626519669c87a519a6705fb30f2cb4ee505362a31cf4ad2020a06cdff48257",
+      "messages_sha256": "360f5687a7cee267e936d5ac20a77216e7bc8944700e7759bd88f4206f987b4c",
+      "answer_derivation": "received_current_query",
+      "history_fact_present": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user"
+      ],
+      "message_count": 2,
+      "history_user_count": 0,
+      "current_query_sha256": "533d7928c98a4ea3d75908539cee1c18735214a01e1bf78b9d4235bc9f44adca",
+      "messages_sha256": "40394d7f6948c09808753aeb8f4862fd02a90ffc82ee7d1eacc1dec4e683c8e1",
+      "answer_derivation": "acknowledgement",
+      "history_fact_present": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user",
+        "assistant",
+        "user"
+      ],
+      "message_count": 4,
+      "history_user_count": 1,
+      "current_query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+      "messages_sha256": "662b8ad65e6ff8291673d573ba5a59b2f3ef563fbcbc92a8ccfde53cc9ac3c35",
+      "answer_derivation": "received_user_history",
+      "history_fact_present": true
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user",
+        "user"
+      ],
+      "message_count": 3,
+      "history_user_count": 0,
+      "current_query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+      "messages_sha256": "7a6c85f00d535dfa3fc0c0d6071506a344d315d84a603ffffb695dccaeb20192",
+      "answer_derivation": "received_history_unknown",
+      "history_fact_present": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user"
+      ],
+      "message_count": 2,
+      "history_user_count": 0,
+      "current_query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+      "messages_sha256": "7a03c2bce0b4f37b4d2e3fa493160210d16c6507ee9962978db4c542df2fab27",
+      "answer_derivation": "received_history_unknown",
+      "history_fact_present": false
+    },
+    {
+      "path": "/api/embed",
+      "input_sha256": "3441aec2ba4907860353bf2cb2fa1a491079692392aafa959e6744275c31d3eb",
+      "delayed_past_timeout": false
+    },
+    {
+      "path": "/api/embed",
+      "input_sha256": "8c1ce880e78d7619d9960930d64e003a7284e45aa65cfb3859e04abf6e451bea",
+      "delayed_past_timeout": true
+    },
+    {
+      "path": "/api/embed",
+      "input_sha256": "8c1ce880e78d7619d9960930d64e003a7284e45aa65cfb3859e04abf6e451bea",
+      "delayed_past_timeout": false
+    },
+    {
+      "path": "/api/chat",
+      "structured": false,
+      "message_roles": [
+        "system",
+        "user",
+        "user"
+      ],
+      "message_count": 3,
+      "history_user_count": 0,
+      "current_query_sha256": "8c1ce880e78d7619d9960930d64e003a7284e45aa65cfb3859e04abf6e451bea",
+      "messages_sha256": "1d574847babec917764f3d1adb7b5e27c680df946ddfd4eb6e78ad897b19c339",
+      "answer_derivation": "received_evidence",
+      "history_fact_present": false
+    },
+    {
+      "path": "/api/embed",
+      "input_sha256": "c7232a942766ade3b329adf5016384c979c0165f7b8cac253233342c3ee6b40b",
+      "delayed_past_timeout": true
+    },
+    {
+      "path": "/api/embed",
+      "input_sha256": "c7232a942766ade3b329adf5016384c979c0165f7b8cac253233342c3ee6b40b",
+      "delayed_past_timeout": true
+    }
+  ],
+  "memory_stages": {
+    "workflow_remember": {
+      "response": {
+        "completed": true,
+        "answer_chars": 3,
+        "answer_fact_present": false,
+        "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+      },
+      "submitted_pair_chars": 95,
+      "store": {
+        "revision": 1,
+        "stored_turns": 1,
+        "history_chars": 95,
+        "source_note_retained": true,
+        "query_fact_present": true,
+        "answer_fact_present": false,
+        "history_sha256": "6e75a7686f3915e40b3419823272f5ab866ccbfbc47be3f4d6adcd45e8937fc4",
+        "turns": [
+          {
+            "query_chars": 92,
+            "answer_chars": 3,
+            "query_fact_present": true,
+            "answer_fact_present": false,
+            "query_sha256": "533d7928c98a4ea3d75908539cee1c18735214a01e1bf78b9d4235bc9f44adca",
+            "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+          }
+        ]
+      }
+    },
+    "workflow_recall": {
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+    },
+    "before_restart": {
+      "revision": 2,
+      "stored_turns": 2,
+      "history_chars": 179,
+      "source_note_retained": true,
+      "query_fact_present": true,
+      "answer_fact_present": true,
+      "history_sha256": "b58631c07a208f4bad647586966991c65b3257221c80bdf8c7f653fcffed281e",
+      "turns": [
+        {
+          "query_chars": 92,
+          "answer_chars": 3,
+          "query_fact_present": true,
+          "answer_fact_present": false,
+          "query_sha256": "533d7928c98a4ea3d75908539cee1c18735214a01e1bf78b9d4235bc9f44adca",
+          "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+        },
+        {
+          "query_chars": 76,
+          "answer_chars": 8,
+          "query_fact_present": false,
+          "answer_fact_present": true,
+          "query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+          "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+        }
+      ]
+    },
+    "after_restart": {
+      "revision": 2,
+      "stored_turns": 2,
+      "history_chars": 179,
+      "source_note_retained": true,
+      "query_fact_present": true,
+      "answer_fact_present": true,
+      "history_sha256": "b58631c07a208f4bad647586966991c65b3257221c80bdf8c7f653fcffed281e",
+      "turns": [
+        {
+          "query_chars": 92,
+          "answer_chars": 3,
+          "query_fact_present": true,
+          "answer_fact_present": false,
+          "query_sha256": "533d7928c98a4ea3d75908539cee1c18735214a01e1bf78b9d4235bc9f44adca",
+          "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+        },
+        {
+          "query_chars": 76,
+          "answer_chars": 8,
+          "query_fact_present": false,
+          "answer_fact_present": true,
+          "query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+          "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+        }
+      ]
+    },
+    "restart_recall": {
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+    },
+    "after_clear": {
+      "store": {
+        "revision": 4,
+        "stored_turns": 0,
+        "history_chars": 0,
+        "source_note_retained": false,
+        "query_fact_present": false,
+        "answer_fact_present": false,
+        "history_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "turns": []
+      },
+      "response": {
+        "completed": true,
+        "answer_chars": 4,
+        "answer_fact_present": false,
+        "answer_sha256": "c44e6dd700593104019ffce7eeda189212379ba13862b09d70cab34c513210d9"
+      }
+    },
+    "bounded_current_query": {
+      "revision": 9,
+      "stored_turns": 2,
+      "history_chars": 85,
+      "source_note_retained": false,
+      "query_fact_present": false,
+      "answer_fact_present": false,
+      "history_sha256": "0e6b7210d98caad455291fbd6e30a0dcaf9a54523649fd682ac3e517e3508c59",
+      "turns": [
+        {
+          "query_chars": 24,
+          "answer_chars": 3,
+          "query_fact_present": false,
+          "answer_fact_present": false,
+          "query_sha256": "4619598a4b8e0eb04b7cfc540b00a1600d9eefc38bd9433248b9432139a60266",
+          "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+        },
+        {
+          "query_chars": 36,
+          "answer_chars": 22,
+          "query_fact_present": false,
+          "answer_fact_present": false,
+          "query_sha256": "07626519669c87a519a6705fb30f2cb4ee505362a31cf4ad2020a06cdff48257",
+          "answer_sha256": "c96ae11eb985e4fe82dd92bc33c74881c6ed8a39cdd45241497e612b0e93bb52"
+        }
+      ]
+    },
+    "chat_remember": {
+      "completed": true,
+      "answer_chars": 3,
+      "answer_fact_present": false,
+      "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+    },
+    "chat_recall": {
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+    }
+  },
+  "provenance": {
+    "source_head": "9be3671ae5b159804dce163ca4fba1797c0b6b95",
+    "source_dirty": true,
+    "source_sha256": {
+      "scripts/verify_v16_memory.py": "564f612af4dec82ca2d9e575e9405bf55edeca7613351471be3764d3841f9488",
+      "scripts/verify_step4_api.py": "bee5ce3f198ecc6953f7bddab5ef872a80e663c9f685ded31afc11473a6cb82f",
+      "src/knowledge_pilot/api/app.py": "eb012603b77990b5221791f344151e1b709fd9a859cfc523184211f5cf56f33f",
+      "src/knowledge_pilot/api/sessions.py": "299f3c818e68647036fc271c638f52342484e0875dcaa9b310059d1e81089f6d",
+      "src/knowledge_pilot/memory/store.py": "56be00de025be130a1207db9569e7ff2c384be8208933a7360d6bbc927a45099",
+      "src/knowledge_pilot/memory/service.py": "6d281193ba49f676ac1a81a51a0bfc16b915e10eafc6a84a95a8157a1a4ddc12",
+      "src/knowledge_pilot/memory/context.py": "e89fd788b92b17e6e868e65cf4334ea5b279515c7f656b238e6d245225b621fc",
+      "src/knowledge_pilot/tools/recovery.py": "8d99ce17074e6be35dbc1ab3f8ecf4136a351185ad8858be716e01258a41c585",
+      "src/knowledge_pilot/workflow/graph.py": "125dde676e7897a9f5f776000dc31c14fa53f67e4a22f1f16da6176867152e93",
+      "src/knowledge_pilot/api/reliability.py": "27f7855343dd8cca5e6dc0367cde6544344bcd2a8105d80307c7e903cb7a4cea"
+    },
+    "versions": {
+      "langgraph": "1.2.18",
+      "pydantic": "2.13.5",
+      "fastapi": "0.141.1",
+      "chromadb": "1.5.9",
+      "requests": "2.34.2"
+    }
+  },
+  "isolation": {
+    "store": "owned_temporary_data_directory",
+    "database": "data/sessions.sqlite3",
+    "max_turns": 2,
+    "max_chars": 512,
+    "tool_max_attempts": 2,
+    "normal_user_store_accessed": false
+  },
+  "model_fixture": {
+    "answers_derived_from_received_messages": true,
+    "history_recall_observed": true,
+    "empty_history_unknown_observed": true
+  },
+  "cleanup": {
+    "temporary_data_removed": true,
+    "children_exited": true,
+    "fixture_stopped": true
+  },
+  "finished_at_utc": "2026-10-30T14:26:05.290096+00:00"
+}

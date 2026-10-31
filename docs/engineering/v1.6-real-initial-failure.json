@@ -1,0 +1,156 @@
+{
+  "schema": "kp_v16_memory_http_v1",
+  "status": "failed",
+  "upstream": "real_host_ollama",
+  "acceptance_scope": "actual_http_sqlite_chroma_real_host_ollama",
+  "time_utc": "2026-10-30T14:19:05.670138+00:00",
+  "requests": [
+    {
+      "label": "session_create_a",
+      "method": "POST",
+      "route": "/sessions",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "798f15ab2ce64282960a1eccc6efd02b",
+      "status": "passed"
+    },
+    {
+      "label": "session_create_b",
+      "method": "POST",
+      "route": "/sessions",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "8b0adbe0b9dd40ca9744643db2252308",
+      "status": "passed"
+    },
+    {
+      "label": "session_initial_read",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "8629cfe49d7944df8c0a9aa46697e541",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_remember",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "900ea29c7e4d49c2b1fc0b57dc84ad7c",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_recall",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "bddd44994ffa4402a3500cca0c86d2ab",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_other_session",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "09fa500c23094cd79396689342e45452",
+      "status": "passed"
+    },
+    {
+      "label": "session_before_restart",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "0e3644be543343b88cd354199fa52df6",
+      "status": "passed"
+    },
+    {
+      "label": "session_after_restart",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "a8d66d2dc4674b1f98588ff27f98332c",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_recall_after_restart",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "e2cc183b7dbe497aa71de8184fce8386",
+      "status": "passed"
+    }
+  ],
+  "checks": {
+    "session_create_read": {
+      "status": "passed"
+    },
+    "workflow_multiturn": {
+      "status": "passed"
+    },
+    "session_isolation": {
+      "status": "passed"
+    },
+    "sqlite_persistence_file": {
+      "status": "passed"
+    },
+    "restart_persistence": {
+      "status": "failed",
+      "api_processes_started": 2,
+      "revision": 2
+    }
+  },
+  "recovery": {},
+  "upstream_requests": [],
+  "provenance": {
+    "source_head": "9be3671ae5b159804dce163ca4fba1797c0b6b95",
+    "source_dirty": true,
+    "source_sha256": {
+      "scripts/verify_v16_memory.py": "019843ff1115c71a804614e2d4719530f261244eb0e98128cae4dfebf6c63d43",
+      "scripts/verify_step4_api.py": "bee5ce3f198ecc6953f7bddab5ef872a80e663c9f685ded31afc11473a6cb82f",
+      "src/knowledge_pilot/api/app.py": "eb012603b77990b5221791f344151e1b709fd9a859cfc523184211f5cf56f33f",
+      "src/knowledge_pilot/api/sessions.py": "299f3c818e68647036fc271c638f52342484e0875dcaa9b310059d1e81089f6d",
+      "src/knowledge_pilot/memory/store.py": "56be00de025be130a1207db9569e7ff2c384be8208933a7360d6bbc927a45099",
+      "src/knowledge_pilot/memory/service.py": "6d281193ba49f676ac1a81a51a0bfc16b915e10eafc6a84a95a8157a1a4ddc12",
+      "src/knowledge_pilot/memory/context.py": "e89fd788b92b17e6e868e65cf4334ea5b279515c7f656b238e6d245225b621fc",
+      "src/knowledge_pilot/tools/recovery.py": "8d99ce17074e6be35dbc1ab3f8ecf4136a351185ad8858be716e01258a41c585",
+      "src/knowledge_pilot/workflow/graph.py": "115bec5bec4f288d2485f4ef75c03e1335a5da4bd38d2937fb6813794124edfa",
+      "src/knowledge_pilot/api/reliability.py": "839d16c0b073b8ba1a86870882c265cf713ef360ddfbc7ee0a299c3241f0941f"
+    },
+    "versions": {
+      "langgraph": "1.2.18",
+      "pydantic": "2.13.5",
+      "fastapi": "0.141.1",
+      "chromadb": "1.5.9",
+      "requests": "2.34.2"
+    }
+  },
+  "real_models": {
+    "chat_model": "gemma4:e2b",
+    "embedding_model": "bge-m3",
+    "models_present": true,
+    "downloads": false
+  },
+  "isolation": {
+    "store": "owned_temporary_data_directory",
+    "database": "data/sessions.sqlite3",
+    "max_turns": 2,
+    "max_chars": 512,
+    "tool_max_attempts": 2,
+    "normal_user_store_accessed": false
+  },
+  "error_type": "AssertionError",
+  "failure_phase": "restart_persistence",
+  "cleanup": {
+    "temporary_data_removed": true,
+    "children_exited": true,
+    "fixture_stopped": true
+  },
+  "finished_at_utc": "2026-10-30T14:19:24.868147+00:00"
+}

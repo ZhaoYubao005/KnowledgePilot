@@ -1,0 +1,529 @@
+{
+  "schema": "kp_v16_memory_http_v1",
+  "status": "passed",
+  "upstream": "real_host_ollama",
+  "acceptance_scope": "actual_http_sqlite_chroma_real_host_ollama",
+  "time_utc": "2026-10-30T14:25:28.692226+00:00",
+  "requests": [
+    {
+      "label": "session_create_a",
+      "method": "POST",
+      "route": "/sessions",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "cc36d98720ae4f3483f31f346203c27d",
+      "status": "passed"
+    },
+    {
+      "label": "session_create_b",
+      "method": "POST",
+      "route": "/sessions",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "c35e16b2f7944e2296df21f1ece7abc2",
+      "status": "passed"
+    },
+    {
+      "label": "session_initial_read",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "f43aeda7b56c496dbff11e03b43280b2",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_remember",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "200f88cf3d5544aa85cc745fdc0085ea",
+      "status": "passed"
+    },
+    {
+      "label": "session_after_remember",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "04ca51f133764af0b7d798931d53f84c",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_recall",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "2c8e489122ce4ff8941278668a325303",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_other_session",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "740f813fb3ab499c917492634011d0fd",
+      "status": "passed"
+    },
+    {
+      "label": "session_before_restart",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "ce77c3e4806a406a8328a06ed1a5ea79",
+      "status": "passed"
+    },
+    {
+      "label": "session_after_restart",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "7368c54584064d36915b693093034cfc",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_recall_after_restart",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "6d1b14c7da014ef0ad6157c27d598b02",
+      "status": "passed"
+    },
+    {
+      "label": "session_before_clear",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "1221776dc711479ea5f02f4d8bf98956",
+      "status": "passed"
+    },
+    {
+      "label": "session_clear",
+      "method": "DELETE",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "2ac4df5aee6344ecbb7b4dc8056319ed",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_after_clear",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "a9a76e01416f40cfbc3919876a4a3b2f",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_bound_fill_0",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "bb0c1a4aa4504e40a1842354434fd3b3",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_bound_fill_1",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "a2afe62ccbb646e6b8785fc51a926afc",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_bound_fill_2",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "086bdfce743048e5bca93872646bd843",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_current_query",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "50eb298ad9a44602900ca7ee46f871d7",
+      "status": "passed"
+    },
+    {
+      "label": "session_bounded_read",
+      "method": "GET",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "7f2e5f60d15b4b6fb2e24bf87d509e1d",
+      "status": "passed"
+    },
+    {
+      "label": "legacy_session_clear",
+      "method": "DELETE",
+      "route": "/sessions/{session_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "dbb96df890e1430f9c9ce1e53da291c2",
+      "status": "passed"
+    },
+    {
+      "label": "chat_remember",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "d348043e421a41d39011cacbdec612fa",
+      "status": "passed"
+    },
+    {
+      "label": "chat_recall",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "274eeca9d98b4ac78e777088b6fa12b6",
+      "status": "passed"
+    },
+    {
+      "label": "workflow_without_session",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "5c706bf6d950489ca8d31226a16e5056",
+      "status": "passed"
+    },
+    {
+      "label": "chat_without_session",
+      "method": "POST",
+      "route": "/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "5a572d32f4964fee9bf7e356a368233a",
+      "status": "passed"
+    },
+    {
+      "label": "calculator_deterministic_failure",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "918670d29b504704b36df1577283d0e2",
+      "status": "passed"
+    },
+    {
+      "label": "upload_retrieval_document",
+      "method": "POST",
+      "route": "/documents",
+      "actual_status": 201,
+      "expected_status": 201,
+      "request_id": "093dc4ec4bff4d6c8f39d5b71cf53c7c",
+      "status": "passed"
+    },
+    {
+      "label": "real_retrieval",
+      "method": "POST",
+      "route": "/workflow/chat",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "1ea0a814e8ca48dba39c806eb05f6da3",
+      "status": "passed"
+    },
+    {
+      "label": "delete_retrieval_document",
+      "method": "DELETE",
+      "route": "/documents/{document_id}",
+      "actual_status": 200,
+      "expected_status": 200,
+      "request_id": "a8548ed69d034267b34d3d05fb2640f8",
+      "status": "passed"
+    }
+  ],
+  "checks": {
+    "session_create_read": {
+      "status": "passed"
+    },
+    "workflow_multiturn": {
+      "status": "passed",
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+    },
+    "session_isolation": {
+      "status": "passed",
+      "completed": true,
+      "answer_chars": 4,
+      "answer_fact_present": false,
+      "answer_sha256": "c44e6dd700593104019ffce7eeda189212379ba13862b09d70cab34c513210d9"
+    },
+    "sqlite_persistence_file": {
+      "status": "passed"
+    },
+    "restart_persistence": {
+      "status": "passed",
+      "snapshot_equal": true,
+      "source_note_retained": true,
+      "history_chars": 179,
+      "api_processes_started": 2,
+      "revision": 2
+    },
+    "restart_recall": {
+      "status": "passed",
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011",
+      "source_note_retained": true,
+      "query_fact_present": true,
+      "answer_fact_in_history": true
+    },
+    "clear_history": {
+      "status": "passed"
+    },
+    "bounded_history_current_query": {
+      "status": "passed",
+      "stored_turns": 2,
+      "answer_chars": 22,
+      "current_marker_present": true,
+      "current_query_stored": true
+    },
+    "chat_multiturn": {
+      "status": "passed",
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011",
+      "current_query_last": true
+    },
+    "no_session_compatibility": {
+      "status": "passed"
+    },
+    "calculator_no_retry": {
+      "status": "passed"
+    },
+    "retrieval_evidence": {
+      "status": "passed"
+    },
+    "log_privacy": {
+      "status": "passed"
+    },
+    "request_log_correlation": {
+      "status": "passed",
+      "requests_correlated": 27
+    }
+  },
+  "recovery": {
+    "transient_fault_injection": {
+      "status": "NOT_RUN",
+      "reason": "real model calls have no injected faults"
+    }
+  },
+  "upstream_requests": [],
+  "memory_stages": {
+    "workflow_remember": {
+      "response": {
+        "completed": true,
+        "answer_chars": 3,
+        "answer_fact_present": false,
+        "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+      },
+      "submitted_pair_chars": 95,
+      "store": {
+        "revision": 1,
+        "stored_turns": 1,
+        "history_chars": 95,
+        "source_note_retained": true,
+        "query_fact_present": true,
+        "answer_fact_present": false,
+        "history_sha256": "6e75a7686f3915e40b3419823272f5ab866ccbfbc47be3f4d6adcd45e8937fc4",
+        "turns": [
+          {
+            "query_chars": 92,
+            "answer_chars": 3,
+            "query_fact_present": true,
+            "answer_fact_present": false,
+            "query_sha256": "533d7928c98a4ea3d75908539cee1c18735214a01e1bf78b9d4235bc9f44adca",
+            "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+          }
+        ]
+      }
+    },
+    "workflow_recall": {
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+    },
+    "before_restart": {
+      "revision": 2,
+      "stored_turns": 2,
+      "history_chars": 179,
+      "source_note_retained": true,
+      "query_fact_present": true,
+      "answer_fact_present": true,
+      "history_sha256": "b58631c07a208f4bad647586966991c65b3257221c80bdf8c7f653fcffed281e",
+      "turns": [
+        {
+          "query_chars": 92,
+          "answer_chars": 3,
+          "query_fact_present": true,
+          "answer_fact_present": false,
+          "query_sha256": "533d7928c98a4ea3d75908539cee1c18735214a01e1bf78b9d4235bc9f44adca",
+          "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+        },
+        {
+          "query_chars": 76,
+          "answer_chars": 8,
+          "query_fact_present": false,
+          "answer_fact_present": true,
+          "query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+          "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+        }
+      ]
+    },
+    "after_restart": {
+      "revision": 2,
+      "stored_turns": 2,
+      "history_chars": 179,
+      "source_note_retained": true,
+      "query_fact_present": true,
+      "answer_fact_present": true,
+      "history_sha256": "b58631c07a208f4bad647586966991c65b3257221c80bdf8c7f653fcffed281e",
+      "turns": [
+        {
+          "query_chars": 92,
+          "answer_chars": 3,
+          "query_fact_present": true,
+          "answer_fact_present": false,
+          "query_sha256": "533d7928c98a4ea3d75908539cee1c18735214a01e1bf78b9d4235bc9f44adca",
+          "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+        },
+        {
+          "query_chars": 76,
+          "answer_chars": 8,
+          "query_fact_present": false,
+          "answer_fact_present": true,
+          "query_sha256": "c50e7aa0175a8c22f0a00170846050425cdd1b04c36b8e42a7bbf38b182abf94",
+          "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+        }
+      ]
+    },
+    "restart_recall": {
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+    },
+    "after_clear": {
+      "store": {
+        "revision": 4,
+        "stored_turns": 0,
+        "history_chars": 0,
+        "source_note_retained": false,
+        "query_fact_present": false,
+        "answer_fact_present": false,
+        "history_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "turns": []
+      },
+      "response": {
+        "completed": true,
+        "answer_chars": 4,
+        "answer_fact_present": false,
+        "answer_sha256": "c44e6dd700593104019ffce7eeda189212379ba13862b09d70cab34c513210d9"
+      }
+    },
+    "bounded_current_query": {
+      "revision": 9,
+      "stored_turns": 2,
+      "history_chars": 87,
+      "source_note_retained": false,
+      "query_fact_present": false,
+      "answer_fact_present": false,
+      "history_sha256": "b0b5de6b0a449ba59fef02a5baf81a78b54b77ea3d80f1e84f270f4a007570c7",
+      "turns": [
+        {
+          "query_chars": 24,
+          "answer_chars": 5,
+          "query_fact_present": false,
+          "answer_fact_present": false,
+          "query_sha256": "4619598a4b8e0eb04b7cfc540b00a1600d9eefc38bd9433248b9432139a60266",
+          "answer_sha256": "9ccbb41ae2aa6a255f3fe0daac71cdfd103faf721531076817fad9943593ec9d"
+        },
+        {
+          "query_chars": 36,
+          "answer_chars": 22,
+          "query_fact_present": false,
+          "answer_fact_present": false,
+          "query_sha256": "07626519669c87a519a6705fb30f2cb4ee505362a31cf4ad2020a06cdff48257",
+          "answer_sha256": "c96ae11eb985e4fe82dd92bc33c74881c6ed8a39cdd45241497e612b0e93bb52"
+        }
+      ]
+    },
+    "chat_remember": {
+      "completed": true,
+      "answer_chars": 3,
+      "answer_fact_present": false,
+      "answer_sha256": "8ae18128586fbd0f953fde4a4c9e5784438bcb0336e5dd583b7bc64fdef118da"
+    },
+    "chat_recall": {
+      "completed": true,
+      "answer_chars": 8,
+      "answer_fact_present": true,
+      "answer_sha256": "a00e026e047662ecb7452b1959218368d1f2e3866c0859981cef06b1f9e1f011"
+    }
+  },
+  "provenance": {
+    "source_head": "9be3671ae5b159804dce163ca4fba1797c0b6b95",
+    "source_dirty": true,
+    "source_sha256": {
+      "scripts/verify_v16_memory.py": "564f612af4dec82ca2d9e575e9405bf55edeca7613351471be3764d3841f9488",
+      "scripts/verify_step4_api.py": "bee5ce3f198ecc6953f7bddab5ef872a80e663c9f685ded31afc11473a6cb82f",
+      "src/knowledge_pilot/api/app.py": "eb012603b77990b5221791f344151e1b709fd9a859cfc523184211f5cf56f33f",
+      "src/knowledge_pilot/api/sessions.py": "299f3c818e68647036fc271c638f52342484e0875dcaa9b310059d1e81089f6d",
+      "src/knowledge_pilot/memory/store.py": "56be00de025be130a1207db9569e7ff2c384be8208933a7360d6bbc927a45099",
+      "src/knowledge_pilot/memory/service.py": "6d281193ba49f676ac1a81a51a0bfc16b915e10eafc6a84a95a8157a1a4ddc12",
+      "src/knowledge_pilot/memory/context.py": "e89fd788b92b17e6e868e65cf4334ea5b279515c7f656b238e6d245225b621fc",
+      "src/knowledge_pilot/tools/recovery.py": "8d99ce17074e6be35dbc1ab3f8ecf4136a351185ad8858be716e01258a41c585",
+      "src/knowledge_pilot/workflow/graph.py": "125dde676e7897a9f5f776000dc31c14fa53f67e4a22f1f16da6176867152e93",
+      "src/knowledge_pilot/api/reliability.py": "27f7855343dd8cca5e6dc0367cde6544344bcd2a8105d80307c7e903cb7a4cea"
+    },
+    "versions": {
+      "langgraph": "1.2.18",
+      "pydantic": "2.13.5",
+      "fastapi": "0.141.1",
+      "chromadb": "1.5.9",
+      "requests": "2.34.2"
+    }
+  },
+  "real_models": {
+    "chat_model": "gemma4:e2b",
+    "embedding_model": "bge-m3",
+    "models_present": true,
+    "downloads": false
+  },
+  "isolation": {
+    "store": "owned_temporary_data_directory",
+    "database": "data/sessions.sqlite3",
+    "max_turns": 2,
+    "max_chars": 512,
+    "tool_max_attempts": 2,
+    "normal_user_store_accessed": false
+  },
+  "cleanup": {
+    "temporary_data_removed": true,
+    "children_exited": true,
+    "fixture_stopped": true
+  },
+  "finished_at_utc": "2026-10-30T14:25:59.600428+00:00"
+}
